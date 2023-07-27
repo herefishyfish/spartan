@@ -1,6 +1,8 @@
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Routes } from '@angular/router';
 import { NativeScriptRouterModule } from '@nativescript/angular';
+import { NativeScriptHlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 import { SharedModule } from '../shared/shared.module';
 import { HOME_COMPONENTS, HomeComponent } from './components';
@@ -13,7 +15,7 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [SharedModule, NativeScriptRouterModule.forChild(routes)],
+  imports: [SharedModule, NativeScriptRouterModule.forChild(routes), NativeScriptHlmButtonDirective],
   declarations: [...HOME_COMPONENTS],
   exports: [...HOME_COMPONENTS],
   schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
