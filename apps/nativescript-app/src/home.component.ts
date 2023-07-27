@@ -27,7 +27,6 @@ export class SpartanHomeComponent {
   ];
 
   navigate(link) {
-    console.log('navigate', link);
     this._routerExtensions.navigateByUrl(link);
   }
 }
