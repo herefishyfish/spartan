@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA, inject } from '@angular/core';
 import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
 import {
   HlmCardDirective,
@@ -9,12 +9,13 @@ import {
   HlmCardTitleDirective,
 } from '@spartan-ng/ui-card-helm';
 import { HlmInputDirective } from '@spartan-ng/nativescript-ui-input-helm';
+import { NativeScriptCommonModule, RouterExtensions } from '@nativescript/angular';
 
 @Component({
   selector: 'spartan-card',
   template: `
     <ActionBar title="Spartan Card" flat="true">
-      <NavigationButton text="Back" android.systemIcon="ic_menu_back"></NavigationButton>
+      <NavigationButton text="Back" (tap)="router.back()" android.systemIcon="ic_menu_back"></NavigationButton>
     </ActionBar>
 
     <StackLayout class="p-4">
@@ -42,6 +43,7 @@ import { HlmInputDirective } from '@spartan-ng/nativescript-ui-input-helm';
   `,
   standalone: true,
   imports: [
+    NativeScriptCommonModule,
     HlmButtonDirective,
     HlmCardDirective,
     HlmCardContentDirective,
@@ -53,4 +55,6 @@ import { HlmInputDirective } from '@spartan-ng/nativescript-ui-input-helm';
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
-export class SpartanCardShowcaseComponent {}
+export class SpartanCardShowcaseComponent {
+  public router = inject(RouterExtensions);
+}

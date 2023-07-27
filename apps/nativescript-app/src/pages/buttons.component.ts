@@ -1,11 +1,12 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA, inject } from '@angular/core';
+import { NativeScriptCommonModule, RouterExtensions } from '@nativescript/angular';
 import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
 
 @Component({
   selector: 'spartan-button',
   template: `
     <ActionBar title="Spartan Buttons" flat="true">
-      <NavigationButton text="Back" android.systemIcon="ic_menu_back"></NavigationButton>
+      <NavigationButton text="Back" (tap)="router.back()" android.systemIcon="ic_menu_back"></NavigationButton>
     </ActionBar>
 
     <StackLayout class="p-10">
@@ -18,7 +19,9 @@ import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
     </StackLayout>
   `,
   standalone: true,
-  imports: [HlmButtonDirective],
+  imports: [NativeScriptCommonModule, HlmButtonDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
-export class SpartanButtonShowcaseComponent {}
+export class SpartanButtonShowcaseComponent {
+  public router = inject(RouterExtensions);
+}
