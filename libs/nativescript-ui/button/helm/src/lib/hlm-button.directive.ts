@@ -16,9 +16,9 @@ export class NativeScriptHlmButtonDirective {
   @HostBinding('style')
   get style() {
     if (isAndroid) {
-      return 'android-elevation: -4';
+      return 'android-elevation: -4; text-transform: none;';
     }
-    return '';
+    return 'text-transform: none;';
   }
 
   @HostBinding('touchAnimation')
