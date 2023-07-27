@@ -55,6 +55,11 @@
     android-elevation: 1;
     box-shadow: none;
   }
+
+  &.ns-ios {
+    border-width: 2;
+    box-shadow: 0 0 0 1 hsl(var(--card));
+  }
 }
 
 [hlmCardTitle] {
@@ -62,8 +67,13 @@
 }
 
 [hlmInput] {
-  box-shadow: 0 0 0 1 hsl(var(--input));
-  &:focus {
-    box-shadow: 0 0 0 2 hsl(var(--input));
+  &.ns-ios {
+    border-width: 1;
+  }
+  &.ns-android {
+    box-shadow: 0 0 0 1 hsl(var(--input));
+    &:focus {
+      box-shadow: 0 0 0 2 hsl(var(--input));
+    }
   }
 }
