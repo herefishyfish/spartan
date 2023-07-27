@@ -15,6 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@spartan-ng/nativescript-ui-button-helm": ["libs/nativescript-ui/button/helm/src/index.ts"],
+      "@spartan-ng/nativescript-ui-input-helm": ["libs/nativescript-ui/input/helm/src/index.ts"],
       "@spartan-ng/nx": ["libs/nx/src/index.ts"],
       "@spartan-ng/tools": ["libs/tools/src/index.ts"],
       "@spartan-ng/ui-accordion-brain": ["libs/ui/accordion/brain/src/index.ts"],
@@ -62,7 +64,6 @@
       "@spartan-ng/ui-toggle-brain": ["libs/ui/toggle/brain/src/index.ts"],
       "@spartan-ng/ui-toggle-helm": ["libs/ui/toggle/helm/src/index.ts"],
       "@spartan-ng/ui-typography-helm": ["libs/ui/typography/helm/src/index.ts"],
-      "@spartan-ng/nativescript-ui-button-helm": ["libs/nativescript-ui/button/helm/src/index.ts"],
       "~/*": ["apps/app/src/*"]
     }
   },
