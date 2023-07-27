@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Application, Color, isIOS } from '@nativescript/core';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,12 @@ import { Component } from '@angular/core';
     </RootLayout>
   `,
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor() {
+    if (isIOS) {
+      const window = Application.ios.window;
+      window.backgroundColor = new Color('#791e20').ios;
+      window.tintColor = UIColor.blackColor;
+    }
+  }
+}

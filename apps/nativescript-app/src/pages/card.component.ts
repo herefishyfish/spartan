@@ -10,7 +10,8 @@ import {
 } from '@spartan-ng/ui-card-helm';
 import { HlmInputDirective } from '@spartan-ng/nativescript-ui-input-helm';
 import { HlmBadgeDirective } from '@spartan-ng/ui-badge-helm';
-import { NativeScriptCommonModule, RouterExtensions } from '@nativescript/angular';
+import { NativeDialogService, NativeScriptCommonModule, RouterExtensions } from '@nativescript/angular';
+import { SpartanSignUpComponent } from './sign-up.component';
 
 @Component({
   selector: 'spartan-card',
@@ -34,7 +35,7 @@ import { NativeScriptCommonModule, RouterExtensions } from '@nativescript/angula
         </StackLayout>
         <StackLayout hlmCardFooter direction="column">
           <Button hlmBtn>Sign In</Button>
-          <Button hlmBtn variant="ghost">Create Account</Button>
+          <Button hlmBtn variant="ghost" (tap)="createAccount()">Create Account</Button>
         </StackLayout>
       </StackLayout>
     </StackLayout>
@@ -52,8 +53,14 @@ import { NativeScriptCommonModule, RouterExtensions } from '@nativescript/angula
     HlmCardTitleDirective,
     HlmInputDirective,
   ],
+  providers: [NativeDialogService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
 export class SpartanCardShowcaseComponent {
   public router = inject(RouterExtensions);
+  private dialog = inject(NativeDialogService);
+
+  createAccount() {
+    this.dialog.open(SpartanSignUpComponent);
+  }
 }
