@@ -8,6 +8,7 @@ import {
   HlmCardHeaderDirective,
   HlmCardTitleDirective,
 } from '@spartan-ng/ui-card-helm';
+import { HlmInputDirective } from '@spartan-ng/nativescript-ui-input-helm';
 
 @Component({
   selector: 'spartan-card',
@@ -29,8 +30,8 @@ import {
           <Label class="block" hlmLabel>E-mail</Label>
           <TextField class="w-full mt-1.5" placeholder="you@spartan-ng" hlmInput></TextField>
 
-          <Label class="block my-4" hlmLabel>Password</Label>
-          <TextField class="w-full mt-1.5" type="password" hlmInput></TextField>
+          <Label class="block mt-4" hlmLabel>Password</Label>
+          <TextField class="w-full mt-1.5" [secure]="true" hlmInput></TextField>
         </StackLayout>
         <StackLayout hlmCardFooter direction="column">
           <Button hlmBtn>Sign In</Button>
@@ -48,6 +49,7 @@ import {
     HlmCardFooterDirective,
     HlmCardHeaderDirective,
     HlmCardTitleDirective,
+    HlmInputDirective,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
