@@ -1,12 +1,7 @@
 import { NgFor } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA, inject } from '@angular/core';
-import {
-  NSRouterLink,
-  NativeScriptCommonModule,
-  NativeScriptRouterModule,
-  RouterExtensions,
-} from '@nativescript/angular';
-import { NativeScriptHlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
+import { RouterExtensions } from '@nativescript/angular';
+import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
 
 @Component({
   selector: 'spartan-home',
@@ -21,14 +16,14 @@ import { NativeScriptHlmButtonDirective } from '@spartan-ng/nativescript-ui-butt
     </StackLayout>
   `,
   standalone: true,
-  imports: [NgFor, NativeScriptHlmButtonDirective],
+  imports: [NgFor, HlmButtonDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
 export class SpartanHomeComponent {
   private _routerExtensions = inject(RouterExtensions);
   routes = [
     { link: 'buttons', title: 'Buttons' },
-    { link: 'buttons', title: 'Buttons' },
+    { link: 'card', title: 'Card' },
   ];
 
   navigate(link) {

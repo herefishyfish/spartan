@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'buttons',
     loadComponent: () => import('./pages/buttons.component').then((m) => m.SpartanButtonShowcaseComponent),
   },
+  {
+    path: 'card',
+    loadComponent: () => import('./pages/card.component').then((m) => m.SpartanCardShowcaseComponent),
+  },
 ];
 
 @NgModule({
