@@ -1,18 +1,18 @@
 import { Directive, HostBinding } from '@angular/core';
 import { CoreTypes, TouchAnimationOptions, isAndroid } from '@nativescript/core';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { HlmButtonDirective as HostHlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 @Directive({
   selector: '[hlmBtn]',
   standalone: true,
   hostDirectives: [
     {
-      directive: HlmButtonDirective,
+      directive: HostHlmButtonDirective,
       inputs: ['variant', 'size', 'class'],
     },
   ],
 })
-export class NativeScriptHlmButtonDirective {
+export class HlmButtonDirective {
   @HostBinding('style')
   get style() {
     if (isAndroid) {

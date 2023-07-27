@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA } from '@angular/core';
-import { NativeScriptHlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
+import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
 
 @Component({
   selector: 'spartan-button',
@@ -18,7 +18,7 @@ import { NativeScriptHlmButtonDirective } from '@spartan-ng/nativescript-ui-butt
     </StackLayout>
   `,
   standalone: true,
-  imports: [NativeScriptHlmButtonDirective],
+  imports: [HlmButtonDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
 export class SpartanButtonShowcaseComponent {}
