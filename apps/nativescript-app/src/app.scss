@@ -62,6 +62,7 @@
 }
 
 [hlmInput] {
+  box-shadow: 0 0 0 1 hsl(var(--input));
   &:focus {
     box-shadow: 0 0 0 2 hsl(var(--input));
   }

@@ -1,5 +1,5 @@
 import { NgFor } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, Component, inject } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA, inject } from '@angular/core';
 import { NativeScriptCommonModule, RouterExtensions } from '@nativescript/angular';
 import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
 
@@ -8,7 +8,7 @@ import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
   template: `
     <ActionBar title="Spartan App" class="action-bar" flat="true"> </ActionBar>
     <StackLayout class="p-10">
-      <Label text="Enjoy" class="h1 text-center c-white"></Label>
+      <Label text="Spartan" class="h1 text-center c-white"></Label>
 
       <Button *ngFor="let route of routes" (tap)="navigate(route.link)" class="my-1" hlmBtn>
         {{ route.title }}
@@ -17,7 +17,7 @@ import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
   `,
   standalone: true,
   imports: [NativeScriptCommonModule, NgFor, HlmButtonDirective],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
 export class SpartanHomeComponent {
   private _routerExtensions = inject(RouterExtensions);

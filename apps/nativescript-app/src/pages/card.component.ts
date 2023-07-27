@@ -9,6 +9,7 @@ import {
   HlmCardTitleDirective,
 } from '@spartan-ng/ui-card-helm';
 import { HlmInputDirective } from '@spartan-ng/nativescript-ui-input-helm';
+import { HlmBadgeDirective } from '@spartan-ng/ui-badge-helm';
 import { NativeScriptCommonModule, RouterExtensions } from '@nativescript/angular';
 
 @Component({
@@ -21,11 +22,8 @@ import { NativeScriptCommonModule, RouterExtensions } from '@nativescript/angula
     <StackLayout class="p-4">
       <StackLayout class="max-w-lg mx-auto" hlmCard>
         <StackLayout hlmCardHeader orientation="horizontal">
-          <Label hlmCardTitle>AngularGPT</Label>
-          <Label hlmCardDescription>
-            beta
-            <!-- <span variant='secondary' hlmBadge>beta</span> -->
-          </Label>
+          <Label hlmCardTitle class="mr-2">AngularGPT</Label>
+          <Label variant="secondary" hlmBadge> beta </Label>
         </StackLayout>
         <StackLayout hlmCardContent>
           <Label class="block" hlmLabel>E-mail</Label>
@@ -45,6 +43,7 @@ import { NativeScriptCommonModule, RouterExtensions } from '@nativescript/angula
   imports: [
     NativeScriptCommonModule,
     HlmButtonDirective,
+    HlmBadgeDirective,
     HlmCardDirective,
     HlmCardContentDirective,
     HlmCardDescriptionDirective,
