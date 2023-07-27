@@ -5,9 +5,6 @@ import { Routes } from '@angular/router';
 // nativescript
 import { NativeScriptRouterModule } from '@nativescript/angular';
 
-// app
-import { SharedModule } from './features/shared/shared.module';
-
 const routes: Routes = [
   {
     path: '',
@@ -16,11 +13,16 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./features/home/home.module').then((m) => m.HomeModule),
+    loadComponent: () => import('./home.component').then((m) => m.SpartanHomeComponent),
+  },
+  {
+    path: 'buttons',
+    loadComponent: () => import('./pages/buttons.component').then((m) => m.SpartanButtonShowcaseComponent),
   },
 ];
 
 @NgModule({
-  imports: [SharedModule, NativeScriptRouterModule.forRoot(routes)],
+  imports: [NativeScriptRouterModule.forRoot(routes)],
+  exports: [NativeScriptRouterModule],
 })
 export class AppRoutingModule {}
