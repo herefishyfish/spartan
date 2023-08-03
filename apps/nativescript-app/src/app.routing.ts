@@ -13,15 +13,19 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('./home.component').then((m) => m.SpartanHomeComponent),
+    loadComponent: () => import('./home.component').then((m) => m.SpartanHomePage),
   },
   {
     path: 'buttons',
-    loadComponent: () => import('./pages/buttons.component').then((m) => m.SpartanButtonShowcaseComponent),
+    loadComponent: () => import('./pages/buttons.component').then((m) => m.SpartanButtonPage),
   },
   {
     path: 'card',
-    loadComponent: () => import('./pages/card.component').then((m) => m.SpartanCardShowcaseComponent),
+    loadComponent: () => import('./pages/card.component').then((m) => m.SpartanCardPage),
+  },
+  {
+    path: 'typography',
+    loadComponent: () => import('./pages/typography.component').then((m) => m.SpartanTypographyPage),
   },
 ];
 

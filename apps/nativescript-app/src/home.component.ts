@@ -19,11 +19,12 @@ import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
   imports: [NativeScriptCommonModule, NgFor, HlmButtonDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
-export class SpartanHomeComponent {
+export class SpartanHomePage {
   private _routerExtensions = inject(RouterExtensions);
   routes = [
     { link: 'buttons', title: 'Buttons' },
     { link: 'card', title: 'Card' },
+    { link: 'typography', title: 'Typograpy' },
   ];
 
   navigate(link) {

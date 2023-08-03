@@ -63,7 +63,7 @@ import { SpartanSignUpComponent } from './sign-up.component';
   providers: [NativeDialogService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
-export class SpartanCardShowcaseComponent {
+export class SpartanCardPage {
   public router = inject(RouterExtensions);
   private dialog = inject(NativeDialogService);
 
