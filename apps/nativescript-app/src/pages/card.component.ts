@@ -1,4 +1,4 @@
-import { isAndroid } from '@nativescript/core';
+import { isAndroid, alert, AlertOptions } from '@nativescript/core';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA, inject } from '@angular/core';
 import { NativeDialogService, NativeScriptCommonModule, RouterExtensions } from '@nativescript/angular';
 import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
@@ -39,7 +39,7 @@ import { SpartanSignUpComponent } from './sign-up.component';
         </StackLayout>
         <brn-separator hlmSeparator seperatorOrientation="horizontal" class="mb-6" />
         <StackLayout hlmCardFooter direction="column">
-          <Button hlmBtn>Sign In</Button>
+          <Button hlmBtn (tap)="signIn()">Sign In</Button>
           <Button hlmBtn variant="ghost" (tap)="createAccount()">Create Account</Button>
         </StackLayout>
       </StackLayout>
@@ -66,6 +66,14 @@ import { SpartanSignUpComponent } from './sign-up.component';
 export class SpartanCardPage {
   public router = inject(RouterExtensions);
   private dialog = inject(NativeDialogService);
+
+  signIn() {
+    alert({
+      title: 'Sign In',
+      message: 'Sign In button tapped',
+      okButtonText: 'OK',
+    } as AlertOptions);
+  }
 
   createAccount() {
     this.dialog.open(SpartanSignUpComponent, {

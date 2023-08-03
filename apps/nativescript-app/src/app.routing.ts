@@ -5,7 +5,7 @@ import { Routes } from '@angular/router';
 // nativescript
 import { NativeScriptRouterModule } from '@nativescript/angular';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     redirectTo: '/home',
@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home.component').then((m) => m.SpartanHomePage),
+  },
+  {
+    path: 'accordion',
+    loadComponent: () => import('./pages/accordion.component').then((m) => m.SpartanAccordionPage),
   },
   {
     path: 'buttons',
