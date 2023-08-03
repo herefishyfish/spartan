@@ -1,0 +1,40 @@
+{
+  "name": "nativescript-ui-separator-brain",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nativescript-ui/separator/brain/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/nativescript-ui/separator/brain",
+        "main": "libs/nativescript-ui/separator/brain/src/index.ts",
+        "tsConfig": "libs/nativescript-ui/separator/brain/tsconfig.lib.json",
+        "assets": ["libs/nativescript-ui/separator/brain/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/nativescript-ui/separator/brain/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/nativescript-ui/separator/brain/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
