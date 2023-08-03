@@ -1,5 +1,9 @@
+import { isAndroid } from '@nativescript/core';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, NO_ERRORS_SCHEMA, inject } from '@angular/core';
+import { NativeDialogService, NativeScriptCommonModule, RouterExtensions } from '@nativescript/angular';
 import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
+import { HlmInputDirective } from '@spartan-ng/nativescript-ui-input-helm';
+import { BrnSeparatorComponent } from '@spartan-ng/nativescript-ui-separator-brain';
 import {
   HlmCardDirective,
   HlmCardContentDirective,
@@ -8,9 +12,9 @@ import {
   HlmCardHeaderDirective,
   HlmCardTitleDirective,
 } from '@spartan-ng/ui-card-helm';
-import { HlmInputDirective } from '@spartan-ng/nativescript-ui-input-helm';
 import { HlmBadgeDirective } from '@spartan-ng/ui-badge-helm';
-import { NativeDialogService, NativeScriptCommonModule, RouterExtensions } from '@nativescript/angular';
+import { HlmSeparatorDirective } from '@spartan-ng/ui-separator-helm';
+
 import { SpartanSignUpComponent } from './sign-up.component';
 
 @Component({
@@ -33,6 +37,7 @@ import { SpartanSignUpComponent } from './sign-up.component';
           <Label class="block mt-4" hlmLabel>Password</Label>
           <TextField class="w-full mt-1.5" [secure]="true" hlmInput></TextField>
         </StackLayout>
+        <brn-separator hlmSeparator seperatorOrientation="horizontal" class="mb-6" />
         <StackLayout hlmCardFooter direction="column">
           <Button hlmBtn>Sign In</Button>
           <Button hlmBtn variant="ghost" (tap)="createAccount()">Create Account</Button>
@@ -43,6 +48,8 @@ import { SpartanSignUpComponent } from './sign-up.component';
   standalone: true,
   imports: [
     NativeScriptCommonModule,
+    BrnSeparatorComponent,
+    HlmSeparatorDirective,
     HlmButtonDirective,
     HlmBadgeDirective,
     HlmCardDirective,
@@ -61,6 +68,10 @@ export class SpartanCardShowcaseComponent {
   private dialog = inject(NativeDialogService);
 
   createAccount() {
-    this.dialog.open(SpartanSignUpComponent);
+    this.dialog.open(SpartanSignUpComponent, {
+      nativeOptions: {
+        fullscreen: isAndroid ? true : false,
+      },
+    });
   }
 }

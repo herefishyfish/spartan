@@ -1,5 +1,5 @@
 import { Directive, HostBinding } from '@angular/core';
-import { CoreTypes, TouchAnimationOptions, isAndroid } from '@nativescript/core';
+import { CoreTypes, TouchAnimationOptions } from '@nativescript/core';
 import { HlmButtonDirective as HostHlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 @Directive({
@@ -13,14 +13,6 @@ import { HlmButtonDirective as HostHlmButtonDirective } from '@spartan-ng/ui-but
   ],
 })
 export class HlmButtonDirective {
-  @HostBinding('style')
-  get style() {
-    if (isAndroid) {
-      return 'android-elevation: -4; text-transform: none;';
-    }
-    return 'text-transform: none;';
-  }
-
   @HostBinding('touchAnimation')
   private _touchAnimation: TouchAnimationOptions = {
     down: {
