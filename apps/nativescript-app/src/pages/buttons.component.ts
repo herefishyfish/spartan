@@ -22,6 +22,6 @@ import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
   imports: [NativeScriptCommonModule, HlmButtonDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
-export class SpartanButtonShowcaseComponent {
+export class SpartanButtonPage {
   public router = inject(RouterExtensions);
 }

@@ -62,6 +62,12 @@
   }
 }
 
+@for $i from 1 through 4 {
+  [hlmH#{$i}] {
+    @apply tracking-normal;
+  }
+}
+
 Button {
   &.ns-android {
     android-elevation: -4;
