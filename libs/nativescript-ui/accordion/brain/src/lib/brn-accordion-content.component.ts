@@ -69,6 +69,7 @@ export class BrnAccordionContentComponent implements CustomElementClassSettable 
 
   public onLoaded(event: LoadEventData) {
     this.view = event.object as StackLayout;
+    this.view.originY = -0.1;
     setTimeout(() => {
       this.initialHeight = this.view.getActualSize().height;
 
