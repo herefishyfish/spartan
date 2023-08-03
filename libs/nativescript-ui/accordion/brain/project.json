@@ -1,0 +1,40 @@
+{
+  "name": "nativescript-ui-accordion-brain",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nativescript-ui/accordion/brain/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/nativescript-ui/accordion/brain",
+        "main": "libs/nativescript-ui/accordion/brain/src/index.ts",
+        "tsConfig": "libs/nativescript-ui/accordion/brain/tsconfig.lib.json",
+        "assets": ["libs/nativescript-ui/accordion/brain/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/nativescript-ui/accordion/brain/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/nativescript-ui/accordion/brain/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

@@ -18,6 +18,7 @@
       "@spartan-ng/nativescript-ui-button-helm": ["libs/nativescript-ui/button/helm/src/index.ts"],
       "@spartan-ng/nativescript-ui-input-helm": ["libs/nativescript-ui/input/helm/src/index.ts"],
       "@spartan-ng/nativescript-ui-separator-brain": ["libs/nativescript-ui/separator/brain/src/index.ts"],
+      "@spartan-ng/nativescript-ui-accordion-brain": ["libs/nativescript-ui/accordion/brain/src/index.ts"],
       "@spartan-ng/nx": ["libs/nx/src/index.ts"],
       "@spartan-ng/tools": ["libs/tools/src/index.ts"],
       "@spartan-ng/ui-accordion-brain": ["libs/ui/accordion/brain/src/index.ts"],
