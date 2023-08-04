@@ -5,7 +5,7 @@ import { HlmButtonDirective } from '@spartan-ng/nativescript-ui-button-helm';
 @Component({
   selector: 'spartan-sign-up',
   template: `
-    <GridLayout rows="auto * auto" class="bg-white p-10">
+    <GridLayout rows="auto * auto" class="p-10 bg-white dark:bg-black">
       <Label class="h1">Create an account!</Label>
       <StackLayout row="2">
         <Button class="my-1" (tap)="goBack()" variant="outline" hlmBtn>Sign Up</Button>
