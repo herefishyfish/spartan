@@ -43,7 +43,7 @@ import { HlmPDirective } from '@spartan-ng/ui-typography-helm';
             <span>Is it accessible?</span>
             <!-- <hlm-accordion-icon /> -->
           </brn-accordion-trigger>
-          <brn-accordion-content hlm>
+          <brn-accordion-content hlm class="p-2">
             <Label textWrap="true" hlmP>Yes. It adheres to the WAI-ARIA design pattern.</Label>
           </brn-accordion-content>
         </brn-accordion-item>
@@ -53,7 +53,7 @@ import { HlmPDirective } from '@spartan-ng/ui-typography-helm';
             <span>Is it styled</span>
             <!-- <hlm-accordion-icon /> -->
           </brn-accordion-trigger>
-          <brn-accordion-content hlm>
+          <brn-accordion-content hlm class="p-2">
             <Label textWrap="true" hlmP
               >Yes. It comes with default styles that matches the other components' aesthetic.</Label
             >
@@ -65,7 +65,7 @@ import { HlmPDirective } from '@spartan-ng/ui-typography-helm';
             <span>Is it animated?</span>
             <!-- <hlm-accordion-icon /> -->
           </brn-accordion-trigger>
-          <brn-accordion-content hlm>
+          <brn-accordion-content hlm class="p-2">
             <Label textWrap="true" hlmP>Yes. It's animated by default, but you can disable it if you prefer.</Label>
           </brn-accordion-content>
         </brn-accordion-item>
