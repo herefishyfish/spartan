@@ -1,7 +1,7 @@
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
-  ElementRef,
+  HostListener,
   NO_ERRORS_SCHEMA,
   effect,
   forwardRef,
@@ -10,8 +10,12 @@ import {
 } from '@angular/core';
 import { BrnAccordionItemComponent } from './brn-accordion-item.component';
 import { CustomElementClassSettable, SET_CLASS_TO_CUSTOM_ELEMENT_TOKEN } from '@spartan-ng/ui-core-brain';
-import { LoadEventData, StackLayout } from '@nativescript/core';
+import { registerElement } from '@nativescript/angular';
+import { LoadEventData, StackLayout, CSSType } from '@nativescript/core';
 
+registerElement('brn-accordion-content', () => StackLayout);
+
+@CSSType('brn-accordion-content')
 @Component({
   selector: 'brn-accordion-content',
   standalone: true,
@@ -25,15 +29,12 @@ import { LoadEventData, StackLayout } from '@nativescript/core';
     '[attr.data-state]': 'state()',
     '[style.--brn-collapsible-content-height]': 'initialHeight',
     '[id]': 'id',
+    '[class]': 'contentClass()',
   },
-  template: `
-    <StackLayout (loaded)="onLoaded($event)" [class]="contentClass()">
-      <ng-content />
-    </StackLayout>
-  `,
+  template: ` <ng-content /> `,
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
-export class BrnAccordionContentComponent implements CustomElementClassSettable {
+export class BrnAccordionContentComponent extends StackLayout implements CustomElementClassSettable {
   private _item = inject(BrnAccordionItemComponent);
   private view: StackLayout | undefined;
 
@@ -45,6 +46,7 @@ export class BrnAccordionContentComponent implements CustomElementClassSettable 
   public contentClass = this._contentClass.asReadonly();
 
   constructor() {
+    super();
     if (!this._item) {
       throw Error('Accordion trigger can only be used inside an AccordionItem. Add brnAccordionItem to parent.');
     }
@@ -54,20 +56,21 @@ export class BrnAccordionContentComponent implements CustomElementClassSettable 
       if (isOpen) {
         this.view?.animate({
           height: this.initialHeight,
-          duration: 330,
+          duration: 200,
           opacity: 1,
         });
       } else {
         this.view?.animate({
           height: 1,
-          duration: 330,
+          duration: 200,
           opacity: 0,
         });
       }
     });
   }
 
-  public onLoaded(event: LoadEventData) {
+  @HostListener('loaded', ['$event'])
+  public onLoadedAnimation(event: LoadEventData) {
     this.view = event.object as StackLayout;
     this.view.originY = -0.1;
     setTimeout(() => {
