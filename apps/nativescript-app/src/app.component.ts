@@ -13,8 +13,9 @@ export class AppComponent {
   constructor() {
     if (isIOS) {
       const window = Application.ios.window;
-      window.backgroundColor = new Color('#791e20').ios;
-      window.tintColor = UIColor.blackColor;
+      const tintColor = new Color('#791e20').ios;
+      window.backgroundColor = tintColor;
+      window.tintColor = tintColor;
     }
   }
 }
