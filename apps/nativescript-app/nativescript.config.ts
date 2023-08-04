@@ -10,7 +10,7 @@ export default {
     suppressCallJSMethodExceptions: false,
   },
   ios: {
-    discardUncaughtJsExceptions: false,
+    discardUncaughtJsExceptions: true,
   },
   appPath: 'src',
 } as NativeScriptConfig;
