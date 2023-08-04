@@ -1,6 +1,10 @@
 import { AfterContentInit, Component, computed, ContentChildren, Input, QueryList, signal } from '@angular/core';
 import { BrnAccordionTriggerComponent } from './brn-accordion-trigger.component';
+import { StackLayout, CSSType } from '@nativescript/core';
+import { registerElement } from '@nativescript/angular';
 
+registerElement('brn-accordion', () => StackLayout);
+@CSSType('brn-accordion')
 @Component({
   selector: 'brn-accordion',
   standalone: true,
@@ -10,7 +14,7 @@ import { BrnAccordionTriggerComponent } from './brn-accordion-trigger.component'
   },
   template: `<ng-content />`,
 })
-export class BrnAccordionComponent implements AfterContentInit {
+export class BrnAccordionComponent extends StackLayout implements AfterContentInit {
   @Input()
   public type: 'single' | 'multiple' = 'single';
   @Input()

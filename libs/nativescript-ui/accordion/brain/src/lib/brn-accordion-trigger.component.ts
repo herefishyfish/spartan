@@ -6,11 +6,17 @@ import {
   forwardRef,
   inject,
   signal,
+  HostListener,
 } from '@angular/core';
+import { registerElement } from '@nativescript/angular';
+import { FlexboxLayout, CSSType } from '@nativescript/core';
 import { BrnAccordionComponent } from './brn-accordion.component';
 import { BrnAccordionItemComponent } from './brn-accordion-item.component';
 import { CustomElementClassSettable, SET_CLASS_TO_CUSTOM_ELEMENT_TOKEN } from '@spartan-ng/ui-core-brain';
+import { HlmSmallDirective } from '@spartan-ng/ui-typography-helm';
 
+registerElement('brn-accordion-trigger', () => FlexboxLayout);
+@CSSType('brn-accordion-trigger')
 @Component({
   selector: 'brn-accordion-trigger',
   standalone: true,
@@ -29,14 +35,14 @@ import { CustomElementClassSettable, SET_CLASS_TO_CUSTOM_ELEMENT_TOKEN } from '@
     '[id]': 'id',
   },
   template: `
-    <button [class]="btnClass()" [attr.data-state]="state()" (tap)="toggleAccordionItem()">
+    <Label hlmSmall class="m-4">
       <ng-content />
-    </button>
+    </Label>
   `,
-
+  imports: [HlmSmallDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
-export class BrnAccordionTriggerComponent implements CustomElementClassSettable {
+export class BrnAccordionTriggerComponent extends FlexboxLayout implements CustomElementClassSettable {
   private _accordion = inject(BrnAccordionComponent);
   private _item = inject(BrnAccordionItemComponent);
   private _elementRef = inject(ElementRef);
@@ -49,6 +55,7 @@ export class BrnAccordionTriggerComponent implements CustomElementClassSettable 
   public btnClass = this._btnClass.asReadonly();
 
   constructor() {
+    super();
     if (!this._accordion) {
       throw Error('Accordion trigger can only be used inside an Accordion. Add brnAccordion to ancestor.');
     }
@@ -62,10 +69,7 @@ export class BrnAccordionTriggerComponent implements CustomElementClassSettable 
     this._btnClass.set(classes);
   }
 
-  public focus() {
-    this._elementRef.nativeElement.focus();
-  }
-
+  @HostListener('tap')
   protected toggleAccordionItem() {
     this._accordion.toggleItem(this._item.id);
   }
