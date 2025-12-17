@@ -1,80 +1,79 @@
-import { RouteMeta } from '@analogjs/router';
-import { metaWith } from '~/app/shared/meta/meta.util';
-import { Component } from '@angular/core';
-import { MainSectionDirective } from '~/app/shared/layout/main-section.directive';
-import { CodeComponent } from '~/app/shared/code/code.component';
-import { SectionIntroComponent } from '~/app/shared/layout/section-intro.component';
-import { SectionSubHeadingComponent } from '~/app/shared/layout/section-sub-heading.component';
-import { TabsComponent } from '~/app/shared/layout/tabs.component';
-import { CodePreviewDirective } from '~/app/shared/code/code-preview.directive';
-import { PageNavLinkComponent } from '~/app/shared/layout/page-nav/page-nav-link.component';
-import { PageNavComponent } from '~/app/shared/layout/page-nav/page-nav.component';
-import { PageBottomNavComponent } from '~/app/shared/layout/page-bottom-nav/page-bottom-nav.component';
-import { PageBottomNavLinkComponent } from '~/app/shared/layout/page-bottom-nav/page-bottom-nav-link.component';
-import { PageBottomNavPlaceholderComponent } from '~/app/shared/layout/page-bottom-nav-placeholder.component';
-import { ComboboxPreviewComponent, defaultCode } from './combobox.preview';
-import { hlmCode, hlmP } from '@spartan-ng/ui-typography-helm';
+import type { RouteMeta } from '@analogjs/router';
+import { Component, computed, inject } from '@angular/core';
+import { hlmP } from '@spartan-ng/helm/typography';
+import { Code } from '../../../../shared/code/code';
+import { CodePreview } from '../../../../shared/code/code-preview';
+import { MainSection } from '../../../../shared/layout/main-section';
+
+import { PageBottomNav } from '../../../../shared/layout/page-bottom-nav/page-bottom-nav';
+import { PageBottomNavLink } from '../../../../shared/layout/page-bottom-nav/page-bottom-nav-link';
+import { PageNav } from '../../../../shared/layout/page-nav/page-nav';
+import { SectionIntro } from '../../../../shared/layout/section-intro';
+import { SectionSubHeading } from '../../../../shared/layout/section-sub-heading';
+
+import { PrimitiveSnippetsService } from '@spartan-ng/app/app/core/services/primitive-snippets.service';
+import { link } from '@spartan-ng/app/app/shared/typography/link';
+import { Tabs } from '../../../../shared/layout/tabs';
+import { metaWith } from '../../../../shared/meta/meta.util';
+import { ComboboxPreview } from './combobox.preview';
 
 export const routeMeta: RouteMeta = {
-  data: { breadcrumb: 'Combobox' },
-  meta: metaWith('spartan/ui - Combobox', 'Autocomplete input and command palette with a list of suggestions.'),
-  title: 'spartan/ui - Combobox',
+	data: { breadcrumb: 'Combobox' },
+	meta: metaWith('spartan/ui - Combobox', 'Autocomplete input and command palette with a list of suggestions.'),
+	title: 'spartan/ui - Combobox',
 };
 
 @Component({
-  selector: 'spartan-combobox',
-  standalone: true,
-  imports: [
-    MainSectionDirective,
-    CodeComponent,
-    SectionIntroComponent,
-    SectionSubHeadingComponent,
-    TabsComponent,
-    CodePreviewDirective,
-    PageNavLinkComponent,
-    PageNavComponent,
-    PageBottomNavComponent,
-    PageBottomNavLinkComponent,
-    PageBottomNavPlaceholderComponent,
-    ComboboxPreviewComponent,
-  ],
-  template: `
-    <section spartanMainSection>
-      <spartan-section-intro
-        name="Combobox"
-        lead="Autocomplete input and command palette with a list of suggestions."
-      />
+	selector: 'spartan-combobox',
+	imports: [
+		MainSection,
+		Code,
+		SectionIntro,
+		SectionSubHeading,
+		Tabs,
+		CodePreview,
+		PageNav,
+		PageBottomNav,
+		PageBottomNavLink,
+		ComboboxPreview,
+	],
+	template: `
+		<section spartanMainSection>
+			<spartan-section-intro
+				name="Combobox"
+				lead="Autocomplete input and command palette with a list of suggestions."
+			/>
 
-      <spartan-tabs firstTab="Preview" secondTab="Code">
-        <div spartanCodePreview firstTab>
-          <spartan-combobox-preview />
-        </div>
-        <spartan-code secondTab [code]="defaultCode" />
-      </spartan-tabs>
+			<spartan-tabs firstTab="Preview" secondTab="Code">
+				<div spartanCodePreview firstTab>
+					<spartan-combobox-preview />
+				</div>
+				<spartan-code secondTab [code]="_defaultCode()" />
+			</spartan-tabs>
 
-      <spartan-section-sub-heading id="installation">Installation</spartan-section-sub-heading>
-      <p class="${hlmP}">
-        The Combobox is built using a composition of the <code class="${hlmCode}">brn-popover</code> and the
-        <code class="${hlmCode}">brn-command</code> components.
-      </p>
-      <p class="${hlmP}">See installation instructions for the Popover and the Command components.</p>
+			<spartan-section-sub-heading id="installation">Installation</spartan-section-sub-heading>
+			<p class="${hlmP}">
+				The Combobox is built using a composition of the
+				<a routerLink="/components/command" hlmBtn variant="link" class="${link}">Command</a>
+				and the
+				<a routerLink="/components/popover" hlmBtn variant="link" class="${link}">Popover</a>
+				components.
+			</p>
 
-      <spartan-section-sub-heading id="usage">Usage</spartan-section-sub-heading>
-      <div class="space-y-4">
-        <spartan-code [code]="defaultCode" />
-      </div>
+			<spartan-section-sub-heading id="usage">Usage</spartan-section-sub-heading>
+			<div class="mt-6 space-y-4">
+				<spartan-code [code]="_defaultCode()" />
+			</div>
 
-      <spartan-page-bottom-nav>
-        <spartan-page-bottom-nav-link href="command" label="Command" />
-        <spartan-page-bottom-nav-link direction="previous" href="collapsible" label="Collapsible" />
-      </spartan-page-bottom-nav>
-    </section>
-    <spartan-page-nav>
-      <spartan-page-nav-link fragment="installation" label="Installation" />
-      <spartan-page-nav-link fragment="usage" label="Usage" />
-    </spartan-page-nav>
-  `,
+			<spartan-page-bottom-nav>
+				<spartan-page-bottom-nav-link href="command" label="Command" />
+				<spartan-page-bottom-nav-link direction="previous" href="collapsible" label="Collapsible" />
+			</spartan-page-bottom-nav>
+		</section>
+		<spartan-page-nav />
+	`,
 })
-export default class ComboboxPageComponent {
-  protected readonly defaultCode = defaultCode;
+export default class ComboboxPage {
+	private readonly _snippets = inject(PrimitiveSnippetsService).getSnippets('combobox');
+	protected readonly _defaultCode = computed(() => this._snippets()['default']);
 }

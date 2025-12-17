@@ -1,170 +1,127 @@
 import { Component } from '@angular/core';
-import { BrnCommandImports } from '@spartan-ng/ui-command-brain';
-import { HlmCommandImports } from '@spartan-ng/ui-command-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  radixCalendar,
-  radixCardStack,
-  radixFace,
-  radixGear,
-  radixMagnifyingGlass,
-  radixPerson,
-  radixPlus,
-} from '@ng-icons/radix-icons';
+	lucideCalculator,
+	lucideCalendar,
+	lucideCog,
+	lucidePlus,
+	lucideSearch,
+	lucideSmile,
+	lucideUser,
+	lucideWallet,
+} from '@ng-icons/lucide';
+import { BrnCommandImports } from '@spartan-ng/brain/command';
+import { HlmCommandImports } from '@spartan-ng/helm/command';
+import { HlmIcon } from '@spartan-ng/helm/icon';
 
 @Component({
-  selector: 'spartan-command-preview',
-  standalone: true,
-  imports: [BrnCommandImports, HlmCommandImports, HlmIconComponent, HlmButtonDirective],
-  providers: [
-    provideIcons({ radixMagnifyingGlass, radixCalendar, radixFace, radixPlus, radixPerson, radixCardStack, radixGear }),
-  ],
-  template: `
-    <brn-cmd class="w-96" hlm>
-      <hlm-cmd-input-wrapper>
-        <hlm-icon name="radixMagnifyingGlass" />
-        <input placeholder="Type a command or search..." brnCmdInput hlm />
-      </hlm-cmd-input-wrapper>
-      <div *brnCmdEmpty hlmCmdEmpty>No results found.</div>
-      <brn-cmd-list hlm>
-        <brn-cmd-group hlm label="Suggestions">
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixCalendar" hlmCmdIcon />
-            Calendar
-          </button>
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixFace" hlmCmdIcon />
-            Search Emoji
-          </button>
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixPlus" hlmCmdIcon />
-            Calculator
-          </button>
-        </brn-cmd-group>
-        <brn-cmd-separator hlm></brn-cmd-separator>
-        <brn-cmd-group hlm label="Settings">
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixPerson" hlmCmdIcon />
-            Profile
-            <hlm-cmd-shortcut>⌘P</hlm-cmd-shortcut>
-          </button>
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixCardStack" hlmCmdIcon />
-            Billing
-            <hlm-cmd-shortcut>⌘B</hlm-cmd-shortcut>
-          </button>
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixGear" hlmCmdIcon />
-            Settings
-            <hlm-cmd-shortcut>⌘S</hlm-cmd-shortcut>
-          </button>
-        </brn-cmd-group>
-      </brn-cmd-list>
-    </brn-cmd>
-  `,
-})
-export class CommandPreviewComponent {}
+	selector: 'spartan-command-preview',
+	imports: [BrnCommandImports, HlmCommandImports, NgIcon, HlmIcon],
+	providers: [
+		provideIcons({
+			lucideSearch,
+			lucideCalendar,
+			lucideSmile,
+			lucidePlus,
+			lucideUser,
+			lucideWallet,
+			lucideCog,
+			lucideCalculator,
+		}),
+	],
+	template: `
+		<hlm-command class="rounded-lg border shadow-md md:min-w-[450px]">
+			<hlm-command-search>
+				<ng-icon hlm name="lucideSearch" class="shrink-0 opacity-50" />
 
-export const defaultCode = `
-import { Component } from '@angular/core';
-import { BrnCommandImports } from '@spartan-ng/ui-command-brain';
-import { HlmCommandImports } from '@spartan-ng/ui-command-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { provideIcons } from '@ng-icons/core';
-import {
-  radixCalendar,
-  radixCardStack,
-  radixFace,
-  radixGear,
-  radixMagnifyingGlass,
-  radixPerson,
-  radixPlus,
-} from '@ng-icons/radix-icons';
+				<input type="text" hlm-command-search-input placeholder="Type a command or search..." />
+			</hlm-command-search>
 
-@Component({
-  selector: 'spartan-command-preview',
-  standalone: true,
-  imports: [BrnCommandImports, HlmCommandImports, HlmIconComponent, HlmButtonDirective],
-  providers: [
-    provideIcons({ radixMagnifyingGlass, radixCalendar, radixFace, radixPlus, radixPerson, radixCardStack, radixGear }),
-  ],
-  template: \`
-    <brn-cmd class="w-96" hlm>
-      <hlm-cmd-input-wrapper>
-        <hlm-icon name="radixMagnifyingGlass" />
-        <input placeholder="Type a command or search..." brnCmdInput hlm />
-      </hlm-cmd-input-wrapper>
-      <div *brnCmdEmpty hlmCmdEmpty>No results found.</div>
-      <brn-cmd-list hlm>
-        <brn-cmd-group hlm label="Suggestions">
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixCalendar" hlmCmdIcon />
-            Calendar
-          </button>
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixFace" hlmCmdIcon />
-            Search Emoji
-          </button>
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixPlus" hlmCmdIcon />
-            Calculator
-          </button>
-        </brn-cmd-group>
-        <brn-cmd-separator hlm></brn-cmd-separator>
-        <brn-cmd-group hlm label="Settings">
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixPerson" hlmCmdIcon />
-            Profile
-            <hlm-cmd-shortcut>⌘P</hlm-cmd-shortcut>
-          </button>
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixCardStack" hlmCmdIcon />
-            Billing
-            <hlm-cmd-shortcut>⌘B</hlm-cmd-shortcut>
-          </button>
-          <button brnCmdItem hlm>
-            <hlm-icon name="radixGear" hlmCmdIcon />
-            Settings
-            <hlm-cmd-shortcut>⌘S</hlm-cmd-shortcut>
-          </button>
-        </brn-cmd-group>
-      </brn-cmd-list>
-    </brn-cmd>
-  \`,
+			<hlm-command-list>
+				<hlm-command-group>
+					<hlm-command-group-label>Suggestions</hlm-command-group-label>
+
+					<button hlm-command-item value="Calendar">
+						<ng-icon hlm name="lucideCalendar" hlmCommandIcon />
+						Calendar
+					</button>
+					<button hlm-command-item value="Search Emoji">
+						<ng-icon hlm name="lucideSmile" hlmCommandIcon />
+						Search Emoji
+					</button>
+					<button hlm-command-item value="Calculator" disabled>
+						<ng-icon hlm name="lucideCalculator" hlmCommandIcon />
+						Calculator
+					</button>
+				</hlm-command-group>
+
+				<hlm-command-separator />
+
+				<hlm-command-group>
+					<hlm-command-group-label>Settings</hlm-command-group-label>
+
+					<button hlm-command-item value="Profile">
+						<ng-icon hlm name="lucideUser" hlmCommandIcon />
+						Profile
+						<hlm-command-shortcut>⌘P</hlm-command-shortcut>
+					</button>
+					<button hlm-command-item value="Billing">
+						<ng-icon hlm name="lucideWallet" hlmCommandIcon />
+						Billing
+						<hlm-command-shortcut>⌘B</hlm-command-shortcut>
+					</button>
+					<button hlm-command-item value="Settings">
+						<ng-icon hlm name="lucideCog" hlmCommandIcon />
+						Settings
+						<hlm-command-shortcut>⌘S</hlm-command-shortcut>
+					</button>
+				</hlm-command-group>
+			</hlm-command-list>
+
+			<!-- Empty state -->
+			<div *brnCommandEmpty hlmCommandEmpty>No results found.</div>
+		</hlm-command>
+	`,
 })
-export class CommandPreviewComponent {}
-`;
+export class CommandPreview {}
 
 export const defaultImports = `
-import { BrnCommandImports } from '@spartan-ng/ui-command-brain';
-import { HlmCommandImports } from '@spartan-ng/ui-command-helm';
+import { BrnCommandImports } from '@spartan-ng/brain/command';
+import { HlmCommandImports } from '@spartan-ng/helm/command';
 `;
 
 export const defaultSkeleton = `
-<brn-cmd class="w-96" hlm>
-  <hlm-cmd-input-wrapper>
-    <hlm-icon name="radixMagnifyingGlass" />
-    <input placeholder="Type a command or search..." brnCmdInput hlm />
-  </hlm-cmd-input-wrapper>
-  <div *brnCmdEmpty hlmCmdEmpty>No results found.</div>
-  <brn-cmd-list hlm>
-    <brn-cmd-group hlm label="Suggestions">
-      <button brnCmdItem hlm>
-        <hlm-icon name="radixCalendar" hlmCmdIcon />
+<hlm-command>
+  <hlm-command-search>
+    <ng-icon hlm name="lucideSearch" />
+
+    <input type="text" hlm-command-search-input placeholder="Type a command or search..." />
+  </hlm-command-search>
+
+  <hlm-command-list>
+    <hlm-command-group>
+      <hlm-command-group-label>Suggestions</hlm-command-group-label>
+
+      <button hlm-command-item value="Calendar">
+        <ng-icon hlm name="lucideCalendar" hlmCommandIcon />
         Calendar
       </button>
-    </brn-cmd-group>
-    <brn-cmd-separator hlm></brn-cmd-separator>
-    <brn-cmd-group hlm label="Settings">
-      <button brnCmdItem hlm>
-        <hlm-icon name="radixGear" hlmCmdIcon />
-        Settings
-        <hlm-cmd-shortcut>⌘S</hlm-cmd-shortcut>
+    </hlm-command-group>
+
+    <hlm-command-separator />
+
+    <hlm-command-group>
+      <hlm-command-group-label>Settings</hlm-command-group-label>
+
+      <button hlm-command-item value="Profile">
+        <ng-icon hlm name="lucideUser" hlmCommandIcon />
+        Profile
+        <hlm-command-shortcut>⌘P</hlm-command-shortcut>
       </button>
-    </brn-cmd-group>
-  </brn-cmd-list>
-</brn-cmd>
+    </hlm-command-group>
+  </hlm-command-list>
+
+  <!-- Empty state -->
+  <div *brnCommandEmpty hlmCommandEmpty>No results found.</div>
+</hlm-command>
 `;

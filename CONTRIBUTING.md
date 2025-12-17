@@ -6,26 +6,27 @@ spartan is an MIT-licensed open source project with its ongoing development made
 
 ### Folder structure
 
-Source code for the UI primitives exists under the `libs/ui` folder. To contribute features or bug fixes to the project,
-locate the relevant code in one of the `libs/ui` sub-folder.
+Source code for the UI primitives exists under the `libs/brain` and `libs/helm` folders. To contribute features or bug fixes to the project,
+locate the relevant code in one of these sub-folders.
 
 ### Setup
 
-spartan uses [Yarn Classic](https://classic.yarnpkg.com/) to manage its dependencies.
+spartan uses [PNPM](https://pnpm.io) to manage its dependencies.
 
 Before opening a pull request, run the following command from the root
 folder to make sure your development dependencies are up-to-date:
 
 ```shell
-yarn
+pnpm install
 ```
 
 ### Running locally
 
-To serve the example application locally, run the following command from the root folder:
+When working on UI primitives you most likely want to work with our storybook. To start storybook
+you can simply run and go to http://localhost:4400:
 
 ```shell
-yarn dev
+pnpm run storybook
 ```
 
 ### Build
@@ -34,7 +35,7 @@ spartan uses [Nx](https://nx.dev) for builds. To build all projects locally, run
 folder:
 
 ```shell
-yarn build
+pnpm run build
 ```
 
 ### Testing
@@ -43,12 +44,42 @@ spartan uses [Jest](https://jestjs.io) for tests. To test all projects locally, 
 folder:
 
 ```shell
-yarn test
+pnpm run test
+```
+
+We also have e2e tests set up with Cypress that run against our storybook. Run them with:
+
+```shell
+pnpm run e2e
 ```
 
 ## Contributing to the docs and spartan website
 
-Coming soon...
+To serve the documentation and example application locally, run the following command from the root folder:
+
+```shell
+pnpm run dev
+```
+
+The code is inside `apps/app` and runs on AnalogJs.
+
+## Creating a new Brain feature
+
+Brain features should be added as a secondary entrypoint to the `brain` library. This can be done by running the following
+command:
+
+```shell
+nx g @spartan-ng/tools:brain-secondary-entrypoint --name=feature-name
+```
+
+## Creating a new Helm feature
+
+Helm features should be added as a secondary entrypoint to the `helm` library. This can be done by running the following
+command:
+
+```shell
+nx g @spartan-ng/tools:helm-secondary-entrypoint --name=feature-name
+```
 
 ## Submitting pull requests
 
@@ -59,7 +90,7 @@ anyway.**
 - Run the `Setup` command to make sure your development dependencies are up-to-date.
 - Please ensure the test suite passes before submitting a PR.
 - If you've added new functionality, **please** include tests which validate its behavior.
-- Make reference to possible [issues](https://github.com/goetzrobin/spartan/issues) on PR comment.
+- Make reference to possible [issues](https://github.com/spartan-ng/spartan/issues) on PR comment.
 
 ## Submitting bug reports
 
@@ -79,7 +110,7 @@ anyway.**
 
 Questions and requests for support should not be opened as issues and should be handled in the following ways:
 
-- Start a new [Q&A Discussion](https://github.com/goetzrobin/spartan/discussions/new?category=q-a) on GitHub.
+- Start a new [Q&A Discussion](https://github.com/spartan-ng/spartan/discussions/new?category=q-a) on GitHub.
 
 ## Commit message guidelines
 
@@ -108,7 +139,7 @@ to read on GitHub as well as in various git tools.
 The footer should contain
 a [closing reference to an issue](https://help.github.com/articles/closing-issues-via-commit-messages/) if any.
 
-Samples: (even more [samples](https://github.com/goetzrobin/spartan/commits/main))
+Samples: (even more [samples](https://github.com/spartan-ng/spartan/commits/main))
 
 ```
 docs(changelog): update changelog to beta.5
@@ -146,15 +177,20 @@ from commit messages.
 
 The following is the list of supported scopes:
 
+#### Primitives
+
 - **accordion**
 - **alert**
 - **alert-dialog**
 - **aspect-ratio**
 - **avatar**
 - **badge**
+- **breadcrumb**
 - **button**
+- **button-group**
 - **calendar**
 - **card**
+- **carousel**
 - **checkbox**
 - **collapsible**
 - **combobox**
@@ -164,11 +200,17 @@ The following is the list of supported scopes:
 - **date-picker**
 - **dialog**
 - **dropdown-menu**
+- **empty**
+- **field**
+- **form-field**
 - **hover-card**
+- **icon**
 - **input**
+- **input-otp**
 - **label**
 - **menubar**
 - **navigation-menu**
+- **pagination**
 - **popover**
 - **progress**
 - **radio-group**
@@ -178,13 +220,23 @@ The following is the list of supported scopes:
 - **sheet**
 - **skeleton**
 - **slider**
+- **sonner**
+- **spinner**
 - **switch**
 - **table**
 - **tabs**
 - **textarea**
-- **toast**
 - **toggle**
+- **toggle-group**
 - **tooltip**
+- **typography**
+
+#### And others
+
+- **trpc**
+- **nx**
+- **repo**
+- **cli**
 
 ### Subject
 

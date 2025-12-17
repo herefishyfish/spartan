@@ -1,187 +1,52 @@
 import { Component } from '@angular/core';
-import {
-  BrnAlertDialogCloseDirective,
-  BrnAlertDialogComponent,
-  BrnAlertDialogContentDirective,
-  BrnAlertDialogDescriptionDirective,
-  BrnAlertDialogOverlayComponent,
-  BrnAlertDialogTitleDirective,
-  BrnAlertDialogTriggerDirective,
-} from '@spartan-ng/ui-alertdialog-brain';
-import {
-  HlmAlertDialogActionButtonDirective,
-  HlmAlertDialogCancelButtonDirective,
-  HlmAlertDialogContentDirective,
-  HlmAlertDialogDescriptionDirective,
-  HlmAlertDialogFooterComponent,
-  HlmAlertDialogHeaderComponent,
-  HlmAlertDialogOverlayDirective,
-  HlmAlertDialogTitleDirective,
-} from '@spartan-ng/ui-alertdialog-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { provideIcons } from '@ng-icons/core';
-import { radixCross1 } from '@ng-icons/radix-icons';
+import { BrnAlertDialogImports } from '@spartan-ng/brain/alert-dialog';
+import { HlmAlertDialogImports } from '@spartan-ng/helm/alert-dialog';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
 
 @Component({
-  selector: 'spartan-alert-dialog-preview',
-  standalone: true,
-  imports: [
-    BrnAlertDialogComponent,
-    BrnAlertDialogOverlayComponent,
-    BrnAlertDialogTriggerDirective,
-    BrnAlertDialogContentDirective,
-    BrnAlertDialogCloseDirective,
-    BrnAlertDialogTitleDirective,
-    BrnAlertDialogDescriptionDirective,
-
-    HlmAlertDialogOverlayDirective,
-    HlmAlertDialogContentDirective,
-    HlmAlertDialogHeaderComponent,
-    HlmAlertDialogFooterComponent,
-    HlmAlertDialogTitleDirective,
-    HlmAlertDialogDescriptionDirective,
-    HlmAlertDialogCancelButtonDirective,
-    HlmAlertDialogActionButtonDirective,
-
-    HlmButtonDirective,
-    HlmIconComponent,
-  ],
-  providers: [provideIcons({ radixCross1 })],
-  template: `
-    <brn-alert-dialog closeDelay="100">
-      <brn-alert-dialog-overlay hlm />
-      <button id="edit-profile" variant="outline" brnAlertDialogTrigger hlmBtn>Delete Account</button>
-      <div hlmAlertDialogContent *brnAlertDialogContent="let ctx">
-        <hlm-alert-dialog-header>
-          <h3 brnAlertDialogTitle hlm>Are you absolutely sure?</h3>
-          <p brnAlertDialogDescription hlm>
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
-          </p>
-        </hlm-alert-dialog-header>
-        <hlm-alert-dialog-footer>
-          <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
-          <button hlmAlertDialogAction (click)="ctx.close()">Delete account</button>
-        </hlm-alert-dialog-footer>
-      </div>
-    </brn-alert-dialog>
-  `,
+	selector: 'spartan-alert-dialog-preview',
+	imports: [BrnAlertDialogImports, HlmAlertDialogImports, HlmButtonImports],
+	template: `
+		<hlm-alert-dialog>
+			<button id="edit-profile" hlmAlertDialogTrigger hlmBtn variant="outline">Show Dialog</button>
+			<hlm-alert-dialog-content *brnAlertDialogContent="let ctx">
+				<hlm-alert-dialog-header>
+					<h2 hlmAlertDialogTitle>Are you absolutely sure?</h2>
+					<p hlmAlertDialogDescription>
+						This action cannot be undone. This will permanently delete your account and remove your data from our
+						servers.
+					</p>
+				</hlm-alert-dialog-header>
+				<hlm-alert-dialog-footer>
+					<button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
+					<button hlmAlertDialogAction (click)="ctx.close()">Continue</button>
+				</hlm-alert-dialog-footer>
+			</hlm-alert-dialog-content>
+		</hlm-alert-dialog>
+	`,
 })
-export class AlertDialogPreviewComponent {}
-
-export const defaultCode = `
-import { Component } from '@angular/core';
-import {
-  BrnAlertDialogCloseDirective,
-  BrnAlertDialogComponent,
-  BrnAlertDialogContentDirective,
-  BrnAlertDialogDescriptionDirective,
-  BrnAlertDialogOverlayComponent,
-  BrnAlertDialogTitleDirective,
-  BrnAlertDialogTriggerDirective,
-} from '@spartan-ng/ui-alertdialog-brain';
-import {
-  HlmAlertDialogActionButtonDirective,
-  HlmAlertDialogCancelButtonDirective,
-  HlmAlertDialogContentDirective,
-  HlmAlertDialogDescriptionDirective,
-  HlmAlertDialogFooterComponent,
-  HlmAlertDialogHeaderComponent,
-  HlmAlertDialogOverlayDirective,
-  HlmAlertDialogTitleDirective,
-} from '@spartan-ng/ui-alertdialog-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { provideIcons } from '@ng-icons/core';
-import { radixCross1 } from '@ng-icons/radix-icons';
-
-@Component({
-  selector: 'spartan-alert-dialog-preview',
-  standalone: true,
-  imports: [
-    BrnAlertDialogComponent,
-    BrnAlertDialogOverlayComponent,
-    BrnAlertDialogTriggerDirective,
-    BrnAlertDialogContentDirective,
-    BrnAlertDialogCloseDirective,
-    BrnAlertDialogTitleDirective,
-    BrnAlertDialogDescriptionDirective,
-
-    HlmAlertDialogOverlayDirective,
-    HlmAlertDialogContentDirective,
-    HlmAlertDialogHeaderComponent,
-    HlmAlertDialogFooterComponent,
-    HlmAlertDialogTitleDirective,
-    HlmAlertDialogDescriptionDirective,
-    HlmAlertDialogCancelButtonDirective,
-    HlmAlertDialogActionButtonDirective,
-
-    HlmButtonDirective,
-    HlmIconComponent,
-  ],
-  providers: [provideIcons({ radixCross1 })],
-  template: \`
-    <brn-alert-dialog closeDelay="100">
-      <brn-alert-dialog-overlay hlm />
-      <button id="edit-profile" variant="outline" brnAlertDialogTrigger hlmBtn>Delete Account</button>
-      <div hlmAlertDialogContent *brnAlertDialogContent="let ctx">
-        <hlm-alert-dialog-header>
-          <h3 brnAlertDialogTitle hlm>Are you absolutely sure?</h3>
-          <p brnAlertDialogDescription hlm>
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
-          </p>
-        </hlm-alert-dialog-header>
-        <hlm-alert-dialog-footer>
-          <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
-          <button hlmAlertDialogAction (click)="ctx.close()">Delete account</button>
-        </hlm-alert-dialog-footer>
-      </div>
-    </brn-alert-dialog>
-  \`,
-})
-export class AlertDialogPreviewComponent {}
-`;
+export class AlertDialogPreview {}
 
 export const defaultImports = `
-import {
-  BrnAlertDialogCloseDirective,
-  BrnAlertDialogComponent,
-  BrnAlertDialogContentDirective,
-  BrnAlertDialogDescriptionDirective,
-  BrnAlertDialogOverlayComponent,
-  BrnAlertDialogTitleDirective,
-  BrnAlertDialogTriggerDirective,
-} from '@spartan-ng/ui-alertdialog-brain';
-import {
-  HlmAlertDialogActionButtonDirective,
-  HlmAlertDialogCancelButtonDirective,
-  HlmAlertDialogContentDirective,
-  HlmAlertDialogDescriptionDirective,
-  HlmAlertDialogFooterComponent,
-  HlmAlertDialogHeaderComponent,
-  HlmAlertDialogOverlayDirective,
-  HlmAlertDialogTitleDirective,
-} from '@spartan-ng/ui-alertdialog-helm';
+import { BrnAlertDialogImports } from '@spartan-ng/brain/alert-dialog';
+import { HlmAlertDialogImports } from '@spartan-ng/helm/alert-dialog';
 `;
 
 export const defaultSkeleton = `
-<brn-alert-dialog closeDelay='100'>
-  <brn-alert-dialog-overlay hlm />
-  <button id='edit-profile' variant='outline' brnAlertDialogTrigger hlmBtn>Delete Account</button>
-  <div hlmAlertDialogContent *brnAlertDialogContent='let ctx'>
+<hlm-alert-dialog>
+  <button id="edit-profile" hlmAlertDialogTrigger>Show Dialog</button>
+  <hlm-alert-dialog-content *brnAlertDialogContent="let ctx">
     <hlm-alert-dialog-header>
-      <h3 brnAlertDialogTitle hlm>Are you absolutely sure?</h3>
-      <p brnAlertDialogDescription hlm>
+      <h2 hlmAlertDialogTitle>Are you absolutely sure?</h2>
+      <p hlmAlertDialogDescription>
         This action cannot be undone. This will permanently delete your account and remove your data from our
         servers.
       </p>
     </hlm-alert-dialog-header>
     <hlm-alert-dialog-footer>
-      <button hlmAlertDialogCancel (click)='ctx.close()'>Cancel</button>
-      <button hlmAlertDialogAction (click)='ctx.close()'>Delete account</button>
+      <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
+      <button hlmAlertDialogAction (click)="ctx.close()">Continue</button>
     </hlm-alert-dialog-footer>
-  </div>
-</brn-alert-dialog>
+  </hlm-alert-dialog-content>
+</hlm-alert-dialog>
 `;

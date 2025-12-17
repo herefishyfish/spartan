@@ -1,40 +1,22 @@
 import { Component } from '@angular/core';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
+import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
+import { HlmLabelImports } from '@spartan-ng/helm/label';
 
 @Component({
-  selector: 'spartan-label-preview',
-  standalone: true,
-  imports: [HlmLabelDirective, HlmInputDirective],
-  template: `
-    <label hlmLabel
-      >E-Mail
-      <input class="w-80" hlmInput type="email" placeholder="Email" />
-    </label>
-  `,
+	selector: 'spartan-label-preview',
+	imports: [HlmLabelImports, HlmCheckboxImports],
+	template: `
+		<div>
+			<div class="flex items-center gap-2">
+				<hlm-checkbox id="terms" />
+				<label hlmLabel for="terms">Accept terms and conditions</label>
+			</div>
+		</div>
+	`,
 })
-export class LabelPreviewComponent {}
-
-export const defaultCode = `
-import { Component } from '@angular/core';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
-
-@Component({
-  selector: 'spartan-label-preview',
-  standalone: true,
-  imports: [HlmLabelDirective, HlmInputDirective],
-  template: \`
-    <label hlmLabel>E-Mail
-      <input class='w-80' hlmInput type='email' placeholder='Email'/>
-    </label>
-  \`,
-})
-export class LabelPreviewComponent {}
-
-`;
+export class LabelPreview {}
 
 export const defaultImports = `
-import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
+import { HlmLabelImports } from '@spartan-ng/helm/label';
 `;
-export const defaultSkeleton = `<label hlmLabel>Label<input/></label>`;
+export const defaultSkeleton = '<label hlmLabel>Label</label>';

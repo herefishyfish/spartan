@@ -1,51 +1,30 @@
 import { Component } from '@angular/core';
-import { HlmToggleDirective } from '@spartan-ng/ui-toggle-helm';
-import { BrnToggleDirective } from '@spartan-ng/ui-toggle-brain';
-import { provideIcons } from '@ng-icons/core';
-import { radixFontItalic } from '@ng-icons/radix-icons';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBookmark } from '@ng-icons/lucide';
+import { HlmToggleImports } from '@spartan-ng/helm/toggle';
 
 @Component({
-  selector: 'spartan-toggle-preview',
-  standalone: true,
-  imports: [BrnToggleDirective, HlmToggleDirective, HlmIconComponent],
-  providers: [provideIcons({ radixFontItalic })],
-  template: `
-    <button brnToggle hlm>
-      <hlm-icon size="sm" name="radixFontItalic" />
-    </button>
-  `,
+	selector: 'spartan-toggle-preview',
+	imports: [HlmToggleImports, NgIcon],
+	providers: [provideIcons({ lucideBookmark })],
+	template: `
+		<button
+			hlmToggle
+			size="sm"
+			variant="outline"
+			aria-label="Toggle bookmark"
+			class="data-[state=on]:bg-transparent data-[state=on]:*:[ng-icon]:*:[svg]:fill-red-500 data-[state=on]:*:[ng-icon]:*:[svg]:stroke-red-500"
+		>
+			<ng-icon name="lucideBookmark" />
+			Bookmark
+		</button>
+	`,
 })
-export class TogglePreviewComponent {}
-
-export const defaultCode = `
-import { Component } from '@angular/core';
-import { HlmToggleDirective } from '@spartan-ng/ui-toggle-helm';
-import { BrnToggleDirective } from '@spartan-ng/ui-toggle-brain';
-import { provideIcons } from '@ng-icons/core';
-import { radixFontItalic } from '@ng-icons/radix-icons';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-
-@Component({
-  selector: 'spartan-toggle-preview',
-  standalone: true,
-  imports: [BrnToggleDirective, HlmToggleDirective, HlmIconComponent],
-  providers: [provideIcons({ radixFontItalic })],
-  template: \`
-    <button brnToggle hlm>
-      <hlm-icon size="sm" name="radixFontItalic" />
-    </button>
-  \`,
-})
-export class TogglePreviewComponent {}
-`;
+export class TogglePreview {}
 
 export const defaultImports = `
-import { HlmToggleDirective } from '@spartan-ng/ui-toggle-helm';
-import { BrnToggleDirective } from '@spartan-ng/ui-toggle-brain';
+import { HlmToggleImports } from '@spartan-ng/helm/toggle';
 `;
 export const defaultSkeleton = `
-<button brnToggle hlm>
-  <hlm-icon size="sm" name="radixFontItalic" />
-</button>
+<button hlmToggle>Toggle</button>
 `;

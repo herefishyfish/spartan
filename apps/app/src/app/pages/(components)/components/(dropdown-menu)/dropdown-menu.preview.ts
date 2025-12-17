@@ -1,410 +1,155 @@
 import { Component } from '@angular/core';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { provideIcons } from '@ng-icons/core';
 import {
-  radixAvatar,
-  radixCardStack,
-  radixChatBubble,
-  radixCode,
-  radixEnvelopeClosed,
-  radixExit,
-  radixFace,
-  radixGear,
-  radixGithubLogo,
-  radixKeyboard,
-  radixPerson,
-  radixPlus,
-  radixPlusCircled,
-  radixQuestionMarkCircled,
-} from '@ng-icons/radix-icons';
-import {
-  BrnMenuDirective,
-  BrnMenuGroupDirective,
-  BrnMenuItemDirective,
-  BrnMenuTriggerDirective,
-} from '@spartan-ng/ui-menu-brain';
-import {
-  HlmMenuDirective,
-  HlmMenuItemDirective,
-  HlmMenuItemIconDirective,
-  HlmMenuItemSubIndicatorComponent,
-  HlmMenuLabelComponent,
-  HlmMenuSeparatorComponent,
-  HlmMenuShortcutComponent,
-  HlmSubMenuDirective,
-} from '@spartan-ng/ui-menu-helm';
+	lucideCircleHelp,
+	lucideCirclePlus,
+	lucideCircleUser,
+	lucideCode,
+	lucideCog,
+	lucideGithub,
+	lucideKeyboard,
+	lucideLayers,
+	lucideLogOut,
+	lucideMail,
+	lucideMessageSquare,
+	lucidePlus,
+	lucideSmile,
+	lucideUser,
+} from '@ng-icons/lucide';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 
 @Component({
-  selector: 'spartan-dropdown-preview',
-  standalone: true,
-  imports: [
-    BrnMenuDirective,
-    BrnMenuItemDirective,
-    BrnMenuTriggerDirective,
-    BrnMenuGroupDirective,
+	selector: 'spartan-dropdown-preview',
+	imports: [HlmDropdownMenuImports, HlmButtonImports],
+	providers: [
+		provideIcons({
+			lucideUser,
+			lucideLayers,
+			lucideCog,
+			lucideKeyboard,
+			lucideCircleUser,
+			lucideSmile,
+			lucidePlus,
+			lucideGithub,
+			lucideCircleHelp,
+			lucideCode,
+			lucideLogOut,
+			lucideMail,
+			lucideMessageSquare,
+			lucideCirclePlus,
+		}),
+	],
+	template: `
+		<button hlmBtn variant="outline" [hlmDropdownMenuTrigger]="menu">Open</button>
 
-    HlmMenuDirective,
-    HlmSubMenuDirective,
-    HlmMenuItemDirective,
-    HlmMenuItemSubIndicatorComponent,
-    HlmMenuLabelComponent,
-    HlmMenuShortcutComponent,
-    HlmMenuSeparatorComponent,
-    HlmMenuItemIconDirective,
+		<ng-template #menu>
+			<hlm-dropdown-menu class="w-56">
+				<hlm-dropdown-menu-label>My Account</hlm-dropdown-menu-label>
 
-    HlmButtonDirective,
-    HlmIconComponent,
-  ],
-  providers: [
-    provideIcons({
-      radixPerson,
-      radixCardStack,
-      radixGear,
-      radixKeyboard,
-      radixAvatar,
-      radixFace,
-      radixPlus,
-      radixGithubLogo,
-      radixQuestionMarkCircled,
-      radixCode,
-      radixExit,
-      radixEnvelopeClosed,
-      radixChatBubble,
-      radixPlusCircled,
-    }),
-  ],
-  template: `
-    <div class="w-full flex justify-center items-center pt-[20%]">
-      <button hlmBtn variant="outline" align="end" [brnMenuTriggerFor]="menu">Open</button>
-    </div>
-    <ng-template #menu>
-      <div hlm brnMenu class="w-56">
-        <hlm-menu-label>My Account</hlm-menu-label>
-        <hlm-menu-separator />
-        <div brnMenuGroup>
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixPerson" hlmMenuIcon />
-            <span>Profile</span>
-            <hlm-menu-shortcut>⇧⌘P</hlm-menu-shortcut>
-          </button>
+				<hlm-dropdown-menu-group>
+					<button hlmDropdownMenuItem>
+						<span>Profile</span>
+						<hlm-dropdown-menu-shortcut>⇧⌘P</hlm-dropdown-menu-shortcut>
+					</button>
 
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixCardStack" hlmMenuIcon />
-            <span>Billing</span>
-            <hlm-menu-shortcut>⌘B</hlm-menu-shortcut>
-          </button>
+					<button hlmDropdownMenuItem>
+						<span>Billing</span>
+						<hlm-dropdown-menu-shortcut>⌘B</hlm-dropdown-menu-shortcut>
+					</button>
 
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixGear" hlmMenuIcon />
-            <span>Settings</span>
-            <hlm-menu-shortcut>⌘S</hlm-menu-shortcut>
-          </button>
+					<button hlmDropdownMenuItem>
+						<span>Settings</span>
+						<hlm-dropdown-menu-shortcut>⌘S</hlm-dropdown-menu-shortcut>
+					</button>
 
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixKeyboard" hlmMenuIcon />
-            <span>Keyboard Shortcuts</span>
-            <hlm-menu-shortcut>⌘K</hlm-menu-shortcut>
-          </button>
-        </div>
+					<button hlmDropdownMenuItem>
+						<span>Keyboard shortcuts</span>
+						<hlm-dropdown-menu-shortcut>⌘K</hlm-dropdown-menu-shortcut>
+					</button>
+				</hlm-dropdown-menu-group>
 
-        <hlm-menu-separator />
+				<hlm-dropdown-menu-separator />
 
-        <div brnMenuGroup>
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixAvatar" hlmMenuIcon />
-            <span>Team</span>
-            <hlm-menu-shortcut>⌘B</hlm-menu-shortcut>
-          </button>
+				<hlm-dropdown-menu-group>
+					<button hlmDropdownMenuItem>
+						<span>Team</span>
+						<hlm-dropdown-menu-shortcut>⌘B</hlm-dropdown-menu-shortcut>
+					</button>
 
-          <button hlm brnMenuItem [brnMenuTriggerFor]="invite">
-            <hlm-icon name="radixFace" hlmMenuIcon />
-            <span>Invite Users</span>
-            <hlm-menu-item-sub-indicator />
-          </button>
+					<button hlmDropdownMenuItem side="right" align="start" [hlmDropdownMenuTrigger]="invite">
+						<span>Invite Users</span>
+						<hlm-dropdown-menu-item-sub-indicator />
+					</button>
 
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixPlus" hlmMenuIcon />
-            <span>New Team</span>
-            <hlm-menu-shortcut>⌘+T</hlm-menu-shortcut>
-          </button>
-        </div>
+					<button hlmDropdownMenuItem>
+						<span>New Team</span>
+						<hlm-dropdown-menu-shortcut>⌘+T</hlm-dropdown-menu-shortcut>
+					</button>
+				</hlm-dropdown-menu-group>
 
-        <hlm-menu-separator />
+				<hlm-dropdown-menu-separator />
 
-        <div brnMenuGroup>
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixGithubLogo" hlmMenuIcon />
-            <span>Github</span>
-          </button>
+				<hlm-dropdown-menu-group>
+					<button hlmDropdownMenuItem>
+						<span>GitHub</span>
+					</button>
 
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixQuestionMarkCircled" hlmMenuIcon />
-            <span>Support</span>
-          </button>
+					<button hlmDropdownMenuItem>
+						<span>Support</span>
+					</button>
 
-          <button hlm brnMenuItem disabled>
-            <hlm-icon name="radixCode" hlmMenuIcon />
-            <span>API</span>
-          </button>
-        </div>
+					<button hlmDropdownMenuItem disabled>
+						<span>API</span>
+					</button>
+				</hlm-dropdown-menu-group>
 
-        <hlm-menu-separator />
+				<hlm-dropdown-menu-separator />
 
-        <button hlm brnMenuItem>
-          <hlm-icon name="radixExit" hlmMenuIcon />
-          <span>Logout</span>
-          <hlm-menu-shortcut>⇧⌘Q</hlm-menu-shortcut>
-        </button>
-      </div>
-    </ng-template>
+				<button hlmDropdownMenuItem>
+					Log out
+					<hlm-dropdown-menu-shortcut>⇧⌘Q</hlm-dropdown-menu-shortcut>
+				</button>
+			</hlm-dropdown-menu>
+		</ng-template>
 
-    <ng-template #invite>
-      <div hlm brnSubMenu>
-        <button hlm brnMenuItem>
-          <hlm-icon name="radixEnvelopeClosed" hlmMenuIcon />
-          Email
-        </button>
+		<ng-template #invite>
+			<hlm-dropdown-menu-sub>
+				<button hlmDropdownMenuItem>Email</button>
 
-        <button hlm brnMenuItem>
-          <hlm-icon name="radixChatBubble" hlmMenuIcon />
-          Message
-        </button>
-        <hlm-menu-separator />
-        <button hlm brnMenuItem>
-          <hlm-icon name="radixPlusCircled" hlmMenuIcon />
-          <span>More</span>
-        </button>
-      </div>
-    </ng-template>
-  `,
+				<button hlmDropdownMenuItem>Message</button>
+				<hlm-dropdown-menu-separator />
+				<button hlmDropdownMenuItem>More...</button>
+			</hlm-dropdown-menu-sub>
+		</ng-template>
+	`,
 })
-export class DropdownPreviewComponent {}
-
-export const defaultCode = `
-import { Component } from '@angular/core';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { provideIcons } from '@ng-icons/core';
-import {
-  radixAvatar,
-  radixCardStack,
-  radixChatBubble,
-  radixCode,
-  radixEnvelopeClosed,
-  radixExit,
-  radixFace,
-  radixGear,
-  radixGithubLogo,
-  radixKeyboard,
-  radixPerson,
-  radixPlus,
-  radixPlusCircled,
-  radixQuestionMarkCircled,
-} from '@ng-icons/radix-icons';
-import {
-  BrnMenuDirective,
-  BrnMenuGroupDirective,
-  BrnMenuItemDirective,
-  BrnMenuTriggerDirective,
-} from '@spartan-ng/ui-menu-brain';
-import {
-  HlmMenuDirective,
-  HlmMenuItemDirective,
-  HlmMenuItemIconDirective,
-  HlmMenuItemSubIndicatorComponent,
-  HlmMenuLabelComponent,
-  HlmMenuSeparatorComponent,
-  HlmMenuShortcutComponent,
-  HlmSubMenuDirective,
-} from '@spartan-ng/ui-menu-helm';
-
-@Component({
-  selector: 'spartan-dropdown-preview',
-  standalone: true,
-  imports: [
-    BrnMenuDirective,
-    BrnMenuItemDirective,
-    BrnMenuTriggerDirective,
-    BrnMenuGroupDirective,
-
-    HlmMenuDirective,
-    HlmSubMenuDirective,
-    HlmMenuItemDirective,
-    HlmMenuItemSubIndicatorComponent,
-    HlmMenuLabelComponent,
-    HlmMenuShortcutComponent,
-    HlmMenuSeparatorComponent,
-    HlmMenuItemIconDirective,
-
-    HlmButtonDirective,
-    HlmIconComponent,
-  ],
-  providers: [
-    provideIcons({
-      radixPerson,
-      radixCardStack,
-      radixGear,
-      radixKeyboard,
-      radixAvatar,
-      radixFace,
-      radixPlus,
-      radixGithubLogo,
-      radixQuestionMarkCircled,
-      radixCode,
-      radixExit,
-      radixEnvelopeClosed,
-      radixChatBubble,
-      radixPlusCircled,
-    }),
-  ],
-  template: \`
-    <div class="w-full flex justify-center items-center pt-[20%]">
-      <button hlmBtn variant="outline" align="end" [brnMenuTriggerFor]="menu">Open</button>
-    </div>
-    <ng-template #menu>
-      <div hlm brnMenu class="w-56">
-        <hlm-menu-label>My Account</hlm-menu-label>
-        <hlm-menu-separator />
-        <div brnMenuGroup>
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixPerson" hlmMenuIcon />
-            <span>Profile</span>
-            <hlm-menu-shortcut>⇧⌘P</hlm-menu-shortcut>
-          </button>
-
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixCardStack" hlmMenuIcon />
-            <span>Billing</span>
-            <hlm-menu-shortcut>⌘B</hlm-menu-shortcut>
-          </button>
-
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixGear" hlmMenuIcon />
-            <span>Settings</span>
-            <hlm-menu-shortcut>⌘S</hlm-menu-shortcut>
-          </button>
-
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixKeyboard" hlmMenuIcon />
-            <span>Keyboard Shortcuts</span>
-            <hlm-menu-shortcut>⌘K</hlm-menu-shortcut>
-          </button>
-        </div>
-
-        <hlm-menu-separator />
-
-        <div brnMenuGroup>
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixAvatar" hlmMenuIcon />
-            <span>Team</span>
-            <hlm-menu-shortcut>⌘B</hlm-menu-shortcut>
-          </button>
-
-          <button hlm brnMenuItem [brnMenuTriggerFor]="invite">
-            <hlm-icon name="radixFace" hlmMenuIcon />
-            <span>Invite Users</span>
-            <hlm-menu-item-sub-indicator />
-          </button>
-
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixPlus" hlmMenuIcon />
-            <span>New Team</span>
-            <hlm-menu-shortcut>⌘+T</hlm-menu-shortcut>
-          </button>
-        </div>
-
-        <hlm-menu-separator />
-
-        <div brnMenuGroup>
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixGithubLogo" hlmMenuIcon />
-            <span>Github</span>
-          </button>
-
-          <button hlm brnMenuItem>
-            <hlm-icon name="radixQuestionMarkCircled" hlmMenuIcon />
-            <span>Support</span>
-          </button>
-
-          <button hlm brnMenuItem disabled>
-            <hlm-icon name="radixCode" hlmMenuIcon />
-            <span>API</span>
-          </button>
-        </div>
-
-        <hlm-menu-separator />
-
-        <button hlm brnMenuItem>
-          <hlm-icon name="radixExit" hlmMenuIcon />
-          <span>Logout</span>
-          <hlm-menu-shortcut>⇧⌘Q</hlm-menu-shortcut>
-        </button>
-      </div>
-    </ng-template>
-
-    <ng-template #invite>
-      <div hlm brnSubMenu>
-        <button hlm brnMenuItem>
-          <hlm-icon name="radixEnvelopeClosed" hlmMenuIcon />
-          Email
-        </button>
-
-        <button hlm brnMenuItem>
-          <hlm-icon name="radixChatBubble" hlmMenuIcon />
-          Message
-        </button>
-        <hlm-menu-separator />
-        <button hlm brnMenuItem>
-          <hlm-icon name="radixPlusCircled" hlmMenuIcon />
-          <span>More</span>
-        </button>
-      </div>
-    </ng-template>
-  \`,
-})
-export class DropdownPreviewComponent {}
-`;
+export class DropdownPreview {}
 
 export const defaultImports = `
-import {
-  BrnMenuDirective,
-  BrnMenuGroupDirective,
-  BrnMenuItemDirective,
-  BrnMenuTriggerDirective,
-} from '@spartan-ng/ui-menu-brain';
-import {
-  HlmMenuDirective,
-  HlmMenuItemDirective,
-  HlmMenuItemIconDirective,
-  HlmMenuItemSubIndicatorComponent,
-  HlmMenuLabelComponent,
-  HlmMenuSeparatorComponent,
-  HlmMenuShortcutComponent,
-  HlmSubMenuDirective,
-} from '@spartan-ng/ui-menu-helm';
+import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 `;
 
 export const defaultSkeleton = `
-<button [brnMenuTriggerFor]="menu">Open</button>
+<button [hlmDropdownMenuTrigger]="menu">Open</button>
 
 <ng-template #menu>
-  <div hlm brnMenu>
-    <hlm-menu-label>My Account</hlm-menu-label>
-    <hlm-menu-separator />
-    <div brnMenuGroup>
-      <button hlm brnMenuItem>
+  <hlm-dropdown-menu>
+    <hlm-dropdown-menu-label>My Account</hlm-dropdown-menu-label>
+    <hlm-dropdown-menu-separator />
+    <hlm-dropdown-menu-group>
+      <button hlmDropdownMenuItem>
         Profile
-        <hlm-menu-shortcut>⇧⌘P</hlm-menu-shortcut>
+        <hlm-dropdown-menu-shortcut>⇧⌘P</hlm-dropdown-menu-shortcut>
       </button>
 
-      <hlm-menu-separator />
+      <hlm-dropdown-menu-separator />
 
-      <button hlm brnMenuItem [brnMenuTriggerFor]="invite">
+      <button hlmDropdownMenuItem [hlmDropdownMenuTrigger]="invite">
         Invite Users
-        <hlm-menu-item-sub-indicator />
+        <hlm-dropdown-menu-item-sub-indicator />
       </button>
-    </div>
-  </div>
+    </hlm-dropdown-menu-group>
+  </hlm-dropdown-menu>
 </ng-template>
 `;

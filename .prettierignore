@@ -7,3 +7,10 @@
 /tmp
 /node_modules
 /stats.html
+pnpm-lock.yaml
+
+/.nx/cache
+
+/.nx/workspace-data
+
+apps/ui-storybook/.storybook/tailwind.css

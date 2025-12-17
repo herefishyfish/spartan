@@ -1,41 +1,17 @@
 import { Component } from '@angular/core';
-import { HlmToggleDirective } from '@spartan-ng/ui-toggle-helm';
-import { BrnToggleDirective } from '@spartan-ng/ui-toggle-brain';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { provideIcons } from '@ng-icons/core';
-import { radixFontItalic } from '@ng-icons/radix-icons';
+import { lucideItalic } from '@ng-icons/lucide';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { HlmToggleImports } from '@spartan-ng/helm/toggle';
 
 @Component({
-  selector: 'spartan-toggle-large',
-  standalone: true,
-  imports: [BrnToggleDirective, HlmToggleDirective, HlmIconComponent],
-  providers: [provideIcons({ radixFontItalic })],
-  template: `
-    <button size="lg" brnToggle hlm>
-      <hlm-icon size="sm" name="radixFontItalic" />
-    </button>
-  `,
+	selector: 'spartan-toggle-large',
+	imports: [HlmToggleImports, HlmIconImports],
+	providers: [provideIcons({ lucideItalic })],
+	template: `
+		<button hlmToggle size="lg" aria-label="Toggle italic">
+			<ng-icon hlm size="lg" name="lucideItalic" />
+		</button>
+	`,
 })
-export class ToggleLargePreviewComponent {}
-
-export const largeCode = `
-import { Component } from '@angular/core';
-import { HlmToggleDirective } from '@spartan-ng/ui-toggle-helm';
-import { BrnToggleDirective } from '@spartan-ng/ui-toggle-brain';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { provideIcons } from '@ng-icons/core';
-import { radixFontItalic } from '@ng-icons/radix-icons';
-
-@Component({
-  selector: 'spartan-toggle-large',
-  standalone: true,
-  imports: [BrnToggleDirective, HlmToggleDirective, HlmIconComponent],
-  providers: [provideIcons({ radixFontItalic })],
-  template: \`
-    <button size="lg" brnToggle hlm>
-      <hlm-icon size="sm" name="radixFontItalic" />
-    </button>
-  \`,
-})
-export class ToggleLargePreviewComponent {}
-`;
+export class ToggleLargePreview {}

@@ -1,129 +1,124 @@
-import { Component, HostListener, signal } from '@angular/core';
-import { BrnCommandImports } from '@spartan-ng/ui-command-brain';
-import { HlmCommandImports } from '@spartan-ng/ui-command-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import {
-  BrnDialogCloseDirective,
-  BrnDialogComponent,
-  BrnDialogContentDirective,
-  BrnDialogOverlayComponent,
-  BrnDialogTriggerDirective,
-} from '@spartan-ng/ui-dialog-brain';
-import { HlmDialogOverlayDirective } from '@spartan-ng/ui-dialog-helm';
-import { HlmCodeDirective } from '@spartan-ng/ui-typography-helm';
+import { Component, signal } from '@angular/core';
 import { provideIcons } from '@ng-icons/core';
 import {
-  radixCalendar,
-  radixCardStack,
-  radixCross1,
-  radixFace,
-  radixGear,
-  radixPerson,
-  radixPlus,
-} from '@ng-icons/radix-icons';
+	lucideCalendar,
+	lucideCog,
+	lucideLayers,
+	lucidePlus,
+	lucideSearch,
+	lucideSmile,
+	lucideUser,
+	lucideX,
+} from '@ng-icons/lucide';
+import { BrnCommandImports } from '@spartan-ng/brain/command';
+import { BrnDialogImports } from '@spartan-ng/brain/dialog';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmCommandImports } from '@spartan-ng/helm/command';
+import { HlmDialogImports } from '@spartan-ng/helm/dialog';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { HlmCode } from '@spartan-ng/helm/typography';
 
 @Component({
-  selector: 'spartan-command-dialog',
-  standalone: true,
-  providers: [
-    provideIcons({
-      radixCross1,
-      radixCalendar,
-      radixFace,
-      radixPlus,
-      radixPerson,
-      radixCardStack,
-      radixGear,
-    }),
-  ],
-  imports: [
-    BrnCommandImports,
-    HlmCommandImports,
-    HlmIconComponent,
-    HlmButtonDirective,
-
-    BrnDialogComponent,
-    BrnDialogCloseDirective,
-    BrnDialogTriggerDirective,
-    BrnDialogContentDirective,
-    BrnDialogOverlayComponent,
-    HlmDialogOverlayDirective,
-    HlmCodeDirective,
-  ],
-  template: `
-    <div class="mx-auto max-w-screen-sm py-20 text-sm flex space-x-4 items-center justify-center">
-      <p>Press <code hlmCode>⌘ + K</code></p>
-      <p>
-        Last command: <code data-testid="lastCommand" hlmCode>{{ command() || 'none' }}</code>
-      </p>
-    </div>
-    <brn-dialog closeDelay="100" [state]="state()" (stateChanged)="stateChanged($event)">
-      <brn-dialog-overlay hlm />
-      <brn-cmd *brnDialogContent="let ctx" hlmCmdDialog class="sm:w-[400px] mx-auto">
-        <hlm-cmd-input-wrapper>
-          <hlm-icon name="radixMagnifyingGlass" />
-          <input placeholder="Type a command or search..." brnCmdInput hlm />
-          <button brnDialogClose hlmCmdDialogCloseBtn>
-            <hlm-icon name="radixCross1" />
-          </button>
-        </hlm-cmd-input-wrapper>
-        <div *brnCmdEmpty hlmCmdEmpty>No results found.</div>
-        <brn-cmd-list hlm>
-          <brn-cmd-group hlm label="Suggestions">
-            <button brnCmdItem value="calendar" (selected)="commandSelected('calendar')" hlm>
-              <hlm-icon name="radixCalendar" hlmCmdIcon />
-              Calendar
-            </button>
-            <button brnCmdItem value="emojy" (selected)="commandSelected('emojy')" hlm>
-              <hlm-icon name="radixFace" hlmCmdIcon />
-              Search Emoji
-            </button>
-            <button brnCmdItem value="calculator" (selected)="commandSelected('calculator')" hlm>
-              <hlm-icon name="radixPlus" hlmCmdIcon />
-              Calculator
-            </button>
-          </brn-cmd-group>
-          <brn-cmd-separator hlm></brn-cmd-separator>
-          <brn-cmd-group hlm label="Settings">
-            <button brnCmdItem value="profile" (selected)="commandSelected('profile')" hlm>
-              <hlm-icon name="radixPerson" hlmCmdIcon />
-              Profile
-              <hlm-cmd-shortcut>⌘P</hlm-cmd-shortcut>
-            </button>
-            <button brnCmdItem value="billing" (selected)="commandSelected('billing')" hlm>
-              <hlm-icon name="radixCardStack" hlmCmdIcon />
-              Billing
-              <hlm-cmd-shortcut>⌘B</hlm-cmd-shortcut>
-            </button>
-            <button brnCmdItem value="settings" (selected)="commandSelected('settings')" hlm>
-              <hlm-icon name="radixGear" hlmCmdIcon />
-              Settings
-              <hlm-cmd-shortcut>⌘S</hlm-cmd-shortcut>
-            </button>
-          </brn-cmd-group>
-        </brn-cmd-list>
-      </brn-cmd>
-    </brn-dialog>
-  `,
+	selector: 'spartan-command-dialog',
+	imports: [
+		BrnCommandImports,
+		HlmCommandImports,
+		HlmIconImports,
+		HlmButtonImports,
+		BrnDialogImports,
+		HlmDialogImports,
+		HlmCode,
+	],
+	providers: [
+		provideIcons({
+			lucideX,
+			lucideCalendar,
+			lucideSmile,
+			lucidePlus,
+			lucideUser,
+			lucideLayers,
+			lucideCog,
+			lucideSearch,
+		}),
+	],
+	host: {
+		'(window:keydown)': 'onKeyDown($event)',
+	},
+	template: `
+		<div class="mx-auto flex max-w-screen-sm items-center justify-center space-x-4 py-20 text-sm">
+			<p>
+				Press
+				<code hlmCode>⌘ + Shift + P</code>
+			</p>
+			<p>
+				Last command:
+				<code data-testid="lastCommand" hlmCode>{{ command() || 'none' }}</code>
+			</p>
+		</div>
+		<hlm-dialog [state]="state()" (stateChanged)="stateChanged($event)">
+			<hlm-command *brnDialogContent="let ctx" hlmCommandDialog class="mx-auto sm:w-[400px]">
+				<hlm-command-search>
+					<ng-icon hlm name="lucideSearch" />
+					<input placeholder="Type a command or search..." hlm-command-search-input />
+					<button hlmCommandDialogCloseBtn>
+						<ng-icon hlm name="lucideX" />
+					</button>
+				</hlm-command-search>
+				<div *brnCommandEmpty hlmCommandEmpty>No results found.</div>
+				<hlm-command-list hlm>
+					<hlm-command-group label="Suggestions">
+						<button hlm-command-item value="calendar" (selected)="commandSelected('calendar')">
+							<ng-icon hlm name="lucideCalendar" hlmCommandIcon />
+							Calendar
+						</button>
+						<button hlm-command-item value="emojy" (selected)="commandSelected('emojy')">
+							<ng-icon hlm name="lucideSmile" hlmCommandIcon />
+							Search Emoji
+						</button>
+						<button hlm-command-item value="calculator" (selected)="commandSelected('calculator')">
+							<ng-icon hlm name="lucidePlus" hlmCommandIcon />
+							Calculator
+						</button>
+					</hlm-command-group>
+					<hlm-command-separator hlm />
+					<hlm-command-group hlm label="Settings">
+						<button hlm-command-item value="profile" (selected)="commandSelected('profile')">
+							<ng-icon hlm name="lucideUser" hlmCommandIcon />
+							Profile
+							<hlm-command-shortcut>⌘P</hlm-command-shortcut>
+						</button>
+						<button hlm-command-item value="billing" (selected)="commandSelected('billing')">
+							<ng-icon hlm name="lucideLayers" hlmCommandIcon />
+							Billing
+							<hlm-command-shortcut>⌘B</hlm-command-shortcut>
+						</button>
+						<button hlm-command-item value="settings" (selected)="commandSelected('settings')">
+							<ng-icon hlm name="lucideCog" hlmCommandIcon />
+							Settings
+							<hlm-command-shortcut>⌘S</hlm-command-shortcut>
+						</button>
+					</hlm-command-group>
+				</hlm-command-list>
+			</hlm-command>
+		</hlm-dialog>
+	`,
 })
-export class CommandDialogComponent {
-  public command = signal('');
-  public state = signal<'closed' | 'open'>('closed');
-  @HostListener('window:keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
-    if ((event.metaKey || event.ctrlKey) && (event.key === 'k' || event.key === 'K')) {
-      this.state.set('open');
-    }
-  }
-  stateChanged(state: 'open' | 'closed') {
-    this.state.set(state);
-  }
+export class CommandDialog {
+	public readonly command = signal('');
+	public readonly state = signal<'closed' | 'open'>('closed');
 
-  commandSelected(selected: string) {
-    this.state.set('closed');
-    this.command.set(selected);
-  }
+	onKeyDown(event: KeyboardEvent) {
+		if ((event.metaKey || event.ctrlKey) && event.shiftKey && (event.key === 'p' || event.key === 'P')) {
+			this.state.set('open');
+		}
+	}
+
+	stateChanged(state: 'open' | 'closed') {
+		this.state.set(state);
+	}
+
+	commandSelected(selected: string) {
+		this.state.set('closed');
+		this.command.set(selected);
+	}
 }
-export const commandDialogCode = `
-`;

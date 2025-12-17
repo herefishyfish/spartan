@@ -1,30 +1,34 @@
-import * as childProcess from 'child_process';
-
-import * as updateVersion from '../update-version/executor';
+import * as childProcess from 'node:child_process';
 import * as projectHelper from '../helpers/projects.helpers';
 import * as npmPublish from '../npm-publish/executor';
-
 import executor from './executor';
 
+// Mock the entire child_process module
+jest.mock('node:child_process', () => ({
+	execSync: jest.fn(), // Mock execSync function
+}));
+
 describe('BuildUpdatePublish Executor', () => {
-  it('should call update-version executor and npm publish executor with the options and context', async () => {
-    const libName = 'foo';
-    const mockContext = { bar: 'bar' } as any;
+	it('should call update-version executor and npm publish executor with the options and context', async () => {
+		const libName = 'foo';
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const mockContext = { bar: 'bar' } as any;
 
-    /* eslint-disable */
-    jest.spyOn(projectHelper, 'getProjectName').mockReturnValue(libName);
-    /* eslint-disable */
-    jest.spyOn(updateVersion, 'default').mockImplementation((() => {}) as any);
-    /* eslint-disable */
-    jest.spyOn(npmPublish, 'default').mockImplementation((() => {}) as any);
-    /* eslint-disable */
-    jest.spyOn(childProcess, 'execSync').mockImplementation((() => {}) as any);
+		// Mock the project helper, npmPublish, and execSync
+		jest.spyOn(projectHelper, 'getProjectName').mockReturnValue(libName);
 
-    const output = await executor({}, mockContext as any);
+		// Mock npmPublish to return { success: true }
+		jest.spyOn(npmPublish, 'default').mockImplementation(async () => Promise.resolve({ success: true }));
 
-    expect(updateVersion.default).toHaveBeenCalledWith({}, mockContext);
-    expect(npmPublish.default).toHaveBeenCalledWith({}, mockContext);
-    expect(childProcess.execSync).toHaveBeenCalledWith(`nx build --project ${libName}`);
-    expect(output.success).toBe(true);
-  });
+		// execSync is already mocked globally by jest.mock
+		const expectedCommand = `nx build --project ${libName}`;
+		const execSyncMock = childProcess.execSync as jest.Mock;
+
+		const output = await executor({}, mockContext);
+
+		// Verify that all functions are called as expected
+		expect(npmPublish.default).toHaveBeenCalledWith({}, mockContext);
+		expect(execSyncMock).toHaveBeenCalledWith(expectedCommand);
+		expect(output.success).toBe(true);
+	});
 });

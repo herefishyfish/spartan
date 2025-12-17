@@ -1,43 +1,18 @@
 import { Component } from '@angular/core';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { provideIcons } from '@ng-icons/core';
-import { radixEnvelopeClosed } from '@ng-icons/radix-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideGitBranch } from '@ng-icons/lucide';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
 
 @Component({
-  selector: 'spartan-button-with-icon',
-  standalone: true,
-  imports: [HlmButtonDirective, HlmSpinnerComponent, HlmIconComponent],
-  providers: [provideIcons({ radixEnvelopeClosed })],
-  template: `
-    <button hlmBtn>
-      <hlm-icon size="sm" class="mr-2" name="radixEnvelopeClosed" />
-      Login with Email
-    </button>
-  `,
+	selector: 'spartan-button-with-icon',
+	imports: [HlmButtonImports, NgIcon, HlmIconImports],
+	providers: [provideIcons({ lucideGitBranch })],
+	template: `
+		<button hlmBtn variant="outline" size="sm">
+			<ng-icon hlm size="sm" name="lucideGitBranch" />
+			New Branch
+		</button>
+	`,
 })
-export class ButtonWithIconComponent {}
-
-export const withIconCode = `
-import { Component } from '@angular/core';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-import { provideIcons } from '@ng-icons/core';
-import { radixEnvelopeClosed } from '@ng-icons/radix-icons';
-
-@Component({
-  selector: 'spartan-button-with-icon',
-  standalone: true,
-  imports: [HlmButtonDirective, HlmSpinnerComponent, HlmIconComponent],
-  providers: [provideIcons({ radixEnvelopeClosed })],
-  template: \`
-    <button hlmBtn>
-      <hlm-icon size="sm" class="mr-2" name="radixEnvelopeClosed" />
-      Login with Email
-    </button>
-  \`,
-})
-export class ButtonWithIconComponent {}
-`;
+export class ButtonWithIcon {}

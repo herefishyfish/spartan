@@ -1,14 +1,27 @@
-import { execSync } from 'child_process';
-import { ExecutorContext } from '@nx/devkit';
+import type { ExecutorContext } from '@nx/devkit';
+import { execSync } from 'node:child_process';
 
 import { getRoot } from '../helpers/projects.helpers';
 
-import { NpmPublishExecutorSchema } from './schema';
+import * as process from 'node:process';
+import type { NpmPublishExecutorSchema } from './schema';
 
-export default async function runExecutor(options: NpmPublishExecutorSchema, context: ExecutorContext) {
-  const sourceRoot = `./dist/${getRoot(context)}`;
-  execSync(`cd ${sourceRoot} && npm publish${process.env.TAG ? ' --tag ' + process.env.TAG : ''}`);
-  return {
-    success: true,
-  };
+export default async function runExecutor(_options: NpmPublishExecutorSchema, context: ExecutorContext) {
+	const tag = process.env.TAG;
+
+	if (!tag) {
+		console.log('no process.env.TAG available. returning early');
+		return {
+			success: false,
+		};
+	}
+
+	const sourceRoot = `./dist/${getRoot(context)}`;
+
+	console.log('running npm publish at ' + sourceRoot);
+
+	execSync(`cd ${sourceRoot} && npm publish${tag ? ` --tag ${tag}` : ''}`);
+	return {
+		success: true,
+	};
 }

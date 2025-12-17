@@ -1,47 +1,24 @@
 import { Component } from '@angular/core';
-import { HlmSkeletonComponent } from '@spartan-ng/ui-skeleton-helm';
+import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
 
 @Component({
-  selector: 'spartan-skeleton-preview',
-  standalone: true,
-  imports: [HlmSkeletonComponent],
-  template: `
-    <div class="p-4 m-4 w-fit flex items-center space-x-4">
-      <hlm-skeleton class="h-12 w-12 rounded-full" />
-      <div class="space-y-2">
-        <hlm-skeleton class="h-4 w-[250px]" />
-        <hlm-skeleton class="h-4 w-[200px]" />
-      </div>
-    </div>
-  `,
+	selector: 'spartan-skeleton-preview',
+	imports: [HlmSkeletonImports],
+	template: `
+		<div class="flex items-center space-x-4">
+			<hlm-skeleton class="size-12 rounded-full" />
+			<div class="space-y-2">
+				<hlm-skeleton class="h-4 w-[250px]" />
+				<hlm-skeleton class="h-4 w-[200px]" />
+			</div>
+		</div>
+	`,
 })
-export class SkeletonPreviewComponent {}
-
-export const defaultCode = `
-import { Component } from '@angular/core';
-import { HlmSkeletonComponent } from '@spartan-ng/ui-skeleton-helm';
-
-@Component({
-  selector: 'spartan-skeleton-preview',
-  standalone: true,
-  imports: [HlmSkeletonComponent],
-  template: \`
-    <div class='p-4 m-4 w-fit flex items-center space-x-4'>
-      <hlm-skeleton class='h-12 w-12 rounded-full' />
-      <div class='space-y-2'>
-        <hlm-skeleton class='h-4 w-[250px]' />
-        <hlm-skeleton class='h-4 w-[200px]' />
-      </div>
-    </div>
-  \`,
-})
-export class SkeletonPreviewComponent {}
-
-`;
+export class SkeletonPreview {}
 
 export const defaultImports = `
-import { HlmSkeletonComponent } from '@spartan-ng/ui-skeleton-helm';
+import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
 `;
 export const defaultSkeleton = `
-<hlm-skeleton class='h-4 w-[250px]' />
+<hlm-skeleton class="h-[20px] w-[100px] rounded-full" />
 `;

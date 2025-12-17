@@ -1,342 +1,106 @@
 import { Component } from '@angular/core';
-import {
-  BrnContextMenuTriggerDirective,
-  BrnMenuDirective,
-  BrnMenuGroupDirective,
-  BrnMenuItemCheckboxDirective,
-  BrnMenuItemDirective,
-  BrnMenuItemRadioDirective,
-  BrnMenuTriggerDirective,
-} from '@spartan-ng/ui-menu-brain';
-import {
-  HlmMenuDirective,
-  HlmMenuItemCheckComponent,
-  HlmMenuItemDirective,
-  HlmMenuItemIconDirective,
-  HlmMenuItemRadioComponent,
-  HlmMenuItemSubIndicatorComponent,
-  HlmMenuLabelComponent,
-  HlmMenuSeparatorComponent,
-  HlmMenuShortcutComponent,
-  HlmSubMenuDirective,
-} from '@spartan-ng/ui-menu-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { HlmContextMenuImports } from '@spartan-ng/helm/context-menu';
+import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 
 @Component({
-  selector: 'spartan-context-menu-preview',
-  standalone: true,
-  imports: [
-    BrnMenuDirective,
-    BrnMenuItemDirective,
-    BrnMenuTriggerDirective,
-    BrnContextMenuTriggerDirective,
-    BrnMenuGroupDirective,
-    BrnMenuItemCheckboxDirective,
-    BrnMenuItemRadioDirective,
+	selector: 'spartan-context-menu-preview',
+	imports: [HlmDropdownMenuImports, HlmContextMenuImports],
+	template: `
+		<div
+			[hlmContextMenuTrigger]="menu"
+			align="start"
+			side="right"
+			class="flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm"
+		>
+			Right click here
+		</div>
 
-    HlmMenuDirective,
-    HlmSubMenuDirective,
-    HlmMenuItemDirective,
-    HlmMenuItemSubIndicatorComponent,
-    HlmMenuLabelComponent,
-    HlmMenuShortcutComponent,
-    HlmMenuSeparatorComponent,
-    HlmMenuItemIconDirective,
-    HlmMenuItemCheckComponent,
-    HlmMenuItemRadioComponent,
+		<ng-template #menu>
+			<hlm-dropdown-menu class="w-64">
+				<hlm-dropdown-menu-group>
+					<button hlmDropdownMenuItem inset>
+						Back
+						<hlm-dropdown-menu-shortcut>⌘[</hlm-dropdown-menu-shortcut>
+					</button>
 
-    HlmButtonDirective,
-    HlmIconComponent,
-  ],
-  template: `
-    <div
-      [brnCtxMenuTriggerFor]="menu"
-      class="border-border flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm"
-    >
-      Right click here
-    </div>
+					<button hlmDropdownMenuItem disabled inset>
+						Forward
+						<hlm-dropdown-menu-shortcut>⌘]</hlm-dropdown-menu-shortcut>
+					</button>
 
-    <ng-template #menu>
-      <div hlm brnMenu class="w-64">
-        <div brnMenuGroup>
-          <button inset hlm brnMenuItem>
-            Back
-            <hlm-menu-shortcut>⌘[</hlm-menu-shortcut>
-          </button>
+					<button hlmDropdownMenuItem disabled inset>
+						Reload
+						<hlm-dropdown-menu-shortcut>⌘R</hlm-dropdown-menu-shortcut>
+					</button>
 
-          <button disabled inset hlm brnMenuItem>
-            Forward
-            <hlm-menu-shortcut>⌘]</hlm-menu-shortcut>
-          </button>
+					<button inset hlmDropdownMenuItem [hlmDropdownMenuTrigger]="moreTools" align="start" side="right">
+						More Tools
+						<hlm-dropdown-menu-item-sub-indicator />
+					</button>
+				</hlm-dropdown-menu-group>
 
-          <button disabled inset hlm brnMenuItem>
-            Reload
-            <hlm-menu-shortcut>⌘R</hlm-menu-shortcut>
-          </button>
+				<hlm-dropdown-menu-separator />
 
-          <button inset hlm brnMenuItem [brnMenuTriggerFor]="moreTools">
-            More Tools
-            <hlm-menu-item-sub-indicator />
-          </button>
-        </div>
+				<hlm-dropdown-menu-group>
+					<button hlmDropdownMenuCheckbox checked>
+						<hlm-dropdown-menu-checkbox-indicator />
+						Show Booksmarks Bar
+						<hlm-dropdown-menu-shortcut>⌘⇧B</hlm-dropdown-menu-shortcut>
+					</button>
+					<button hlmDropdownMenuCheckbox>
+						<hlm-dropdown-menu-checkbox-indicator />
+						Show full URLs
+					</button>
+				</hlm-dropdown-menu-group>
 
-        <hlm-menu-separator />
+				<hlm-dropdown-menu-separator />
+				<hlm-dropdown-menu-label inset>People</hlm-dropdown-menu-label>
+				<hlm-dropdown-menu-separator />
+				<hlm-dropdown-menu-group>
+					<button hlmDropdownMenuRadio checked>
+						<hlm-dropdown-menu-radio-indicator />
+						Pedro Duarte
+					</button>
+					<button hlmDropdownMenuRadio>
+						<hlm-dropdown-menu-radio-indicator />
+						Colm Tuite
+					</button>
+				</hlm-dropdown-menu-group>
+			</hlm-dropdown-menu>
+		</ng-template>
 
-        <div brnMenuGroup>
-          <button hlm brnMenuItemCheckbox checked>
-            <hlm-menu-item-check />
-            Show Booksmarks Bar
-            <hlm-menu-shortcut>⌘⇧B</hlm-menu-shortcut>
-          </button>
-          <button hlm brnMenuItemCheckbox>
-            <hlm-menu-item-check />
-            Show full URLs
-          </button>
-        </div>
-
-        <hlm-menu-separator />
-        <hlm-menu-label inset>People</hlm-menu-label>
-        <hlm-menu-separator />
-        <div brnMenuGroup>
-          <button hlm brnMenuItemRadio checked>
-            <hlm-menu-item-radio />
-            Pedro Duarte
-          </button>
-          <button hlm brnMenuItemRadio>
-            <hlm-menu-item-radio />
-            Colm Tuite
-          </button>
-        </div>
-      </div>
-    </ng-template>
-
-    <ng-template #moreTools>
-      <div hlm brnSubMenu class="w-48">
-        <button hlm brnMenuItem>
-          Save Page as...
-          <hlm-menu-shortcut>⇧⌘S</hlm-menu-shortcut>
-        </button>
-        <button hlm brnMenuItem>Create Shortcut...</button>
-        <button hlm brnMenuItem>Name Window...</button>
-        <hlm-menu-separator />
-        <button hlm brnMenuItem>Developer Tools</button>
-      </div>
-    </ng-template>
-  `,
+		<ng-template #moreTools>
+			<hlm-dropdown-menu-sub class="w-48">
+				<button hlmDropdownMenuItem>
+					Save Page as...
+					<hlm-dropdown-menu-shortcut>⇧⌘S</hlm-dropdown-menu-shortcut>
+				</button>
+				<button hlmDropdownMenuItem>Create Shortcut...</button>
+				<button hlmDropdownMenuItem>Name Window...</button>
+				<hlm-dropdown-menu-separator />
+				<button hlmDropdownMenuItem>Developer Tools</button>
+			</hlm-dropdown-menu-sub>
+		</ng-template>
+	`,
 })
-export class ContextMenuPreviewComponent {}
-
-export const defaultCode = `
-import { Component } from '@angular/core';
-import {
-  BrnContextMenuTriggerDirective,
-  BrnMenuDirective,
-  BrnMenuGroupDirective,
-  BrnMenuItemCheckboxDirective,
-  BrnMenuItemDirective,
-  BrnMenuItemRadioDirective,
-  BrnMenuTriggerDirective,
-} from '@spartan-ng/ui-menu-brain';
-import {
-  HlmMenuDirective,
-  HlmMenuItemCheckComponent,
-  HlmMenuItemDirective,
-  HlmMenuItemIconDirective,
-  HlmMenuItemRadioComponent,
-  HlmMenuItemSubIndicatorComponent,
-  HlmMenuLabelComponent,
-  HlmMenuSeparatorComponent,
-  HlmMenuShortcutComponent,
-  HlmSubMenuDirective,
-} from '@spartan-ng/ui-menu-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
-
-@Component({
-  selector: 'spartan-context-menu-preview',
-  standalone: true,
-  imports: [
-    BrnMenuDirective,
-    BrnMenuItemDirective,
-    BrnMenuTriggerDirective,
-    BrnContextMenuTriggerDirective,
-    BrnMenuGroupDirective,
-    BrnMenuItemCheckboxDirective,
-    BrnMenuItemRadioDirective,
-
-    HlmMenuDirective,
-    HlmSubMenuDirective,
-    HlmMenuItemDirective,
-    HlmMenuItemSubIndicatorComponent,
-    HlmMenuLabelComponent,
-    HlmMenuShortcutComponent,
-    HlmMenuSeparatorComponent,
-    HlmMenuItemIconDirective,
-    HlmMenuItemCheckComponent,
-    HlmMenuItemRadioComponent,
-
-    HlmButtonDirective,
-    HlmIconComponent,
-  ],
-  template: \`
-    <div
-      [brnCtxMenuTriggerFor]="menu"
-      class="border-border flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm"
-    >
-      Right click here
-    </div>
-
-    <ng-template #menu>
-      <div hlm brnMenu class="w-64">
-        <div brnMenuGroup>
-          <button inset hlm brnMenuItem>
-            Back
-            <hlm-menu-shortcut>⌘[</hlm-menu-shortcut>
-          </button>
-
-          <button disabled inset hlm brnMenuItem>
-            Forward
-            <hlm-menu-shortcut>⌘]</hlm-menu-shortcut>
-          </button>
-
-          <button disabled inset hlm brnMenuItem>
-            Reload
-            <hlm-menu-shortcut>⌘R</hlm-menu-shortcut>
-          </button>
-
-          <button inset hlm brnMenuItem [brnMenuTriggerFor]="moreTools">
-            More Tools
-            <hlm-menu-item-sub-indicator />
-          </button>
-        </div>
-
-        <hlm-menu-separator />
-
-        <div brnMenuGroup>
-          <button hlm brnMenuItemCheckbox checked>
-            <hlm-menu-item-check />
-            Show Booksmarks Bar
-            <hlm-menu-shortcut>⌘⇧B</hlm-menu-shortcut>
-          </button>
-          <button hlm brnMenuItemCheckbox>
-            <hlm-menu-item-check />
-            Show full URLs
-          </button>
-        </div>
-
-        <hlm-menu-separator />
-        <hlm-menu-label inset>People</hlm-menu-label>
-        <hlm-menu-separator />
-        <div brnMenuGroup>
-          <button hlm brnMenuItemRadio checked>
-            <hlm-menu-item-radio />
-            Pedro Duarte
-          </button>
-          <button hlm brnMenuItemRadio>
-            <hlm-menu-item-radio />
-            Colm Tuite
-          </button>
-        </div>
-      </div>
-    </ng-template>
-
-    <ng-template #moreTools>
-      <div hlm brnSubMenu class="w-48">
-        <button hlm brnMenuItem>
-          Save Page as...
-          <hlm-menu-shortcut>⇧⌘S</hlm-menu-shortcut>
-        </button>
-        <button hlm brnMenuItem>Create Shortcut...</button>
-        <button hlm brnMenuItem>Name Window...</button>
-        <hlm-menu-separator />
-        <button hlm brnMenuItem>Developer Tools</button>
-      </div>
-    </ng-template>
-  \`,
-})
-export class ContextMenuPreviewComponent {}
-`;
+export class ContextMenuPreview {}
 
 export const defaultImports = `
-import {
-  BrnContextMenuTriggerDirective,
-  BrnMenuDirective,
-  BrnMenuGroupDirective,
-  BrnMenuItemCheckboxDirective,
-  BrnMenuItemDirective,
-  BrnMenuItemRadioDirective,
-  BrnMenuTriggerDirective,
-} from '@spartan-ng/ui-menu-brain';
-import {
-  HlmMenuDirective,
-  HlmMenuItemCheckComponent,
-  HlmMenuItemDirective,
-  HlmMenuItemIconDirective,
-  HlmMenuItemRadioComponent,
-  HlmMenuItemSubIndicatorComponent,
-  HlmMenuLabelComponent,
-  HlmMenuSeparatorComponent,
-  HlmMenuShortcutComponent,
-  HlmSubMenuDirective,
-} from '@spartan-ng/ui-menu-helm';
+import { HlmContextMenuImports } from '@spartan-ng/helm/context-menu';
+import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 `;
 
 export const defaultSkeleton = `
-<div
-[brnCtxMenuTriggerFor]="menu"
-class="border-border flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm"
->
-Right click here
-</div>
+<div [hlmContextMenuTrigger]="menu">Right click here</div>
 
 <ng-template #menu>
-<div hlm brnMenu class="w-64">
-  <div brnMenuGroup>
-    <button inset hlm brnMenuItem>
-      Save
-      <hlm-menu-shortcut>⌘S</hlm-menu-shortcut>
-    </button>
-
-    <button inset hlm brnMenuItem [brnMenuTriggerFor]="moreTools">
-      More Tools
-      <hlm-menu-item-sub-indicator />
-    </button>
-  </div>
-
-  <hlm-menu-separator />
-
-  <div brnMenuGroup>
-    <button hlm brnMenuItemCheckbox checked>
-      <hlm-menu-item-check />
-      Show Booksmarks Bar
-      <hlm-menu-shortcut>⌘⇧B</hlm-menu-shortcut>
-    </button>
-    <button hlm brnMenuItemCheckbox>
-      <hlm-menu-item-check />
-      Show full URLs
-    </button>
-  </div>
-
-  <div brnMenuGroup>
-    <button hlm brnMenuItemRadio checked>
-      <hlm-menu-item-radio />
-      Pedro Duarte
-    </button>
-    <button hlm brnMenuItemRadio>
-      <hlm-menu-item-radio />
-      Colm Tuite
-    </button>
-  </div>
-</div>
-</ng-template>
-
-<ng-template #moreTools>
-<div hlm brnSubMenu class="w-48">
-  <button hlm brnMenuItem>
-    Save Page as...
-    <hlm-menu-shortcut>⇧⌘S</hlm-menu-shortcut>
-  </button>
-</div>
+  <hlm-dropdown-menu>
+    <hlm-dropdown-menu-group>
+      <button hlmDropdownMenuItem>Profile</button>
+      <button hlmDropdownMenuItem>Billing</button>
+      <button hlmDropdownMenuItem>Team</button>
+      <button hlmDropdownMenuItem>Subscription</button>
+    </hlm-dropdown-menu-group>
+  </hlm-dropdown-menu>
 </ng-template>
 `;

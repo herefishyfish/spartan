@@ -1,54 +1,44 @@
-import { RouteMeta } from '@analogjs/router';
-import { metaWith } from '~/app/shared/meta/meta.util';
-import { Component } from '@angular/core';
-import { PageComponent } from '~/app/shared/layout/page.component';
-import {
-  HlmAlertDescriptionDirective,
-  HlmAlertDirective,
-  HlmAlertIconDirective,
-  HlmAlertTitleDirective,
-} from '@spartan-ng/ui-alert-helm';
-import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import type { RouteMeta } from '@analogjs/router';
+import { injectLoad } from '@analogjs/router';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { provideIcons } from '@ng-icons/core';
-import { radixRocket } from '@ng-icons/radix-icons';
+import { lucideRocket } from '@ng-icons/lucide';
+import { ApiDocsService } from '../../core/services/api-docs.service';
+import { PrimitiveSnippetsService } from '../../core/services/primitive-snippets.service';
+import { Page } from '../../shared/layout/page';
+import { metaWith } from '../../shared/meta/meta.util';
+import type { load } from './components.server';
 
 export const routeMeta: RouteMeta = {
-  meta: metaWith(
-    'spartan/ui - Components',
-    'spartan/ui provides unstyled components that are accessible by default. It also gives you beautiful shadcn-like styling options.'
-  ),
-  data: {
-    breadcrumb: 'Components',
-  },
-  title: 'spartan/ui - Components',
+	meta: metaWith(
+		'spartan/ui - Components',
+		'spartan/ui provides unstyled components that are accessible by default. It also gives you beautiful shadcn-like styling options.',
+	),
+	data: {
+		breadcrumb: 'Components',
+	},
+	title: 'spartan/ui - Components',
 };
 
 @Component({
-  selector: 'spartan-components',
-  standalone: true,
-  imports: [
-    PageComponent,
-    HlmAlertDirective,
-    HlmAlertTitleDirective,
-    HlmAlertDescriptionDirective,
-    HlmIconComponent,
-    HlmAlertIconDirective,
-  ],
-  providers: [provideIcons({ radixRocket })],
-  template: `
-    <div
-      hlmAlert
-      class="max-w-[95vw] my-2 mx-auto p-4 rounded-lg text-primary-foreground border border-border bg-primary"
-    >
-      <hlm-icon hlmAlertIcon name="radixRocket" class="!text-primary-foreground" />
-      <h2 hlmAlertTitle>Components are coming soon...</h2>
-      <p hlmAlertDesc>
-        We are actively working on publishing these components. They will soon be released.
-        <a class="underline" target="_blank" href="https://github.com/goetzrobin/spartan">Star us on GitHub</a> and
-        follow along as we build the next Angular UI library. Check out the preview below to see what they'll look like:
-      </p>
-    </div>
-    <spartan-page />
-  `,
+	selector: 'spartan-components',
+	imports: [Page],
+	providers: [provideIcons({ lucideRocket }), ApiDocsService],
+	host: {
+		class: '[--stable-height:78.75px]',
+	},
+	template: `
+		<spartan-page />
+	`,
 })
-export default class ComponentsPageComponent {}
+export default class ComponentsPage {
+	private readonly _apiData = toSignal(injectLoad<typeof load>(), { requireSync: true });
+	private readonly _apiDocsService = inject(ApiDocsService);
+	private readonly _primitivesService = inject(PrimitiveSnippetsService);
+
+	constructor() {
+		this._apiDocsService.setApiDocs(this._apiData().docsData);
+		this._primitivesService.setSnippets(this._apiData().primitivesData);
+	}
+}

@@ -1,120 +1,91 @@
-import { RouteMeta } from '@analogjs/router';
-import { metaWith } from '~/app/shared/meta/meta.util';
-import { Component } from '@angular/core';
-import { MainSectionDirective } from '~/app/shared/layout/main-section.directive';
-import { CodeComponent } from '~/app/shared/code/code.component';
-import { SectionIntroComponent } from '~/app/shared/layout/section-intro.component';
-import { SectionSubHeadingComponent } from '~/app/shared/layout/section-sub-heading.component';
-import { TabsComponent } from '~/app/shared/layout/tabs.component';
-import { CodePreviewDirective } from '~/app/shared/code/code-preview.directive';
-import { PageNavLinkComponent } from '~/app/shared/layout/page-nav/page-nav-link.component';
-import { PageNavComponent } from '~/app/shared/layout/page-nav/page-nav.component';
-import { PageBottomNavComponent } from '~/app/shared/layout/page-bottom-nav/page-bottom-nav.component';
-import { PageBottomNavLinkComponent } from '~/app/shared/layout/page-bottom-nav/page-bottom-nav-link.component';
-import { PageBottomNavPlaceholderComponent } from '~/app/shared/layout/page-bottom-nav-placeholder.component';
-import { BadgePreviewComponent, defaultCode, defaultImports, defaultSkeleton } from './badge.preview';
-import { hlmH4 } from '@spartan-ng/ui-typography-helm';
-import { BadgeDestructiveComponent, destructiveCode } from './badge--destructive.example';
-import { BadgeOutlineExampleComponent, outlineCode } from './badge--outline.example';
-import { BadgeSecondaryExampleComponent, secondaryCode } from './badge--secondary.example';
+import type { RouteMeta } from '@analogjs/router';
+import { Component, computed, inject } from '@angular/core';
+import { PrimitiveSnippetsService } from '@spartan-ng/app/app/core/services/primitive-snippets.service';
+import { SectionSubSubHeading } from '@spartan-ng/app/app/shared/layout/section-sub-sub-heading';
+import { Code } from '../../../../shared/code/code';
+import { CodePreview } from '../../../../shared/code/code-preview';
+import { MainSection } from '../../../../shared/layout/main-section';
+import { PageBottomNav } from '../../../../shared/layout/page-bottom-nav/page-bottom-nav';
+import { PageBottomNavLink } from '../../../../shared/layout/page-bottom-nav/page-bottom-nav-link';
+import { PageNav } from '../../../../shared/layout/page-nav/page-nav';
+import { SectionIntro } from '../../../../shared/layout/section-intro';
+import { SectionSubHeading } from '../../../../shared/layout/section-sub-heading';
+import { Tabs } from '../../../../shared/layout/tabs';
+import { TabsCli } from '../../../../shared/layout/tabs-cli';
+import { UIApiDocs } from '../../../../shared/layout/ui-docs-section/ui-docs-section';
+import { metaWith } from '../../../../shared/meta/meta.util';
+import { BadgeLink } from './badge--link.example';
+import { BadgePreview, defaultImports, defaultSkeleton } from './badge.preview';
 
 export const routeMeta: RouteMeta = {
-  data: { breadcrumb: 'Badge' },
-  meta: metaWith('spartan/ui - Badge', 'Makes a component look like a badge.'),
-  title: 'spartan/ui - Badge',
+	data: { breadcrumb: 'Badge', api: 'badge' },
+	meta: metaWith('spartan/ui - Badge', 'Makes a component look like a badge.'),
+	title: 'spartan/ui - Badge',
 };
 
 @Component({
-  selector: 'spartan-badge',
-  standalone: true,
-  imports: [
-    MainSectionDirective,
-    CodeComponent,
-    SectionIntroComponent,
-    SectionSubHeadingComponent,
-    TabsComponent,
-    CodePreviewDirective,
-    PageNavLinkComponent,
-    PageNavComponent,
-    PageBottomNavComponent,
-    PageBottomNavLinkComponent,
-    PageBottomNavPlaceholderComponent,
-    BadgePreviewComponent,
-    BadgeDestructiveComponent,
-    BadgeOutlineExampleComponent,
-    BadgeSecondaryExampleComponent,
-  ],
-  template: `
-    <section spartanMainSection>
-      <spartan-section-intro name="Badge" lead="Makes a component look like a badge." />
+	selector: 'spartan-badge',
+	imports: [
+		UIApiDocs,
+		MainSection,
+		Code,
+		SectionIntro,
+		SectionSubHeading,
+		Tabs,
+		TabsCli,
+		CodePreview,
+		PageNav,
+		PageBottomNav,
+		PageBottomNavLink,
+		BadgePreview,
+		BadgeLink,
+		SectionSubSubHeading,
+	],
+	template: `
+		<section spartanMainSection>
+			<spartan-section-intro name="Badge" lead="Makes a component look like a badge." />
 
-      <spartan-tabs firstTab="Preview" secondTab="Code">
-        <div spartanCodePreview firstTab>
-          <spartan-badge-preview />
-        </div>
-        <spartan-code secondTab [code]="defaultCode" />
-      </spartan-tabs>
+			<spartan-tabs firstTab="Preview" secondTab="Code">
+				<div spartanCodePreview firstTab>
+					<spartan-badge-preview />
+				</div>
+				<spartan-code secondTab [code]="_defaultCode()" />
+			</spartan-tabs>
 
-      <spartan-section-sub-heading id="installation">Installation</spartan-section-sub-heading>
-      <spartan-tabs class="mt-4" firstTab="yarn" secondTab="npm">
-        <spartan-code firstTab language="sh" code="yarn install @spartan-ng/ui-badge" />
-        <spartan-code secondTab language="sh" code="npm install @spartan-ng/ui-badge" />
-      </spartan-tabs>
+			<spartan-section-sub-heading id="installation">Installation</spartan-section-sub-heading>
+			<spartan-cli-tabs nxCode="npx nx g @spartan-ng/cli:ui badge" ngCode="ng g @spartan-ng/cli:ui badge" />
 
-      <spartan-section-sub-heading id="usage">Usage</spartan-section-sub-heading>
-      <div class="space-y-4">
-        <spartan-code [code]="defaultImports" />
-        <spartan-code [code]="defaultSkeleton" />
-      </div>
+			<spartan-section-sub-heading id="usage">Usage</spartan-section-sub-heading>
+			<div class="mt-6 space-y-4">
+				<spartan-code [code]="_defaultImports" />
+				<spartan-code [code]="_defaultSkeleton" />
+			</div>
 
-      <spartan-section-sub-heading id="examples">Examples</spartan-section-sub-heading>
-      <h3 class="mt-6 mb-2 ${hlmH4}">Default</h3>
-      <spartan-tabs firstTab="Preview" secondTab="Code">
-        <div spartanCodePreview firstTab>
-          <spartan-badge-preview />
-        </div>
-        <spartan-code secondTab [code]="defaultCode" />
-      </spartan-tabs>
-      <h3 class="mt-6 mb-2 ${hlmH4}">Secondary</h3>
-      <spartan-tabs firstTab="Preview" secondTab="Code">
-        <div spartanCodePreview firstTab>
-          <spartan-badge-secondary />
-        </div>
-        <spartan-code secondTab [code]="secondaryCode" />
-      </spartan-tabs>
-      <h3 class="mt-6 mb-2 ${hlmH4}">Outline</h3>
-      <spartan-tabs firstTab="Preview" secondTab="Code">
-        <div spartanCodePreview firstTab>
-          <spartan-badge-outline />
-        </div>
-        <spartan-code secondTab [code]="outlineCode" />
-      </spartan-tabs>
-      <h3 class="mt-6 mb-2 ${hlmH4}">Destructive</h3>
-      <spartan-tabs firstTab="Preview" secondTab="Code">
-        <div spartanCodePreview firstTab>
-          <spartan-badge-destructive />
-        </div>
-        <spartan-code secondTab [code]="destructiveCode" />
-      </spartan-tabs>
+			<spartan-section-sub-heading id="examples">Examples</spartan-section-sub-heading>
 
-      <spartan-page-bottom-nav>
-        <spartan-page-bottom-nav-link href="button" label="Button" />
-        <spartan-page-bottom-nav-link direction="previous" href="avatar" label="Avatar" />
-      </spartan-page-bottom-nav>
-    </section>
-    <spartan-page-nav>
-      <spartan-page-nav-link fragment="installation" label="Installation" />
-      <spartan-page-nav-link fragment="usage" label="Usage" />
-      <spartan-page-nav-link fragment="examples" label="Examples" />
-    </spartan-page-nav>
-  `,
+			<h3 id="examples__link" spartanH4>Link</h3>
+			<spartan-tabs firstTab="Preview" secondTab="Code">
+				<div spartanCodePreview firstTab>
+					<spartan-badge-link />
+				</div>
+				<spartan-code secondTab [code]="_badgeLinkCode()" />
+			</spartan-tabs>
+
+			<spartan-section-sub-heading id="hlm-api">Helm API</spartan-section-sub-heading>
+			<spartan-ui-api-docs docType="helm" />
+
+			<spartan-page-bottom-nav>
+				<spartan-page-bottom-nav-link href="breadcrumb" label="Breadcrumb" />
+				<spartan-page-bottom-nav-link direction="previous" href="avatar" label="Avatar" />
+			</spartan-page-bottom-nav>
+		</section>
+		<spartan-page-nav />
+	`,
 })
-export default class BadgePageComponent {
-  readonly defaultCode = defaultCode;
-  readonly defaultSkeleton = defaultSkeleton;
-  readonly defaultImports = defaultImports;
-
-  readonly secondaryCode = secondaryCode;
-  readonly outlineCode = outlineCode;
-  readonly destructiveCode = destructiveCode;
+export default class BadgePage {
+	private readonly _snippets = inject(PrimitiveSnippetsService).getSnippets('badge');
+	protected readonly _defaultCode = computed(() => this._snippets()['default']);
+	protected readonly _defaultSkeleton = defaultSkeleton;
+	protected readonly _defaultImports = defaultImports;
+	protected readonly _badgeLinkCode = computed(() => this._snippets()['link']);
 }

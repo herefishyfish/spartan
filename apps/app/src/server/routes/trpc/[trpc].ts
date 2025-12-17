@@ -1,8 +1,8 @@
-import { appRouter } from '../../trpc/routers';
+import { createTrpcNitroHandler } from '@spartan-ng/trpc';
 import { createContext } from '../../trpc/context';
-import { createTrpcNitroHandler } from '@analogjs/trpc';
+import { appRouter } from '../../trpc/routers';
 // export API handler
 export default createTrpcNitroHandler({
-  router: appRouter,
-  createContext,
+	router: appRouter,
+	createContext,
 });

@@ -1,12 +1,12 @@
 name: Bug Report
-description: Report a bug in Analog
+description: Report a bug inside spartan
 labels: [bug]
 
 body:
   - type: markdown
     attributes:
       value: |
-        Please search GitHub for a similar [issue](https://github.com/goetzrobin/spartan/issues) or [PR](https://github.com/goetzrobin/spartan/issues) before submitting a new issue.
+        Please search GitHub for a similar [issue](https://github.com/goetzrobin/spartan/issues) or [PR](https://github.com/goetzrobin/spartan/pulls) before submitting a new issue.
 
   - type: textarea
     id: environment
@@ -25,12 +25,17 @@ body:
         - alert
         - alert-dialog
         - aspect-ratio
+        - autocomplete
         - avatar
         - badge
+        - breadcrumb
         - button
+        - button-group
         - calendar
         - card
+        - carousel
         - checkbox
+        - cli
         - collapsible
         - combobox
         - command
@@ -39,27 +44,41 @@ body:
         - date-picker
         - dialog
         - dropdown-menu
+        - empty
+        - field
+        - form-field
         - hover-card
+        - icon
         - input
+        - input-group
+        - input-otp
+        - item
+        - kbd
         - label
         - menubar
         - navigation-menu
+        - pagination
         - popover
         - progress
         - radio-group
+        - resizable
         - scroll-area
         - select
         - separator
         - sheet
+        - sidebar
         - skeleton
         - slider
+        - sonner
+        - spinner
         - switch
         - table
         - tabs
         - textarea
-        - toast
         - toggle
+        - toggle-group
         - tooltip
+        - trpc
         - typography
         - Docs
         - Don't know / other

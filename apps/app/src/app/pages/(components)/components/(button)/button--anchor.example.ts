@@ -1,25 +1,11 @@
 import { Component } from '@angular/core';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
 
 @Component({
-  selector: 'spartan-button-anchor',
-  standalone: true,
-  imports: [HlmButtonDirective],
-  template: `
-    <a hlmBtn target="_blank" variant="link" href="https://github.com/goetzrobin/spartan"> Star on GitHub </a>
-  `,
+	selector: 'spartan-button-anchor',
+	imports: [HlmButtonImports],
+	template: `
+		<a hlmBtn target="_blank" variant="link" href="https://github.com/spartan-ng/spartan">Star on GitHub</a>
+	`,
 })
-export class ButtonAnchorComponent {}
-
-export const anchorCode = `
-import { Component } from '@angular/core';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-
-@Component({
-  selector: 'spartan-button-anchor',
-  standalone: true,
-  imports: [HlmButtonDirective],
-  template: \` <a hlmBtn target='_blank' variant="link" href="https://github.com/goetzrobin/spartan"> Star on GitHub </a> \`,
-})
-export class ButtonAnchorComponent {}
-`;
+export class ButtonAnchor {}

@@ -1,16 +1,17 @@
+import type { RouteMeta } from '@analogjs/router';
 import { Component } from '@angular/core';
-import { RouteMeta } from '@analogjs/router';
-import { PageComponent } from '~/app/shared/layout/page.component';
+import { Page } from '@spartan-ng/app/app/shared/layout/page';
 
 export const routeMeta: RouteMeta = {
-  data: {
-    breadcrumb: 'Docs',
-  },
+	data: {
+		breadcrumb: 'Docs',
+	},
 };
 @Component({
-  selector: 'spartan-documentation',
-  standalone: true,
-  imports: [PageComponent],
-  template: ` <spartan-page /> `,
+	selector: 'spartan-documentation',
+	imports: [Page],
+	template: `
+		<spartan-page />
+	`,
 })
-export default class ExamplesPageComponent {}
+export default class ExamplesPage {}

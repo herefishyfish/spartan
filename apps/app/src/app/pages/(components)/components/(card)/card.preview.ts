@@ -1,128 +1,61 @@
 import { Component } from '@angular/core';
-import {
-  HlmCardContentDirective,
-  HlmCardDescriptionDirective,
-  HlmCardDirective,
-  HlmCardFooterDirective,
-  HlmCardHeaderDirective,
-  HlmCardTitleDirective,
-} from '@spartan-ng/ui-card-helm';
-import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { provideIcons } from '@ng-icons/core';
+import { lucideCheck, lucideChevronDown } from '@ng-icons/lucide';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmInputImports } from '@spartan-ng/helm/input';
+import { HlmLabelImports } from '@spartan-ng/helm/label';
 
 @Component({
-  selector: 'spartan-card-preview',
-  standalone: true,
-  imports: [
-    HlmCardDirective,
-    HlmCardHeaderDirective,
-    HlmCardTitleDirective,
-    HlmCardDescriptionDirective,
-    HlmCardContentDirective,
-    HlmLabelDirective,
-    HlmInputDirective,
-    HlmCardFooterDirective,
-    HlmButtonDirective,
-  ],
-  template: `
-    <section class="w-80" hlmCard>
-      <div hlmCardHeader>
-        <h3 hlmCardTitle>Create new project</h3>
-        <p hlmCardDescription>Deploy your new project in one-click.</p>
-      </div>
-      <p hlmCardContent>
-        <label class="block" hlmLabel
-          >Name
-          <input class="w-full mt-1.5" placeholder="Name of your project" hlmInput />
-        </label>
+	selector: 'spartan-card-preview',
+	imports: [HlmCardImports, HlmLabelImports, HlmInputImports, HlmButtonImports],
+	providers: [provideIcons({ lucideCheck, lucideChevronDown })],
+	host: {
+		class: 'contents',
+	},
+	template: `
+		<section class="w-full max-w-sm" hlmCard>
+			<div hlmCardHeader>
+				<h3 hlmCardTitle>Login to your account</h3>
+				<p hlmCardDescription>Enter your email below to login to your account</p>
 
-        <label class="block my-4" hlmLabel
-          >Framework
-          <select class="w-full mt-1.5" hlmInput>
-            <option>Angular</option>
-            <option>React</option>
-            <option>Vue</option>
-          </select>
-        </label>
-      </p>
-      <div hlmCardFooter class="justify-between">
-        <button hlmBtn variant="ghost">Cancel</button>
-        <button hlmBtn>Create</button>
-      </div>
-    </section>
-  `,
+				<div hlmCardAction>
+					<button hlmBtn variant="link">Sign Up</button>
+				</div>
+			</div>
+
+			<div hlmCardContent>
+				<form>
+					<div class="flex flex-col gap-6">
+						<div class="grid gap-2">
+							<label hlmLabel for="email">Email</label>
+							<input type="email" id="email" placeholder="m@example.com" required hlmInput />
+						</div>
+
+						<div class="grid gap-2">
+							<div class="flex items-center">
+								<label hlmLabel for="password">Password</label>
+								<a href="#" class="ml-auto inline-block text-sm underline-offset-4 hover:underline">
+									Forgot your password?
+								</a>
+							</div>
+							<input type="password" id="password" hlmInput />
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<div hlmCardFooter class="flex-col gap-2">
+				<button hlmBtn type="submit" class="w-full">Login</button>
+				<button hlmBtn variant="outline" class="w-full">Login with Google</button>
+			</div>
+		</section>
+	`,
 })
-export class CardPreviewComponent {}
-
-export const defaultCode = `
-import { Component } from '@angular/core';
-import {
-  HlmCardContentDirective,
-  HlmCardDescriptionDirective,
-  HlmCardDirective,
-  HlmCardFooterDirective,
-  HlmCardHeaderDirective,
-  HlmCardTitleDirective,
-} from '@spartan-ng/ui-card-helm';
-import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-
-@Component({
-  selector: 'spartan-card-preview',
-  standalone: true,
-  imports: [
-    HlmCardDirective,
-    HlmCardHeaderDirective,
-    HlmCardTitleDirective,
-    HlmCardDescriptionDirective,
-    HlmCardContentDirective,
-    HlmLabelDirective,
-    HlmInputDirective,
-    HlmCardFooterDirective,
-    HlmButtonDirective,
-  ],
-  template: \`
-    <section class="w-80" hlmCard>
-      <div hlmCardHeader>
-        <h3 hlmCardTitle>Create new project</h3>
-        <p hlmCardDescription>Deploy your new project in one-click.</p>
-      </div>
-      <p hlmCardContent>
-        <label class="block" hlmLabel
-          >Name
-          <input class="w-full mt-1.5" placeholder="Name of your project" hlmInput />
-        </label>
-
-        <label class="block my-4" hlmLabel
-          >Framework
-          <select class="w-full mt-1.5" hlmInput>
-            <option>Angular</option>
-            <option>React</option>
-            <option>Vue</option>
-          </select>
-        </label>
-      </p>
-      <div hlmCardFooter class="justify-between">
-        <button hlmBtn variant="ghost">Cancel</button>
-        <button hlmBtn>Create</button>
-      </div>
-    </section>
-  \`,
-})
-export class CardPreviewComponent {}
-`;
+export class CardPreview {}
 
 export const defaultImports = `
-import {
-  HlmCardContentDirective,
-  HlmCardDescriptionDirective,
-  HlmCardDirective,
-  HlmCardFooterDirective,
-  HlmCardHeaderDirective,
-  HlmCardTitleDirective,
-} from '@spartan-ng/ui-card-helm';
+import { HlmCardImports } from '@spartan-ng/helm/card';
 `;
 
 export const defaultSkeleton = `
@@ -130,6 +63,7 @@ export const defaultSkeleton = `
   <div hlmCardHeader>
     <h3 hlmCardTitle>Card Title</h3>
     <p hlmCardDescription>Card Description</p>
+		<div hlmCardAction></div>
   </div>
   <p hlmCardContent>Card Content</p>
   <p hlmCardFooter>Card Footer</p>
