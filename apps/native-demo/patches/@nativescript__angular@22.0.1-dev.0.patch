@@ -1,8 +1,20 @@
 diff --git a/fesm2022/nativescript-angular.mjs b/fesm2022/nativescript-angular.mjs
-index f65ad62a060fd626bfb578863681921e75fac58c..40fcb132197c9ef4eb483fa67cb0492d54b446c1 100644
+index ce6f28c91151e6dd2b4054381706ae78b7b8763d..b1e7bfa021f8aa7ad0135a766d7370701283bbf1 100644
 --- a/fesm2022/nativescript-angular.mjs
 +++ b/fesm2022/nativescript-angular.mjs
-@@ -1315,7 +1315,12 @@ class ViewUtil {
+@@ -2837,6 +2837,11 @@ function registerNativeScriptViewComponents() {
+     // No guard needed — registerElement calls Map.set which is idempotent.
+     // The old `elementMap.size > 0` guard could falsely skip registration
+     // in Vite HMR mode when elements were registered by a prior boot phase.
++    // Already registered in this module instance: registering again would overwrite app overrides
++    // (registerElement('span', ...)) made between module load and bootstrap.
++    if (elementMap.has('AbsoluteLayout')) {
++        return;
++    }
+     registerElement('AbsoluteLayout', () => AbsoluteLayout);
+     registerElement('ActivityIndicator', () => ActivityIndicator);
+     registerElement('Button', () => Button, textBaseMeta);
+@@ -3303,7 +3308,12 @@ class ViewUtil {
              return;
          }
          // Unknown attribute value -- just set it to our object as is.
@@ -13,24 +25,9 @@ index f65ad62a060fd626bfb578863681921e75fac58c..40fcb132197c9ef4eb483fa67cb0492d
 +            view.notify({ eventName: `${attributeName}Change`, object: view, value, oldValue: previous });
 +        }
      }
-     removeParentReferencesFromItems(items) {
-         for (const item of items) {
-@@ -1637,6 +1642,14 @@ class NativeScriptRenderer {
-         this.viewUtil.removeChild(parent ?? oldChild.parentNode, oldChild);
-     }
-     selectRootElement(selectorOrNode, preserveContent) {
-+        // Backport of @nativescript/angular 22: Angular 21.2 reads rootElement.tagName.toLowerCase().
-+        const root = this._selectRootElement(selectorOrNode, preserveContent);
-+        if (root && typeof root.tagName !== "string") {
-+            root.tagName = root.nodeName || "view";
-+        }
-+        return root;
-+    }
-+    _selectRootElement(selectorOrNode, preserveContent) {
-         if (NativeScriptDebug.enabled) {
-             NativeScriptDebug.rendererLog(`NativeScriptRenderer.selectRootElement: ${selectorOrNode}`);
-         }
-@@ -1679,6 +1692,8 @@ class NativeScriptRenderer {
+     getProperties(instance) {
+         const type = instance && instance.constructor;
+@@ -3734,6 +3744,8 @@ class NativeScriptRenderer {
          if (NativeScriptDebug.enabled) {
              NativeScriptDebug.rendererLog(`NativeScriptRenderer.removeAttribute ${namespace ? namespace + ':' : ''}${el}.${name}`);
          }

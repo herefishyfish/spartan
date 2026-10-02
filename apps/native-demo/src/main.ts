@@ -1,9 +1,9 @@
 import { IMAGE_CONFIG } from '@angular/common';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { install as installDrawer } from '@nativescript-community/ui-drawer';
 import { install as installBottomSheet } from '@nativescript-community/ui-material-bottomsheet';
 import {
 	bootstrapApplication,
-	provideNativeScriptNgZone,
 	provideNativeScriptRouter,
 	registerElement,
 	runNativeScriptAngularApp,
@@ -25,7 +25,7 @@ runNativeScriptAngularApp({
 		bootstrapApplication(AppComponent, {
 			providers: [
 				provideNativeScriptRouter(routes),
-				provideNativeScriptNgZone(),
+				provideZonelessChangeDetection(),
 				// Angular's dev-mode image checks read the DOM document, which NativeScript does not have.
 				{ provide: IMAGE_CONFIG, useValue: { disableImageSizeWarning: true, disableImageLazyLoadWarning: true } },
 			],

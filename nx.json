@@ -51,11 +51,6 @@
 		"@nx/vitest:test": {
 			"inputs": ["default", "^production"],
 			"cache": true
-		},
-		"@nativescript/nx:build": {
-			"cache": true,
-			"dependsOn": ["^build"],
-			"inputs": ["production", "^production"]
 		}
 	},
 	"namedInputs": {

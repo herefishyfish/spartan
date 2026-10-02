@@ -2,17 +2,15 @@ import {
 	ApplicationRef,
 	Injectable,
 	Injector,
-	NgZone,
 	type TemplateRef,
 	type ViewContainerRef,
 	inject,
 	signal,
 } from '@angular/core';
-import { BottomSheetService } from '@nativescript-community/ui-material-bottomsheet/angular';
+import type { ViewWithBottomSheetBase } from '@nativescript-community/ui-material-bottomsheet';
 import { HorizontalPosition, VerticalPosition, showPopover } from '@nativescript-community/ui-popover';
 import { AndroidApplication, Application, View } from '@nativescript/core';
 import { Div } from '@triniwiz/nativescript-masonkit/web';
-import { SheetHost } from './sheet-host';
 
 /** A dialog-like panel centered in a layer above the page, over spartan's dialog backdrop. */
 export interface ModalConfig {
@@ -81,10 +79,8 @@ export interface SheetEntry extends ModalEntry {
  */
 @Injectable({ providedIn: 'root' })
 export class Overlays {
-	private readonly _zone = inject(NgZone);
 	private readonly _appRef = inject(ApplicationRef);
 	private readonly _injector = inject(Injector);
-	private readonly _bottomSheets = inject(BottomSheetService);
 	private _viewContainer?: ViewContainerRef;
 	private _nextId = 0;
 	public readonly stack = signal<readonly ModalEntry[]>([]);
@@ -101,7 +97,7 @@ export class Overlays {
 				const top = this.stack().at(-1);
 				if (top) {
 					(args as unknown as { cancel: boolean }).cancel = true;
-					this._zone.run(() => top.ref.close());
+					top.ref.close();
 				}
 			});
 		}
@@ -167,46 +163,27 @@ export class Overlays {
 	}
 
 	private _openBottomSheet(template: OverlayTemplate): OverlayRef {
-		// The sheet's close callback only exists once it is shown, but the panel needs its ref to show.
-		const native: { close?: () => void } = {};
-		const ref: OverlayRef = { close: () => native.close?.() };
-		const shown = this._bottomSheets.showWithCloseCallback(SheetHost, {
-			viewContainerRef: this._viewContainer,
-			context: { template, ref },
+		const parent = this._viewContainer?.element.nativeElement as ViewWithBottomSheetBase | undefined;
+		if (!parent) {
+			throw new Error('Overlays.attach() must run before a drawer opens.');
+		}
+		const ref: OverlayRef = { close: () => (root as unknown as ViewWithBottomSheetBase).closeBottomSheet() };
+		const { root, teardown } = this._render(template, ref, 'style-vega text-foreground');
+		parent.showBottomSheet({
+			view: root,
+			closeCallback: teardown,
 			dismissOnDraggingDownSheet: true,
 			skipCollapsedState: true,
 			transparent: true,
 		});
-		native.close = shown.closeCallback;
-		this._track(ref);
-		shown.observable.subscribe({ next: () => this._untrack(ref), complete: () => this._untrack(ref) });
 		return ref;
 	}
 
 	private _openPopover(template: OverlayTemplate, config: AnchoredConfig): OverlayRef {
-		const native: { close?: () => void } = {};
-		let closed = false;
-		const ref: OverlayRef = { close: () => native.close?.() };
-		const view = template.createEmbeddedView({ $implicit: ref }, this._injector);
-		this._appRef.attachView(view);
-		view.detectChanges();
-
-		// The popover content is a separate native root, so it needs its own theme scope for .style-vega rules.
-		const root = new Div();
+		const ref: OverlayRef = { close: () => popover.close() };
 		// p-1 keeps the panel's ring and shadow inside the popover window's bounds; the offsets below cancel it.
-		root.className = 'style-vega text-foreground p-1';
-		for (const node of view.rootNodes) {
-			if (node instanceof View) root.addChild(node);
-		}
-
-		const teardown = () => {
-			if (closed) return;
-			closed = true;
-			this._untrack(ref);
-			this._appRef.detachView(view);
-			view.destroy();
-		};
-		const popover = showPopover(root as unknown as View, {
+		const { root, teardown } = this._render(template, ref, 'style-vega text-foreground p-1');
+		const popover = showPopover(root, {
 			anchor: config.anchor,
 			vertPos: config.side === 'bottom' ? VerticalPosition.BELOW : VerticalPosition.ABOVE,
 			horizPos: config.align === 'start' ? HorizontalPosition.ALIGN_LEFT : HorizontalPosition.ALIGN_RIGHT,
@@ -214,10 +191,35 @@ export class Overlays {
 			y: config.side === 'bottom' ? (config.offset ?? 4) - 4 : 4 - (config.offset ?? 4),
 			hideArrow: true,
 			transparent: true,
-			onDismiss: () => this._zone.run(teardown),
+			onDismiss: teardown,
 		});
-		native.close = () => popover.close();
-		this._track(ref);
 		return ref;
+	}
+
+	/**
+	 * Renders `template` into a detached MasonKit root for a native window (popover, bottom sheet). That root is outside
+	 * the page, so it carries its own theme scope for the `.style-vega` rules.
+	 */
+	private _render(template: OverlayTemplate, ref: OverlayRef, className: string) {
+		const view = template.createEmbeddedView({ $implicit: ref }, this._injector);
+		this._appRef.attachView(view);
+		view.detectChanges();
+
+		const root = new Div();
+		root.className = className;
+		for (const node of view.rootNodes) {
+			if (node instanceof View) root.addChild(node);
+		}
+
+		let closed = false;
+		const teardown = () => {
+			if (closed) return;
+			closed = true;
+			this._untrack(ref);
+			this._appRef.detachView(view);
+			view.destroy();
+		};
+		this._track(ref);
+		return { root: root as unknown as View, teardown };
 	}
 }

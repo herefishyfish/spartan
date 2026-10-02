@@ -40,3 +40,6 @@ npm-debug.log
 
 package-lock.json
 !tools/**
+
+# Vite build cache
+.ns-vite-build/
