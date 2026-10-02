@@ -23,7 +23,8 @@ export function injectContentDimensions(): ContentDimensions {
 	const width = signal<number | null>(null);
 	const height = signal<number | null>(null);
 
-	if (isPlatformServer(platformId)) {
+	// Non-DOM renderers (NativeScript) have no scroll metrics, and writing the host's height back would pin it.
+	if (isPlatformServer(platformId) || typeof host.scrollHeight !== 'number') {
 		return { width: width.asReadonly(), height: height.asReadonly() };
 	}
 
