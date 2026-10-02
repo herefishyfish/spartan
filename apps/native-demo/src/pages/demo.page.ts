@@ -50,7 +50,7 @@ const TOAST_ICONS: Record<ToastType, IconName | null> = {
 		<Drawer #drawer backdropColor="rgba(0, 0, 0, 0.1)" [gestureEnabled]="!!_overlays.sheet()" (close)="_sheetClosed()">
 			<GridLayout mainContent id="MainContent" #host class="style-vega" (layoutChanged)="_measure()">
 				<ScrollView>
-					<div class="bg-background text-foreground flex w-full flex-col">
+					<div class="bg-background text-foreground flex flex-col" [width]="_hostSize().width">
 						<div class="flex w-full flex-col gap-6 p-6">
 							@if (_component.value(); as type) {
 								<ng-container *ngComponentOutlet="type" />
