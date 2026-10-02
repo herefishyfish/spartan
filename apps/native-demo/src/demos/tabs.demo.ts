@@ -1,61 +1,49 @@
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { buttonVariants } from '@spartan-ng/helm/button';
-import { listVariants } from '@spartan-ng/helm/tabs';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmLabel } from '@spartan-ng/helm/label';
+import { HlmTabs, HlmTabsContent, HlmTabsList, HlmTabsTrigger } from '@spartan-ng/helm/tabs';
 
 @Component({
 	selector: 'tabs-demo',
+	imports: [HlmTabs, HlmTabsList, HlmTabsTrigger, HlmTabsContent, HlmCardImports, HlmButton, HlmInput, HlmLabel],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
-		<div data-slot="tabs" data-orientation="horizontal" class="group/tabs flex w-full flex-col gap-2">
-			<div role="tablist" data-slot="tabs-list" data-variant="default" class="flex-row" [class]="_list">
+		<div hlmTabs class="w-full" [tab]="_active()" (tabActivated)="_active.set($event)">
+			<div hlmTabsList class="flex-row">
 				@for (tab of _tabs; track tab.id) {
-					<button
-						role="tab"
-						data-slot="tabs-trigger"
-						data-orientation="horizontal"
-						[class]="_trigger"
-						[attr.data-state]="_active() === tab.id ? 'active' : 'inactive'"
-						(click)="_active.set(tab.id)"
-					>
-						{{ tab.label }}
-					</button>
+					<button [hlmTabsTrigger]="tab.id">{{ tab.label }}</button>
 				}
 			</div>
+			<!-- Brain hides inactive panels with the [hidden] property, which hides the native view but leaves its box in
+			     MasonKit's layout; display: none removes it. -->
 			@for (tab of _tabs; track tab.id) {
-				@if (_active() === tab.id) {
-					<div
-						role="tabpanel"
-						data-slot="tabs-content"
-						data-state="active"
-						data-orientation="horizontal"
-						class="flex-1 text-sm outline-none"
-					>
-						<div data-slot="card" class="spartan-card group/card flex flex-col">
-							<div data-slot="card-header" class="spartan-card-header group/card-header grid auto-rows-min items-start">
-								<h3 data-slot="card-title" class="spartan-card-title">{{ tab.label }}</h3>
-								<p data-slot="card-description" class="spartan-card-description">{{ tab.description }}</p>
-							</div>
-							<div data-slot="card-content" class="spartan-card-content flex flex-col gap-4">
-								@for (field of tab.fields; track field.label) {
-									<div class="flex flex-col gap-1.5">
-										<label data-slot="label" class="spartan-label select-none">{{ field.label }}</label>
-										<input
-											data-slot="input"
-											class="spartan-input w-full min-w-0 outline-none"
-											[attr.type]="field.type"
-											[attr.placeholder]="field.placeholder"
-											[value]="field.value"
-										/>
-									</div>
-								}
-							</div>
-							<div data-slot="card-footer" class="spartan-card-footer flex flex-row items-center">
-								<button data-slot="button" [class]="_button">{{ tab.action }}</button>
-							</div>
+				<div [hlmTabsContent]="tab.id" [class.hidden]="_active() !== tab.id">
+					<div hlmCard>
+						<div hlmCardHeader class="grid-rows-[auto_auto]">
+							<h3 hlmCardTitle>{{ tab.label }}</h3>
+							<p hlmCardDescription>{{ tab.description }}</p>
+						</div>
+						<div hlmCardContent class="flex flex-col gap-4">
+							@for (field of tab.fields; track field.label) {
+								<div class="flex flex-col gap-1.5">
+									<label hlmLabel>{{ field.label }}</label>
+									<input
+										hlmInput
+										[attr.type]="field.type"
+										[attr.placeholder]="field.placeholder"
+										[value]="field.value"
+									/>
+								</div>
+							}
+						</div>
+						<div hlmCardFooter>
+							<button hlmBtn>{{ tab.action }}</button>
 						</div>
 					</div>
-				}
+				</div>
 			}
 		</div>
 	`,
@@ -84,8 +72,4 @@ export default class TabsDemo {
 		},
 	];
 	protected readonly _active = signal('account');
-	protected readonly _list = listVariants({ variant: 'default' });
-	protected readonly _button = buttonVariants();
-	protected readonly _trigger =
-		'spartan-tabs-trigger text-foreground/60 relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all data-active:bg-background data-active:text-foreground';
 }

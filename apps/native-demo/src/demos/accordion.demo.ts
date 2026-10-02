@@ -1,59 +1,40 @@
-import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { Icon } from '../ui/icon';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { HlmAccordionImports } from '@spartan-ng/helm/accordion';
 
 @Component({
 	selector: 'accordion-demo',
-	imports: [Icon],
+	imports: [HlmAccordionImports],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
-		<div data-slot="accordion" class="spartan-accordion flex w-full flex-col">
-			@for (item of _items; track item.id) {
-				<div
-					data-slot="accordion-item"
-					class="spartan-accordion-item flex flex-col"
-					[attr.data-state]="_open() === item.id ? 'open' : 'closed'"
-				>
-					<div
-						role="button"
-						data-slot="accordion-trigger"
-						class="spartan-accordion-trigger relative flex flex-1 flex-row items-start justify-between border border-transparent"
-						(click)="toggle(item.id)"
-					>
-						<span>{{ item.title }}</span>
-						<ui-icon
-							data-slot="accordion-trigger-icon"
-							class="text-muted-foreground"
-							[name]="_open() === item.id ? 'lucideChevronUp' : 'lucideChevronDown'"
-						/>
-					</div>
-					@if (_open() === item.id) {
-						<div data-slot="accordion-content" class="spartan-accordion-content">
-							<p class="spartan-accordion-content-inner">{{ item.body }}</p>
-						</div>
-					}
-				</div>
+		<hlm-accordion>
+			@for (item of _items; track item.id; let first = $first) {
+				<hlm-accordion-item [isOpened]="first">
+					<hlm-accordion-trigger>{{ item.title }}</hlm-accordion-trigger>
+					<hlm-accordion-content>
+						<p>{{ item.body }}</p>
+					</hlm-accordion-content>
+				</hlm-accordion-item>
 			}
-		</div>
+		</hlm-accordion>
 	`,
 })
 export default class AccordionDemo {
 	protected readonly _items = [
-		{ id: 'a11y', title: 'Is it accessible?', body: 'Yes. It adheres to the WAI-ARIA design pattern.' },
 		{
-			id: 'styled',
-			title: 'Is it styled?',
-			body: 'Yes. It comes with default styles that match the other components.',
+			id: 'shipping',
+			title: 'What are your shipping options?',
+			body: 'We offer standard (5-7 days), express (2-3 days), and overnight shipping. Free shipping on international orders.',
 		},
 		{
-			id: 'animated',
-			title: 'Is it animated?',
-			body: 'Yes. It is animated by default, but you can disable it if you prefer.',
+			id: 'returns',
+			title: 'What is your return policy?',
+			body: 'Returns accepted within 30 days. Items must be unused and in original packaging. Refunds processed within 5-7 business days.',
+		},
+		{
+			id: 'support',
+			title: 'How can I contact customer support?',
+			body: 'Reach us via email, live chat, or phone. We respond within 24 hours during business days.',
 		},
 	];
-	protected readonly _open = signal<string | null>('a11y');
-
-	protected toggle(id: string) {
-		this._open.set(this._open() === id ? null : id);
-	}
 }

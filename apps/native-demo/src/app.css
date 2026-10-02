@@ -87,6 +87,12 @@
 	--surface-foreground: oklch(0.708 0 0);
 }
 
+@layer base {
+	* {
+		@apply border-border;
+	}
+}
+
 .lucide {
 	font-family: lucide;
 }

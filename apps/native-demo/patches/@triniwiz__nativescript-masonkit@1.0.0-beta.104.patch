@@ -110,6 +110,19 @@ index 9321ff4..591def6 100644
              };
              view.didLayout = () => {
                  this.requestLayout();
+diff --git a/input/index.android.js b/input/index.android.js
+index a5ede03..cdea628 100644
+--- a/input/index.android.js
++++ b/input/index.android.js
+@@ -83,7 +83,7 @@ let Input = class Input extends InputBase {
+     }
+     [placeholderProperty.setNative](value) {
+         if (this._view) {
+-            this._view.setPlaceholder(value);
++            this._view.setPlaceholder(value ?? '');
+         }
+     }
+     set valueAsNumber(value) {
 diff --git a/properties.js b/properties.js
 index 4bf3d37..45b68e0 100644
 --- a/properties.js
@@ -201,3 +214,16 @@ index 511b554..5760341 100644
      // A `<br>` that the host already inserted as a `Br` placeholder element
      // (Vue/Angular metas do) is a slot of its own; only synthesise a break run
      // for a framework node MasonKit has no child for.
+diff --git a/textarea/index.android.js b/textarea/index.android.js
+index 1682ffc..e88c9c0 100644
+--- a/textarea/index.android.js
++++ b/textarea/index.android.js
+@@ -21,7 +21,7 @@ let TextArea = class TextArea extends TextAreaBase {
+     }
+     [placeholderProperty.setNative](value) {
+         if (this._view) {
+-            this._view.setPlaceholder(value);
++            this._view.setPlaceholder(value ?? '');
+         }
+     }
+     [rowsProperty.setNative](value) {

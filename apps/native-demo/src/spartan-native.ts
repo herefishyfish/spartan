@@ -48,13 +48,14 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
 /**
  * Element mappings spartan's markup needs on MasonKit. Call after installMasonKit(), before bootstrap.
  *
- * MasonKit lays out `button`, `a`, `li`, `kbd` and `label` as inline text runs that ignore flex, but spartan styles them
- * as flex boxes (buttons and links with icons and gaps, list items, key caps, labels around a control), so they are
- * backed by a block element.
+ * MasonKit lays out `button`, `a`, `li`, `kbd`, `label` and headings as inline text runs that ignore flex and cannot
+ * hold block children, but spartan styles them as flex boxes (buttons and links with icons and gaps, list items, key
+ * caps, labels around a control, the accordion's heading around its trigger), so they are backed by a block element.
+ * Tailwind's preflight resets heading styles, so headings lose nothing.
  * The @ng-icons/core shim draws a glyph, so `ng-icon` is text that can also sit inside helm's text elements.
  */
 export function registerSpartanNativeElements(): void {
-	for (const tag of ['button', 'a', 'li', 'kbd', 'label']) {
+	for (const tag of ['button', 'a', 'li', 'kbd', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']) {
 		registerElement(tag, () => Div, masonMeta);
 	}
 	registerElement('ng-icon', () => Span, masonMeta);

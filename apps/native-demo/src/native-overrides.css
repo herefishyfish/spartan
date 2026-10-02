@@ -11,3 +11,11 @@
 .style-vega [data-slot='pagination-item'] {
 	display: flex;
 }
+
+/* .spartan-accordion-content data-[state=closed]:h-0: MasonKit keeps a zero-height panel at its content height, and
+   without the measured --brn-accordion-content-height there is no height animation to preserve. */
+.style-vega .spartan-accordion-content[data-state='closed'] {
+	display: none;
+	/* Android keeps drawing a panel that closes after first layout unless the native view is hidden too. */
+	visibility: collapse;
+}

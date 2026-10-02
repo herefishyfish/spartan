@@ -18,7 +18,7 @@ patchedDependencies:
     hash: 35bdb6aabe8373a2d4db1c85a7de279e0b47f812fe6024b9f8553e65933f1cfd
     path: patches/@nativescript__vite@8.0.17.patch
   '@triniwiz/nativescript-masonkit@1.0.0-beta.104':
-    hash: 5d1415ae9e9f5f8ee1b4bc88094eefb5c4288e51636349de578346b94ccc3e00
+    hash: 1733761c6928758329a52276809ae5dc5286b5b185819baeb41a7661be079a9f
     path: patches/@triniwiz__nativescript-masonkit@1.0.0-beta.104.patch
 
 importers:
@@ -90,7 +90,7 @@ importers:
         version: 1.0.5
       '@triniwiz/nativescript-masonkit':
         specifier: 1.0.0-beta.104
-        version: 1.0.0-beta.104(patch_hash=5d1415ae9e9f5f8ee1b4bc88094eefb5c4288e51636349de578346b94ccc3e00)(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)(zone.js@0.16.2))(@nativescript/angular@21.2.0-rc.2(patch_hash=b46c48cdaade133b6eee28f33a9a2b9acba7341e54f182c92b98c52c778c4119))
+        version: 1.0.0-beta.104(patch_hash=1733761c6928758329a52276809ae5dc5286b5b185819baeb41a7661be079a9f)(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)(zone.js@0.16.2))(@nativescript/angular@21.2.0-rc.2(patch_hash=b46c48cdaade133b6eee28f33a9a2b9acba7341e54f182c92b98c52c778c4119))
       '@valor/nativescript-websockets':
         specifier: ^2.0.3
         version: 2.0.3
@@ -4865,7 +4865,7 @@ snapshots:
       postcss: 8.5.28
       tailwindcss: 4.3.3
 
-  '@triniwiz/nativescript-masonkit@1.0.0-beta.104(patch_hash=5d1415ae9e9f5f8ee1b4bc88094eefb5c4288e51636349de578346b94ccc3e00)(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)(zone.js@0.16.2))(@nativescript/angular@21.2.0-rc.2(patch_hash=b46c48cdaade133b6eee28f33a9a2b9acba7341e54f182c92b98c52c778c4119))':
+  '@triniwiz/nativescript-masonkit@1.0.0-beta.104(patch_hash=1733761c6928758329a52276809ae5dc5286b5b185819baeb41a7661be079a9f)(@angular/core@21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)(zone.js@0.16.2))(@nativescript/angular@21.2.0-rc.2(patch_hash=b46c48cdaade133b6eee28f33a9a2b9acba7341e54f182c92b98c52c778c4119))':
     optionalDependencies:
       '@angular/core': 21.2.16(@angular/compiler@21.2.16)(rxjs@7.8.2)(zone.js@0.16.2)
       '@nativescript/angular': 21.2.0-rc.2(patch_hash=b46c48cdaade133b6eee28f33a9a2b9acba7341e54f182c92b98c52c778c4119)

@@ -90,7 +90,10 @@ comment naming the rule, or a stand-in to `native-overrides.css` when it applies
 Components whose brain layer is built on the CDK overlay, CDK menu, pointer capture or DOM measurement (dialog,
 sheet, popover, select, combobox, menus, tooltip, hover-card, drawer, slider, resizable, sonner, carousel, chart,
 message-scroller, navigation-menu, date-picker) still mirror helm's markup and open through the `Overlays` service
-below until those layers have native implementations.
+below until those layers have native implementations. Calendar and table mirror helm's markup because helm builds
+them from `table` elements, which MasonKit does not have. Input OTP keeps a native number field: brain's input sets
+`inputMode` and `autocomplete="one-time-code"`, which MasonKit ignores, so the real one gets a full keyboard and no
+code autofill.
 
 ## MasonKit rules
 
