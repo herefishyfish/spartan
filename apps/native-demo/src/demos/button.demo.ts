@@ -6,8 +6,8 @@ import { HlmButton } from '@spartan-ng/helm/button';
 @Component({
 	selector: 'button-demo',
 	imports: [HlmButton, NgIcon],
-	providers: [provideIcons({ lucideArrowUp, lucideGitBranch, lucideLoaderCircle })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideArrowUp, lucideGitBranch, lucideLoaderCircle })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">

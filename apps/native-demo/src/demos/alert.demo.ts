@@ -9,8 +9,8 @@ import { HlmButton } from '@spartan-ng/helm/button';
 @Component({
 	selector: 'alert-demo',
 	imports: [HlmAlertImports, HlmButton, NgIcon],
-	providers: [provideIcons({ lucideCircleAlert, lucideCircleCheck, lucideInfo })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideCircleAlert, lucideCircleCheck, lucideInfo })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">

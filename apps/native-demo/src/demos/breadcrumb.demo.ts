@@ -8,8 +8,8 @@ import { HlmButton } from '@spartan-ng/helm/button';
 @Component({
 	selector: 'breadcrumb-demo',
 	imports: [HlmBreadcrumbImports, HlmButton, NgIcon],
-	providers: [provideIcons({ lucideSlash })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideSlash })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">

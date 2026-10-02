@@ -8,8 +8,8 @@ const PAGE_COUNT = 10;
 @Component({
 	selector: 'pagination-demo',
 	imports: [HlmPaginationImports, NgIcon],
-	providers: [provideIcons({ lucideChevronsLeft, lucideChevronsRight })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideChevronsLeft, lucideChevronsRight })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">

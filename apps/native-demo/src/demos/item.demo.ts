@@ -14,6 +14,7 @@ import { HlmItemImports } from '@spartan-ng/helm/item';
 @Component({
 	selector: 'item-demo',
 	imports: [HlmItemImports, HlmButton, NgIcon],
+	schemas: [NO_ERRORS_SCHEMA],
 	providers: [
 		provideIcons({
 			lucideBadge,
@@ -24,7 +25,6 @@ import { HlmItemImports } from '@spartan-ng/helm/item';
 			lucideShieldAlert,
 		}),
 	],
-	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">

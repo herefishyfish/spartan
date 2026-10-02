@@ -33,6 +33,7 @@ const stateIcon: Record<Exclude<AttachmentState, 'uploading'>, string> = {
 @Component({
 	selector: 'attachment-demo',
 	imports: [HlmAttachmentImports, HlmButton, HlmSpinner, NgIcon],
+	schemas: [NO_ERRORS_SCHEMA],
 	providers: [
 		provideIcons({
 			lucideCheck,
@@ -45,7 +46,6 @@ const stateIcon: Record<Exclude<AttachmentState, 'uploading'>, string> = {
 			lucideX,
 		}),
 	],
-	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">

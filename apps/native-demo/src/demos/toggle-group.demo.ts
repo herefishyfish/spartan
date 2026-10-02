@@ -14,6 +14,7 @@ import { HlmToggleGroup, HlmToggleGroupItem } from '@spartan-ng/helm/toggle-grou
 @Component({
 	selector: 'toggle-group-demo',
 	imports: [HlmToggleGroup, HlmToggleGroupItem, NgIcon],
+	schemas: [NO_ERRORS_SCHEMA],
 	providers: [
 		provideIcons({
 			lucideBold,
@@ -24,7 +25,6 @@ import { HlmToggleGroup, HlmToggleGroupItem } from '@spartan-ng/helm/toggle-grou
 			lucideTextAlignEnd,
 		}),
 	],
-	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">

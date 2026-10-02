@@ -14,8 +14,8 @@ const STEPS = [
 @Component({
 	selector: 'marker-demo',
 	imports: [HlmButton, HlmMarkerImports, NgIcon],
-	providers: [provideIcons({ lucideBookOpenCheck, lucideFilePen, lucideGitBranch, lucideSearch })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideBookOpenCheck, lucideFilePen, lucideGitBranch, lucideSearch })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<!-- The separator variant draws its rules with ::before/::after, which do not render natively, so they are explicit children. -->

@@ -1,33 +1,63 @@
 # native-demo
 
-A NativeScript Angular app that renders every spartan/ui component natively on iOS and Android.
-[MasonKit](https://github.com/triniwiz/nativescript-mason) gives NativeScript HTML-shaped elements
-(`div`, `span`, `button`, `input`, ...) with a web layout engine (flexbox, grid), and
-`@nativescript/tailwind` compiles the real spartan theme (`libs/registry/src/styles/style-vega.css`) into
-NativeScript CSS. The demos use the same `spartan-*` classes and `data-slot` attributes as the helm
-directives, so they track the web styles.
+A NativeScript Angular app that renders spartan/ui natively on iOS and Android with spartan's own helm and brain
+directives. [MasonKit](https://github.com/triniwiz/nativescript-mason) gives NativeScript HTML-shaped elements
+(`div`, `span`, `button`, `input`, ...) with a web layout engine (flexbox, grid), and `@nativescript/tailwind`
+compiles the real spartan theme (`libs/registry/src/styles/style-vega.css`) into NativeScript CSS, so
+`<button hlmBtn variant="outline">` in a NativeScript template is the same directive, classes and theme as on the
+web.
 
 ## Run it
 
+The app is a standalone NativeScript project with its own install, so the workspace keeps its web toolchain.
+Install the workspace first (the helm and brain sources type-check against it), then the app:
+
 ```bash
+pnpm install
 cd apps/native-demo
-ns run android
+pnpm install
+ns run ios       # Vite dev server with HMR
+ns run android --no-hmr
 ```
 
-On Windows, if Gradle reports `'gradlew.bat' is not recognized`, the shell has
-`NoDefaultCurrentDirectoryInExePath` set; unset it for the command.
+Android currently needs `--no-hmr`: under the Vite HMR session `com.tns.NativeScriptActivity` is served over
+HTTP, so Android's static binding generator never sees it and the app cannot start.
 
 Open a demo directly, skipping the list:
 
 ```bash
+xcrun simctl launch booted ng.spartan.nativedemo -demo accordion
 adb shell am start -n ng.spartan.nativedemo/com.tns.NativeScriptActivity -e demo accordion
 ```
 
-Type-check the app, templates included, without a device:
+Type-check the app, templates and the helm/brain sources it uses included, without a device:
 
 ```bash
-pnpm exec ngc -p apps/native-demo/tsconfig.app.json --noEmit
+cd apps/native-demo
+node_modules/.bin/ngc -p tsconfig.app.json --noEmit
 ```
+
+The app pins the workspace's Angular, CDK and TypeScript versions so both resolve one set of Angular types; keep
+them in step when the workspace upgrades. After changing a patch or a dependency, delete
+`node_modules/.ns-vite` (the dev server's pre-bundle cache does not key on patches).
+
+## Running spartan on NativeScript
+
+`src/spartan-native.ts` and `src/native-globals.ts` are what spartan needs from a NativeScript app, beyond MasonKit:
+
+- `registerSpartanNativeElements()` backs `button`, `a` and `li` with MasonKit blocks (MasonKit makes them inline
+  text runs, which ignore the flex classes spartan gives buttons, links and list items) and registers `ng-icon` as
+  a text element.
+- `provideSpartanNativeScript()` gives `@angular/cdk` a non-browser `Platform` (NativeScript reports
+  `PLATFORM_ID` `'browser'`, after which CDK reaches for `window` and `document` listeners), adds the
+  `querySelector` brain uses to find labels, and turns off Angular's dev-mode image checks.
+- `native-globals` stubs `window.addEventListener`, which CDK calls while its modules load. `main.ts` imports it
+  first.
+- `@ng-icons/core` is aliased (`vite.config.mts`) to `src/shims/ng-icons-core.ts`, whose `ng-icon` draws the
+  lucide glyph font, so helm templates render their icons unchanged.
+- `src/app.css` maps `dark:` to NativeScript's `.ns-dark` and makes `motion-safe:` unconditional (media queries
+  are dropped). `src/native-overrides.css` holds stand-ins for rules NativeScript CSS cannot express, each next to
+  the rule it replaces.
 
 ## Add a demo
 
@@ -37,39 +67,44 @@ The list and the `demo/:slug` route pick it up from the file name; its default e
 ```ts
 @Component({
 	selector: 'badge-demo',
-	imports: [Icon],
+	imports: [HlmBadge, NgIcon],
+	providers: [provideIcons({ lucideBadgeCheck })],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
-		...
+		<div hlmBadge variant="secondary">
+			<ng-icon name="lucideBadgeCheck" />
+			Verified
+		</div>
 	`,
 })
 export default class BadgeDemo {}
 ```
 
-Mirror the helm directive for each part. Every helm directive in `libs/helm/<component>/src/lib` is a
-`data-slot`, maybe some attributes, and a class string passed to `classes()` or `hlm()`. Copy all three onto
-the matching element, including the `group/<name>` classes, because variants such as
-`group-data-[size=sm]/switch:` select on them. Where helm exports a variant function (`buttonVariants`,
-`badgeVariants`, ...), import it and call it. Model the content on the docs previews in
-`apps/app/src/app/pages/(components)/components/(<slug>)/`.
+Use the helm directives and components as the docs previews in
+`apps/app/src/app/pages/(components)/components/(<slug>)/` do. Where a spartan rule depends on CSS NativeScript
+cannot match (`:has()`, `::before`/`::after`, container queries), add the resulting classes in the demo next to a
+comment naming the rule, or a stand-in to `native-overrides.css` when it applies everywhere.
+
+Components whose brain layer is built on the CDK overlay, CDK menu, pointer capture or DOM measurement (dialog,
+sheet, popover, select, combobox, menus, tooltip, hover-card, drawer, slider, resizable, sonner, carousel, chart,
+message-scroller, navigation-menu, date-picker) still mirror helm's markup and open through the `Overlays` service
+below until those layers have native implementations.
 
 ## MasonKit rules
 
-- Text elements (`span`, `p`, `h1`-`h6`, `li`, `a`, `label`, `kbd`) lay their children out as inline text runs
-  and ignore flex. An element that spartan styles as a flex box (a badge, an item title, a select group label) must
+- Text elements (`span`, `p`, `h1`-`h6`, `label`, `kbd`) lay their children out as inline text runs and ignore
+  flex (`button`, `a` and `li` are remapped to blocks, see above). An element that spartan styles as a flex box (a badge, an item title, a select group label) must
   be a `div`; it still takes the `flex`/`inline-flex` classes. A `span` with them measures its text at the
   wrong width when it is stretched in a column.
-- `<button>` is registered as a block element (see `main.ts`), so spartan's `inline-flex items-center gap-*`
-  button classes lay icons and labels out as on the web.
 - Listen with `(click)`. For `<input>` and `<textarea>`, bind `[value]` and read `$any($event).target.value`
   in `(input)`.
-- Drive state with signals and the same attributes helm sets: `[attr.data-state]` (`open`/`closed`,
+- In demos that mirror helm's markup, drive state with signals and the same attributes helm sets: `[attr.data-state]` (`open`/`closed`,
   `checked`/`unchecked`, `active`/`inactive`, `on`/`off`), `[attr.data-disabled]`, `[attr.data-orientation]`,
   `[attr.data-size]`, and so on. The style-vega rules select on these.
-- Icons: `<ui-icon name="lucideChevronDown" />`, the `@ng-icons/lucide` export names helm uses.
+- Icons: `<ng-icon name="lucideChevronDown" />` with `provideIcons`, as on the web.
 - Lengths are unitless (device-independent pixels).
-
+- `display: contents` (switch, checkbox) lays out as a flex box sized to its child.
 - Use either a static `class` or a `[class]` binding on an element, not both; `[class.name]` toggles are fine.
 - `:first-child`, `:last-child` and `:only-child` match (the MasonKit patch tracks them), so helm's
   `first:`/`last:`/`[&>*:not(:first-child)]:` classes work.
@@ -139,21 +174,25 @@ MasonKit supports. Some web CSS still has no native equivalent:
 - Spartan's rules are `.style-vega .spartan-*` descendant selectors, so an element only picks them up inside an
   ancestor with `style-vega`. The demo page provides it.
 
-When a spartan rule cannot be expressed, add a pixel equivalent to `src/native-overrides.css` next to a
-comment naming the rule it stands in for.
+When a spartan rule cannot be expressed, add an equivalent to `src/native-overrides.css` next to a comment
+naming the rule it stands in for.
 
-Why each patch exists:
+Why each patch in `patches/` exists:
 
 - `@nativescript/tailwind`: flattens Tailwind v4's nested rules instead of deleting them; allows MasonKit's
   properties and `:hover`/`:active`; maps logical and individual-transform properties; strips values
   NativeScript cannot parse (`inherit`, `var()` in animations and keyframes, `@container`), any one of which
   silently drops the whole stylesheet. Lets intrinsic `width`/`height` through.
 - `@triniwiz/nativescript-masonkit`: clears `color` and `background-color` when a class that set them is
-  removed, instead of keeping the stale value, and keeps `:first-child`/`:last-child`/`:only-child` current.
-- `@nativescript/angular`: backports the v22 `selectRootElement` fix Angular 21.2 needs to bootstrap, and
-  emits `<name>Change` when an attribute binding changes, which is what re-matches `[data-state=...]` rules.
-  `removeAttribute` (an `[attr.x]` bound to `null`) clears the property instead of doing nothing.
-- `@nativescript/core`: notifies `data-*`/`aria-*` changes so attribute selectors re-match, and parses
-  `fit-content`/`min-content`/`max-content` lengths (core layouts treat them as `auto`; MasonKit sizes by content).
-- `@nativescript-community/ui-canvas` and `gesturehandler` (used by the chart): find `@nativescript/core` by
-  walking up from the app, as Node does, instead of assuming `apps/native-demo/node_modules`.
+  removed; keeps `:first-child`/`:last-child`/`:only-child` current; starts loading an `img` as soon as `src` is
+  set and emits `load`/`error` (helm's avatar shows the image after `load`); lays out `display: contents` as a
+  flex box.
+- `@nativescript/angular`: emits `<name>Change` when an attribute binding changes, which is what re-matches
+  `[data-state=...]` rules; `removeAttribute` (an `[attr.x]` bound to `null`) clears the property; boots under
+  the `@nativescript/vite` HMR session, where the app has launched before Angular bootstraps.
+- `@nativescript/core`: notifies `data-*`/`aria-*` changes so attribute selectors re-match; tracks ancestor
+  attributes for complex selectors inside `:is()`/`:where()`, so `group-data-[size=sm]/switch:` re-matches when
+  the group's attribute arrives late; parses `fit-content`/`min-content`/`max-content` lengths.
+- `@nativescript/vite`: treats `.mjs` as ESM when bridging pre-bundled dependencies (minified `clsx.mjs` lost its
+  named exports) and keeps class names in its esbuild pre-bundles (bundling renamed `TextNode`, which MasonKit's
+  Angular adapter identifies by name).

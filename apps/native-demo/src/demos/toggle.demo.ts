@@ -9,8 +9,8 @@ type ToggleState = 'on' | 'off';
 @Component({
 	selector: 'toggle-demo',
 	imports: [HlmToggle, NgIcon],
-	providers: [provideIcons({ lucideBold, lucideBookmark, lucideItalic })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideBold, lucideBookmark, lucideItalic })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		@for (item of _items; track item.id) {

@@ -6,8 +6,8 @@ import { HlmAspectRatio } from '@spartan-ng/helm/aspect-ratio';
 @Component({
 	selector: 'aspect-ratio-demo',
 	imports: [HlmAspectRatio, NgIcon],
-	providers: [provideIcons({ lucideImage })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideImage })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">

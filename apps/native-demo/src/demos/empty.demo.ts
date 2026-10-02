@@ -8,8 +8,8 @@ import { HlmEmptyImports } from '@spartan-ng/helm/empty';
 @Component({
 	selector: 'empty-demo',
 	imports: [HlmEmptyImports, HlmAvatarImports, HlmButton, NgIcon],
-	providers: [provideIcons({ lucideArrowUpRight, lucideCloud, lucideFolderCheck, lucideFolderCode })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideArrowUpRight, lucideCloud, lucideFolderCheck, lucideFolderCode })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<!-- Icons carry text-2xl because spartan sizes them with [&_ng-icon:not([class*='text-'])], which does not match. -->

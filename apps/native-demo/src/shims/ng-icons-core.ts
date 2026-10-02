@@ -13,7 +13,9 @@ import { lucideGlyph } from '../ui/lucide-glyph';
 	// Registered as a MasonKit text element (provideSpartanNativeScript), so the glyph lays out as an inline run inside
 	// helm's text elements (a checkbox indicator span) as well as a box inside flex containers.
 	host: { class: 'lucide', '[style.color]': 'color()', '[style.fontSize]': '_fontSize()' },
-	template: `{{ _glyph() }}`,
+	template: `
+		{{ _glyph() }}
+	`,
 })
 export class NgIcon {
 	public readonly name = input<string>();

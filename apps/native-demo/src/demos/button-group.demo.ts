@@ -8,8 +8,8 @@ import { HlmInput } from '@spartan-ng/helm/input';
 @Component({
 	selector: 'button-group-demo',
 	imports: [HlmButtonGroupImports, HlmButton, HlmInput, NgIcon],
-	providers: [provideIcons({ lucideArrowLeft, lucideArrowUpRight, lucideEllipsis, lucideMinus, lucidePlus })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideArrowLeft, lucideArrowUpRight, lucideEllipsis, lucideMinus, lucidePlus })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">

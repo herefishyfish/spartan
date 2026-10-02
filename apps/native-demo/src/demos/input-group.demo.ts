@@ -8,8 +8,8 @@ const FRAMEWORKS = ['Angular', 'Analog', 'NativeScript', 'Nx', 'Tailwind CSS', '
 @Component({
 	selector: 'input-group-demo',
 	imports: [HlmInputGroupImports, NgIcon],
-	providers: [provideIcons({ lucideArrowUp, lucideCheck, lucideCopy, lucideSearch })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideArrowUp, lucideCheck, lucideCopy, lucideSearch })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">

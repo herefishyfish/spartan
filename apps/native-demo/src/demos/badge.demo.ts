@@ -7,8 +7,8 @@ import { HlmSpinner } from '@spartan-ng/helm/spinner';
 @Component({
 	selector: 'badge-demo',
 	imports: [HlmBadge, HlmSpinner, NgIcon],
-	providers: [provideIcons({ lucideBadgeCheck, lucideBookmark, lucideCheck, lucidePlus })],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideBadgeCheck, lucideBookmark, lucideCheck, lucidePlus })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">
