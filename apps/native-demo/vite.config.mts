@@ -15,11 +15,7 @@ const rootDependencies = Object.keys(
 
 // The vendor pre-bundle seeds root dependencies imported anywhere under a tsconfig.base.json path, i.e. every lib in
 // the web workspace. Those resolve from the root node_modules (a second Angular); the device only gets this app's.
-// @ng-icons/core is aliased to a shim below, so the real package must not be pre-bundled either.
-process.env['NS_VENDOR_EXCLUDE'] = [
-	...rootDependencies.filter((name) => !appDependencies.includes(name)),
-	'@ng-icons/core',
-].join(',');
+process.env['NS_VENDOR_EXCLUDE'] = rootDependencies.filter((name) => !appDependencies.includes(name)).join(',');
 
 // libs/helm and libs/brain sit outside this project; their bare imports must resolve to this app's node_modules.
 const dedupedPackages = appDependencies.filter((name) => !name.startsWith('@nativescript'));
@@ -31,6 +27,7 @@ export default defineConfig(
 			define: { __WINDOWS__: 'false' },
 			resolve: {
 				dedupe: dedupedPackages,
+				// ng-icon renders SVG; helm templates type-check against the workspace's @ng-icons/core and run this shim.
 				alias: [{ find: /^@ng-icons\/core$/, replacement: join(__dirname, 'src/shims/ng-icons-core.ts') }],
 			},
 			// Bundling renames colliding classes (@nativescript/angular's TextNode becomes TextNode$1 next to MasonKit's);

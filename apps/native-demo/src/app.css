@@ -9,6 +9,9 @@
 /* NativeScript stamps ns-dark on the root view instead of the web's .dark. */
 @custom-variant dark (&:is(.ns-dark *));
 
+/* NativeScript drops media queries, so helm's motion-safe: animations (spinner, skeleton) would never run. */
+@custom-variant motion-safe (&);
+
 :root {
 	--font-sans: sans-serif;
 	--font-mono: monospace;

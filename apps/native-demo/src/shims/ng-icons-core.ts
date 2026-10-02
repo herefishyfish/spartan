@@ -10,10 +10,10 @@ import { lucideGlyph } from '../ui/lucide-glyph';
 	selector: 'ng-icon',
 	schemas: [NO_ERRORS_SCHEMA],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	host: { class: 'inline-flex shrink-0 items-center justify-center' },
-	template: `
-		<span class="lucide" [style.color]="color()" [style.fontSize]="_fontSize()">{{ _glyph() }}</span>
-	`,
+	// Registered as a MasonKit text element (provideSpartanNativeScript), so the glyph lays out as an inline run inside
+	// helm's text elements (a checkbox indicator span) as well as a box inside flex containers.
+	host: { class: 'lucide', '[style.color]': 'color()', '[style.fontSize]': '_fontSize()' },
+	template: `{{ _glyph() }}`,
 })
 export class NgIcon {
 	public readonly name = input<string>();

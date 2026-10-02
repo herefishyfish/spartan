@@ -42,8 +42,88 @@ index 1770602f5d50fb886f53dda4c8701f673c9217ce..acf7a18bb7cc0a2ce05b13f19b90dbb9
 +        return result;
 +    };
 +}
+diff --git a/img/index.android.js b/img/index.android.js
+index cbe4519..af587d6 100644
+--- a/img/index.android.js
++++ b/img/index.android.js
+@@ -8,11 +8,32 @@ let Img = class Img extends ImageBase {
+         super();
+         this._inBatch = false;
+         this[isMasonView_] = true;
++        // Like an HTMLImageElement, start loading as soon as src is set, even while detached: web templates such as
++        // spartan's avatar only attach the image once its load event has fired.
++        this.on('srcChange', (args) => {
++            if (!this.nativeViewProtected) {
++                this[srcProperty.setNative](args.value);
++            }
++        });
+     }
+     get _view() {
+         if (!this[native_]) {
+             const context = Utils.android.getCurrentActivity() || Utils.android.getApplicationContext();
+             const view = Tree.instance.createImageView(context);
++            const owner = new WeakRef(this);
++            // DOM-style load/error, which web templates listen for (e.g. avatar images that show once loaded).
++            view.setOnStateChange(new kotlin.jvm.functions.Function1({
++                invoke(state) {
++                    const name = state.name();
++                    if (name === 'Loaded') {
++                        owner.deref()?.notify({ eventName: 'load', object: owner.deref() });
++                    }
++                    else if (name === 'Error') {
++                        owner.deref()?.notify({ eventName: 'error', object: owner.deref() });
++                    }
++                    return null;
++                },
++            }));
+             this[native_] = view;
+             return view;
+         }
+diff --git a/img/index.ios.js b/img/index.ios.js
+index 9321ff4..591def6 100644
+--- a/img/index.ios.js
++++ b/img/index.ios.js
+@@ -8,12 +8,26 @@ let Img = class Img extends ImageBase {
+         super();
+         this._inBatch = false;
+         this[isMasonView_] = true;
++        // Like an HTMLImageElement, start loading as soon as src is set, even while detached: web templates such as
++        // spartan's avatar only attach the image once its load event has fired.
++        this.on('srcChange', (args) => {
++            if (!this.nativeViewProtected) {
++                this[srcProperty.setNative](args.value);
++            }
++        });
+     }
+     get _view() {
+         if (!this[native_]) {
+             const view = Tree.instance.createImageView();
+             view.onStateChange = (state) => {
+                 this.requestLayout();
++                // DOM-style load/error, which web templates listen for (e.g. avatar images that show once loaded).
++                if (state === 1 /* MasonLoadingState.Loaded */) {
++                    this.notify({ eventName: 'load', object: this });
++                }
++                else if (state === 2 /* MasonLoadingState.Error */) {
++                    this.notify({ eventName: 'error', object: this });
++                }
+             };
+             view.didLayout = () => {
+                 this.requestLayout();
+diff --git a/properties.js b/properties.js
+index 4bf3d37..45b68e0 100644
+--- a/properties.js
++++ b/properties.js
+@@ -101,6 +101,7 @@ export const displayProperty = new CssProperty({
+             case 'inline-block':
+             case 'inline-flex':
+             case 'inline-grid':
++            case 'contents':
+                 return value;
+             default:
+                 return undefined;
 diff --git a/style.js b/style.js
-index f5de8b9f36e34f3071066e870050278bb73aea7b..9bc8addba2d2aa2c0a11af28c70959d6501678df 100644
+index f5de8b9..427ec47 100644
 --- a/style.js
 +++ b/style.js
 @@ -1849,6 +1849,12 @@ export class Style {
@@ -73,8 +153,20 @@ index f5de8b9f36e34f3071066e870050278bb73aea7b..9bc8addba2d2aa2c0a11af28c70959d6
              return;
          }
          this.prepareMut();
+@@ -1980,6 +1993,11 @@ export class Style {
+                 display = 2;
+                 displayMode = 2;
+                 break;
++            case 'contents':
++                // No contents box in the layout engine; a flex box sized to its children stands in for the
++                // single-child wrappers that use it.
++                display = 1;
++                break;
+         }
+         if (display != -1) {
+             this.prepareMut();
 diff --git a/text-runs.js b/text-runs.js
-index 511b55409672443b92335718ae980dfb92d87977..576034160078f14b590c35feff806d86508ef08a 100644
+index 511b554..5760341 100644
 --- a/text-runs.js
 +++ b/text-runs.js
 @@ -15,8 +15,30 @@ export function hasTextRun(children, node) {
