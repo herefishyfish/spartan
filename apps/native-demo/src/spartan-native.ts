@@ -6,6 +6,9 @@ import {
 	makeEnvironmentProviders,
 	provideEnvironmentInitializer,
 } from '@angular/core';
+import { registerElement } from '@nativescript/angular';
+import { masonMeta } from '@triniwiz/nativescript-masonkit/angular';
+import { Div, Span } from '@triniwiz/nativescript-masonkit/web';
 
 /**
  * CDK reads `isBrowser` from PLATFORM_ID, which NativeScript reports as 'browser', and then reaches for `window`
@@ -40,4 +43,18 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
 		// Angular's dev-mode image checks read the DOM document, which NativeScript does not have.
 		{ provide: IMAGE_CONFIG, useValue: { disableImageSizeWarning: true, disableImageLazyLoadWarning: true } },
 	]);
+}
+
+/**
+ * Element mappings spartan's markup needs on MasonKit. Call after installMasonKit(), before bootstrap.
+ *
+ * MasonKit lays out `button`, `a` and `li` as inline text runs that ignore flex, but spartan styles them as flex boxes
+ * (buttons and links with icons and gaps, pagination and menu items), so they are backed by a block element.
+ * The @ng-icons/core shim draws a glyph, so `ng-icon` is text that can also sit inside helm's text elements.
+ */
+export function registerSpartanNativeElements(): void {
+	for (const tag of ['button', 'a', 'li']) {
+		registerElement(tag, () => Div, masonMeta);
+	}
+	registerElement('ng-icon', () => Span, masonMeta);
 }

@@ -5,3 +5,9 @@
 .style-vega .group\/switch[data-state='checked'] {
 	justify-content: flex-end;
 }
+
+/* li[hlmPaginationItem] is a block box around an inline-flex link, which MasonKit sizes to the wrong width; a flex
+   item box sizes to the link. */
+.style-vega [data-slot='pagination-item'] {
+	display: flex;
+}
