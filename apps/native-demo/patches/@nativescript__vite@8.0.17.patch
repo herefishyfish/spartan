@@ -1,0 +1,49 @@
+diff --git a/hmr/server/core-bundle.js b/hmr/server/core-bundle.js
+index 993097b9d861a2a7c477f4e664213efec3eb6293..aeb436e82b5c0036b8589d2c959d41d4630989b6 100644
+--- a/hmr/server/core-bundle.js
++++ b/hmr/server/core-bundle.js
+@@ -490,6 +490,8 @@ export async function generateCoreBundle(options) {
+         platform: 'neutral',
+         format: 'esm',
+         bundle: true,
++        // Bundling renames colliding classes (TextNode -> TextNode$1); NativeScript and its plugins key off class names.
++        keepNames: true,
+         target: 'es2019',
+         // Keep every module body — core relies on registration side effects
+         // (CssAnimationProperty.register, global.registerModule, …).
+diff --git a/hmr/server/deps-bundle.js b/hmr/server/deps-bundle.js
+index 8f2fa15556244f7ef811b5e2ea0fc6a19bab74d3..d6d4fcaca2828eb259a03b6c72332e08bfd2a446 100644
+--- a/hmr/server/deps-bundle.js
++++ b/hmr/server/deps-bundle.js
+@@ -712,6 +712,8 @@ export async function generateDepsBundle(options) {
+         platform: 'neutral',
+         format: 'esm',
+         bundle: true,
++        // Bundling renames colliding classes (TextNode -> TextNode$1); NativeScript and its plugins key off class names.
++        keepNames: true,
+         target: 'es2019',
+         // Keep every module body — dep packages rely on registration side
+         // effects the same way core does.
+@@ -870,7 +872,8 @@ export function collectDepsModuleExportInfo(absPath, platform, seen = new Set())
+     catch {
+         return { names: null, hasDefault: false };
+     }
+-    if (!ESM_SYNTAX_RE.test(code))
++    // Minified ESM (clsx.mjs: `...}export function clsx`) has no line-leading export; .mjs is ESM by definition.
++    if (!absPath.endsWith('.mjs') && !ESM_SYNTAX_RE.test(code))
+         return collectCjsExportInfo(code);
+     const names = new Set(extractDirectExportedNames(code));
+     let match;
+diff --git a/hmr/shared/vendor/manifest.js b/hmr/shared/vendor/manifest.js
+index 54ba11ef9c329df049fa93b01b2ce47c9fb1ac3e..55800393f586299a7afab5dd33a7d8649dcc50f5 100644
+--- a/hmr/shared/vendor/manifest.js
++++ b/hmr/shared/vendor/manifest.js
+@@ -313,6 +313,8 @@ async function generateVendorBundle(options) {
+         platform: 'neutral',
+         format: 'esm',
+         bundle: true,
++        // Bundling renames colliding classes (TextNode -> TextNode$1); NativeScript and its plugins key off class names.
++        keepNames: true,
+         target: 'es2019',
+         treeShaking: false,
+         sourcemap: false,

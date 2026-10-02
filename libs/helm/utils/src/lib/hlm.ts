@@ -92,7 +92,7 @@ export function classes(computed: () => ClassValue[] | string, options: ClassesO
 			// Suppress transitions until the first effect writes correct classes and
 			// the browser has painted them. This prevents CSS transition animations
 			// during hydration when classes change from SSR state to client state.
-			if (isPlatformBrowser(platformId)) {
+			if (isPlatformBrowser(platformId) && hasStyleDeclaration(element)) {
 				manager.previousTransition = element.style.getPropertyValue('transition');
 				manager.previousTransitionPriority = element.style.getPropertyPriority('transition');
 				element.style.setProperty('transition', 'none', 'important');
@@ -161,6 +161,18 @@ export function classes(computed: () => ClassValue[] | string, options: ClassesO
 	});
 }
 
+/**
+ * Non-DOM renderers (NativeScript) report PLATFORM_ID 'browser' but have no CSSOM on their elements and no
+ * `document` to observe.
+ */
+function hasStyleDeclaration(element: HTMLElement): boolean {
+	return typeof CSSStyleDeclaration !== 'undefined' && element.style instanceof CSSStyleDeclaration;
+}
+
+function hasDocument(): boolean {
+	return typeof document !== 'undefined' && typeof MutationObserver !== 'undefined';
+}
+
 function restoreTransitionSuppression(manager: ElementClassManager): void {
 	const prev = manager.previousTransition;
 	if (prev) {
@@ -172,7 +184,7 @@ function restoreTransitionSuppression(manager: ElementClassManager): void {
 
 // eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
 function setupGlobalObserver(platformId: Object): void {
-	if (isPlatformBrowser(platformId) && !globalObserver) {
+	if (isPlatformBrowser(platformId) && hasDocument() && !globalObserver) {
 		// Create single global observer that watches the entire document
 		globalObserver = new MutationObserver((mutations) => {
 			for (const mutation of mutations) {

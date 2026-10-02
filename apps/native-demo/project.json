@@ -5,40 +5,17 @@
 	"projectType": "application",
 	"tags": ["scope:native"],
 	"targets": {
-		"build": {
-			"executor": "@nativescript/nx:build",
-			"options": {
-				"noHmr": true,
-				"production": true,
-				"uglify": true,
-				"release": true,
-				"forDevice": true
-			}
+		"install": {
+			"command": "pnpm install",
+			"options": { "cwd": "apps/native-demo" }
 		},
-		"debug": {
-			"executor": "@nativescript/nx:debug",
-			"options": {
-				"noHmr": true,
-				"uglify": false,
-				"release": false,
-				"forDevice": false,
-				"prepare": false
-			}
+		"ios": {
+			"command": "ns debug ios",
+			"options": { "cwd": "apps/native-demo" }
 		},
-		"prepare": {
-			"executor": "@nativescript/nx:prepare",
-			"options": {
-				"noHmr": true,
-				"production": true,
-				"uglify": true,
-				"release": true,
-				"forDevice": true,
-				"prepare": true
-			}
-		},
-		"clean": {
-			"executor": "@nativescript/nx:clean",
-			"options": {}
+		"android": {
+			"command": "ns debug android",
+			"options": { "cwd": "apps/native-demo" }
 		},
 		"lint": {
 			"command": "eslint apps/native-demo/src"

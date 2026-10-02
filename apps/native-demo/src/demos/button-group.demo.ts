@@ -1,41 +1,34 @@
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { buttonVariants } from '@spartan-ng/helm/button';
-import { Icon } from '../ui/icon';
-
-const GROUP =
-	'spartan-button-group flex w-fit items-stretch spartan-button-group-orientation-horizontal [&>*:not(:first-child)]:rounded-s-none [&>*:not(:first-child)]:border-s-0 [&>*:not(:last-child)]:rounded-e-none';
-const VERTICAL_GROUP =
-	'spartan-button-group flex w-fit items-stretch spartan-button-group-orientation-vertical flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none';
-const SEPARATOR =
-	'spartan-button-group-separator relative self-stretch data-horizontal:mx-px data-horizontal:w-auto data-vertical:my-px data-vertical:h-auto shrink-0 data-horizontal:h-px data-vertical:w-px data-vertical:self-stretch';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowLeft, lucideArrowUpRight, lucideEllipsis, lucideMinus, lucidePlus } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmButtonGroupImports } from '@spartan-ng/helm/button-group';
+import { HlmInput } from '@spartan-ng/helm/input';
 
 @Component({
 	selector: 'button-group-demo',
-	imports: [Icon],
+	imports: [HlmButtonGroupImports, HlmButton, HlmInput, NgIcon],
 	schemas: [NO_ERRORS_SCHEMA],
+	providers: [provideIcons({ lucideArrowLeft, lucideArrowUpRight, lucideEllipsis, lucideMinus, lucidePlus })],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Nested groups</h3>
-			<div role="group" data-slot="button-group" data-orientation="horizontal" [class]="_group + ' gap-2'">
-				<div role="group" data-slot="button-group" data-orientation="horizontal" [class]="_group">
-					<button data-slot="button" aria-label="Go Back" [class]="_outlineIcon" (click)="_action.set('Back')">
-						<ui-icon name="lucideArrowLeft" />
+			<!-- gap-2 stands in for spartan's has-[>[data-slot=button-group]]:gap-2, which needs :has(). -->
+			<div hlmButtonGroup class="gap-2">
+				<div hlmButtonGroup>
+					<button hlmBtn variant="outline" size="icon" aria-label="Go Back" (click)="_action.set('Back')">
+						<ng-icon name="lucideArrowLeft" />
 					</button>
 				</div>
-				<div role="group" data-slot="button-group" data-orientation="horizontal" [class]="_group">
-					<button data-slot="button" [class]="_outline" (click)="_action.set('Archived')">Archive</button>
-					<button data-slot="button" [class]="_outline" (click)="_action.set('Reported')">Report</button>
+				<div hlmButtonGroup>
+					<button hlmBtn variant="outline" (click)="_action.set('Archived')">Archive</button>
+					<button hlmBtn variant="outline" (click)="_action.set('Reported')">Report</button>
 				</div>
-				<div role="group" data-slot="button-group" data-orientation="horizontal" [class]="_group">
-					<button data-slot="button" [class]="_outline" (click)="_action.set('Snoozed')">Snooze</button>
-					<button
-						data-slot="button"
-						aria-label="More Options"
-						[class]="_outlineIcon"
-						(click)="_action.set('More options')"
-					>
-						<ui-icon name="lucideEllipsis" />
+				<div hlmButtonGroup>
+					<button hlmBtn variant="outline" (click)="_action.set('Snoozed')">Snooze</button>
+					<button hlmBtn variant="outline" size="icon" aria-label="More Options" (click)="_action.set('More options')">
+						<ng-icon name="lucideEllipsis" />
 					</button>
 				</div>
 			</div>
@@ -44,12 +37,12 @@ const SEPARATOR =
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Vertical</h3>
 			<div class="flex flex-row items-center gap-3">
-				<div role="group" data-slot="button-group" data-orientation="vertical" [class]="_verticalGroup">
-					<button data-slot="button" aria-label="Zoom in" [class]="_outlineIcon" (click)="_zoom.set(_zoom() + 10)">
-						<ui-icon name="lucidePlus" />
+				<div hlmButtonGroup orientation="vertical" aria-label="Zoom controls">
+					<button hlmBtn variant="outline" size="icon" aria-label="Zoom in" (click)="_zoom.set(_zoom() + 10)">
+						<ng-icon name="lucidePlus" />
 					</button>
-					<button data-slot="button" aria-label="Zoom out" [class]="_outlineIcon" (click)="_zoom.set(_zoom() - 10)">
-						<ui-icon name="lucideMinus" />
+					<button hlmBtn variant="outline" size="icon" aria-label="Zoom out" (click)="_zoom.set(_zoom() - 10)">
+						<ng-icon name="lucideMinus" />
 					</button>
 				</div>
 				<span class="text-sm font-medium">{{ _zoom() }}%</span>
@@ -57,28 +50,28 @@ const SEPARATOR =
 		</section>
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Separator</h3>
-			<div role="group" data-slot="button-group" data-orientation="horizontal" [class]="_group">
-				<button data-slot="button" [class]="_secondary" (click)="_clipboard.set('Copied')">Copy</button>
-				<div role="separator" data-slot="button-group-separator" data-orientation="vertical" [class]="_separator"></div>
-				<button data-slot="button" [class]="_secondary" (click)="_clipboard.set('Pasted')">Paste</button>
+			<div hlmButtonGroup>
+				<button hlmBtn variant="secondary" (click)="_clipboard.set('Copied')">Copy</button>
+				<div hlmButtonGroupSeparator></div>
+				<button hlmBtn variant="secondary" (click)="_clipboard.set('Pasted')">Paste</button>
 			</div>
 			<p class="text-muted-foreground text-sm">{{ _clipboard() ?? 'Nothing yet' }}</p>
 		</section>
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Text and input</h3>
-			<div role="group" data-slot="button-group" data-orientation="horizontal" [class]="_group + ' w-full'">
-				<div data-slot="button-group-text" class="spartan-button-group-text flex flex-row items-center">
+			<div hlmButtonGroup class="w-full">
+				<div hlmButtonGroupText>
 					<span>https://</span>
 				</div>
 				<input
-					data-slot="input"
+					hlmInput
 					placeholder="my-site"
-					class="spartan-input w-full min-w-0 flex-1 outline-none"
+					class="flex-1"
 					[value]="_site()"
 					(input)="_site.set($any($event).target.value)"
 				/>
-				<button data-slot="button" [class]="_outlineIcon" aria-label="Visit" (click)="_visited.set(_site())">
-					<ui-icon name="lucideArrowUpRight" />
+				<button hlmBtn variant="outline" size="icon" aria-label="Visit" (click)="_visited.set(_site())">
+					<ng-icon name="lucideArrowUpRight" />
 				</button>
 			</div>
 			@if (_visited()) {
@@ -88,13 +81,6 @@ const SEPARATOR =
 	`,
 })
 export default class ButtonGroupDemo {
-	protected readonly _group = GROUP;
-	protected readonly _verticalGroup = VERTICAL_GROUP;
-	protected readonly _separator = SEPARATOR;
-	protected readonly _outline = buttonVariants({ variant: 'outline' });
-	protected readonly _outlineIcon = buttonVariants({ variant: 'outline', size: 'icon' });
-	protected readonly _secondary = buttonVariants({ variant: 'secondary' });
-
 	protected readonly _action = signal<string | null>(null);
 	protected readonly _zoom = signal(100);
 	protected readonly _clipboard = signal<string | null>(null);

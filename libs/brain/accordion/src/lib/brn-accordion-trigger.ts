@@ -72,6 +72,8 @@ export class BrnAccordionTrigger implements FocusableOption {
 
 	private validateAriaStructure(): void {
 		const element = this._el.nativeElement;
+		// Non-DOM renderers (NativeScript) have no attributes or parent elements to validate.
+		if (typeof element.getAttribute !== 'function') return;
 
 		const isButton = element.tagName === 'BUTTON';
 		const hasButtonRole = element.getAttribute('role') === 'button';

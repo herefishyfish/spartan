@@ -1,7 +1,9 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { HlmSeparator } from '@spartan-ng/helm/separator';
 
 @Component({
 	selector: 'separator-demo',
+	imports: [HlmSeparator],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
@@ -12,7 +14,7 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 					<p class="leading-none font-medium">spartan/ui</p>
 					<p class="text-muted-foreground">An open-source UI component library.</p>
 				</div>
-				<div data-slot="separator" role="none" data-orientation="horizontal" [class]="_separator"></div>
+				<hlm-separator />
 				<p>A set of beautifully designed components that you can customize, extend, and build on.</p>
 			</div>
 		</section>
@@ -22,7 +24,7 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 				@for (link of _links; track link; let last = $last) {
 					<span>{{ link }}</span>
 					@if (!last) {
-						<div data-slot="separator" role="none" data-orientation="vertical" [class]="_separator"></div>
+						<hlm-separator orientation="vertical" />
 					}
 				}
 			</div>
@@ -36,7 +38,7 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 						<span class="text-muted-foreground">{{ row.value }}</span>
 					</div>
 					@if (!last) {
-						<div data-slot="separator" role="none" data-orientation="horizontal" [class]="_separator"></div>
+						<hlm-separator />
 					}
 				}
 			</div>
@@ -44,8 +46,6 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 	`,
 })
 export default class SeparatorDemo {
-	protected readonly _separator =
-		'inline-flex shrink-0 bg-border data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch';
 	protected readonly _links = ['Blog', 'Docs', 'Source'];
 	protected readonly _rows = [
 		{ label: 'Item 1', value: 'Value 1' },

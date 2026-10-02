@@ -1,8 +1,21 @@
 diff --git a/fesm2022/nativescript-angular.mjs b/fesm2022/nativescript-angular.mjs
-index f65ad62a060fd626bfb578863681921e75fac58c..40fcb132197c9ef4eb483fa67cb0492d54b446c1 100644
+index 1c399efb889c1629dc06d4fdfd148bd35101f33c..cdbd3a5dae385281e416af33bb8f054e4a5ae4f1 100644
 --- a/fesm2022/nativescript-angular.mjs
 +++ b/fesm2022/nativescript-angular.mjs
-@@ -1315,7 +1315,12 @@ class ViewUtil {
+@@ -672,7 +672,11 @@ function runNativeScriptAngularApp(options) {
+     if (oldAddEventListener) {
+         global.NativeScriptGlobals.events.addEventListener = oldAddEventListener;
+     }
+-    if (import.meta['webpackHot']) {
++    // Under the @nativescript/vite dev session the app has already launched behind a placeholder root, so the launch
++    // event this function waits for never comes. import.meta.hot is absent once this module is pre-bundled, hence
++    // the placeholder flag the session sets.
++    const isViteHot = !!import.meta['hot'] || !!globalThis.__NS_DEV_PLACEHOLDER_ROOT_EARLY__;
++    if (import.meta['webpackHot'] || isViteHot) {
+         // handle HMR Application.run
+         global['__dispose_app_ng_platform__'] = () => {
+             disposePlatform('hotreload');
+@@ -1456,7 +1460,12 @@ class ViewUtil {
              return;
          }
          // Unknown attribute value -- just set it to our object as is.
@@ -15,22 +28,7 @@ index f65ad62a060fd626bfb578863681921e75fac58c..40fcb132197c9ef4eb483fa67cb0492d
      }
      removeParentReferencesFromItems(items) {
          for (const item of items) {
-@@ -1637,6 +1642,14 @@ class NativeScriptRenderer {
-         this.viewUtil.removeChild(parent ?? oldChild.parentNode, oldChild);
-     }
-     selectRootElement(selectorOrNode, preserveContent) {
-+        // Backport of @nativescript/angular 22: Angular 21.2 reads rootElement.tagName.toLowerCase().
-+        const root = this._selectRootElement(selectorOrNode, preserveContent);
-+        if (root && typeof root.tagName !== "string") {
-+            root.tagName = root.nodeName || "view";
-+        }
-+        return root;
-+    }
-+    _selectRootElement(selectorOrNode, preserveContent) {
-         if (NativeScriptDebug.enabled) {
-             NativeScriptDebug.rendererLog(`NativeScriptRenderer.selectRootElement: ${selectorOrNode}`);
-         }
-@@ -1679,6 +1692,8 @@ class NativeScriptRenderer {
+@@ -1891,6 +1900,8 @@ class NativeScriptRenderer {
          if (NativeScriptDebug.enabled) {
              NativeScriptDebug.rendererLog(`NativeScriptRenderer.removeAttribute ${namespace ? namespace + ':' : ''}${el}.${name}`);
          }
