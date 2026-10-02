@@ -250,7 +250,7 @@ export class BrnCheckbox implements ControlValueAccessor, AfterContentInit, OnDe
 			const newLabelId = state.id + '-label';
 			const checkboxButtonId = this._getCheckboxButtonId(state.id);
 			const labelElement =
-				this._elementRef.nativeElement.closest('label') ??
+				this._elementRef.nativeElement.closest?.('label') ??
 				this._document.querySelector(`label[for="${checkboxButtonId}"]`);
 
 			if (!labelElement) return;

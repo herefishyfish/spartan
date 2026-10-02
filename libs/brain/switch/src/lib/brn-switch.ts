@@ -228,7 +228,7 @@ export class BrnSwitch implements AfterContentInit, OnDestroy, ControlValueAcces
 			const newLabelId = state.id + '-label';
 			const switchButtonId = this.getSwitchButtonId(state.id);
 			const labelElement =
-				this._elementRef.nativeElement.closest('label') ??
+				this._elementRef.nativeElement.closest?.('label') ??
 				this._document.querySelector(`label[for="${switchButtonId}"]`);
 
 			if (!labelElement) return;
@@ -286,7 +286,7 @@ export class BrnSwitch implements AfterContentInit, OnDestroy, ControlValueAcces
 
 		if (!this.switch()) return;
 		this.switch().nativeElement.value = this.checked() ? 'on' : 'off';
-		this.switch().nativeElement.dispatchEvent(new Event('change'));
+		this.switch().nativeElement.dispatchEvent?.(new Event('change'));
 	}
 
 	public ngOnDestroy() {

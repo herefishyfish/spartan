@@ -112,7 +112,7 @@ export class HlmRadio<T = unknown> {
 			if (!this._elementRef.nativeElement || !this._isBrowser) return;
 
 			const labelElement =
-				this._elementRef.nativeElement.closest('label') ??
+				this._elementRef.nativeElement.closest?.('label') ??
 				this._document.querySelector(`label[for="${this.inputId()}"]`);
 
 			if (!labelElement) return;
