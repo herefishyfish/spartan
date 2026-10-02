@@ -1,10 +1,12 @@
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { type ButtonVariants, buttonVariants } from '@spartan-ng/helm/button';
-import { Icon } from '../ui/icon';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp, lucideGitBranch, lucideLoaderCircle } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
 
 @Component({
 	selector: 'button-demo',
-	imports: [Icon],
+	imports: [HlmButton, NgIcon],
+	providers: [provideIcons({ lucideArrowUp, lucideGitBranch, lucideLoaderCircle })],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
@@ -12,7 +14,7 @@ import { Icon } from '../ui/icon';
 			<h3 class="text-sm font-medium">Variants</h3>
 			<div class="flex flex-row flex-wrap gap-2">
 				@for (variant of _variants; track variant) {
-					<button data-slot="button" [class]="_btn({ variant })" (click)="_clicks.set(_clicks() + 1)">
+					<button hlmBtn [variant]="variant" (click)="_clicks.set(_clicks() + 1)">
 						{{ variant }}
 					</button>
 				}
@@ -22,23 +24,23 @@ import { Icon } from '../ui/icon';
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Sizes</h3>
 			<div class="flex flex-row flex-wrap items-center gap-2">
-				<button [class]="_btn({ variant: 'outline', size: 'xs' })">Extra small</button>
-				<button [class]="_btn({ variant: 'outline', size: 'sm' })">Small</button>
-				<button [class]="_btn({ variant: 'outline' })">Default</button>
-				<button [class]="_btn({ variant: 'outline', size: 'lg' })">Large</button>
+				<button hlmBtn variant="outline" size="xs">Extra small</button>
+				<button hlmBtn variant="outline" size="sm">Small</button>
+				<button hlmBtn variant="outline">Default</button>
+				<button hlmBtn variant="outline" size="lg">Large</button>
 			</div>
 		</section>
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">With icons</h3>
 			<div class="flex flex-row flex-wrap items-center gap-2">
-				<button [class]="_btn({ variant: 'outline', size: 'icon' })"><ui-icon name="lucideArrowUp" /></button>
-				<button [class]="_btn({})">
-					<ui-icon name="lucideGitBranch" />
+				<button hlmBtn variant="outline" size="icon"><ng-icon name="lucideArrowUp" /></button>
+				<button hlmBtn>
+					<ng-icon name="lucideGitBranch" />
 					<span>New branch</span>
 				</button>
-				<button [class]="_btn({ variant: 'secondary' })" [attr.data-disabled]="_loading() ? '' : null" (click)="load()">
+				<button hlmBtn variant="secondary" [disabled]="_loading()" (click)="load()">
 					@if (_loading()) {
-						<ui-icon name="lucideLoaderCircle" class="animate-spin" />
+						<ng-icon name="lucideLoaderCircle" class="animate-spin" />
 					}
 					<span>{{ _loading() ? 'Please wait' : 'Submit' }}</span>
 				</button>
@@ -50,7 +52,6 @@ export default class ButtonDemo {
 	protected readonly _variants = ['default', 'secondary', 'outline', 'destructive', 'ghost', 'link'] as const;
 	protected readonly _clicks = signal(0);
 	protected readonly _loading = signal(false);
-	protected readonly _btn = (variants: ButtonVariants) => buttonVariants(variants);
 
 	protected load() {
 		this._loading.set(true);

@@ -1,17 +1,9 @@
 import { ChangeDetectionStrategy, Component, NO_ERRORS_SCHEMA, computed, input } from '@angular/core';
 import type * as lucide from '@ng-icons/lucide';
-import codepoints from 'lucide-static/font/codepoints.json';
+import { lucideGlyph } from './lucide-glyph';
 
 /** Spartan's icon names, as used with `ng-icon` (`lucideChevronDown`). */
 export type IconName = keyof typeof lucide;
-
-const glyphFor = (name: IconName) => {
-	const kebab = name
-		.replace(/^lucide/, '')
-		.replace(/(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])/g, '-');
-	const codepoint = (codepoints as Record<string, number>)[kebab.toLowerCase()];
-	return codepoint === undefined ? '' : String.fromCodePoint(codepoint);
-};
 
 /**
  * A Lucide icon drawn from the lucide.ttf glyph font, so it renders in any MasonKit text element and, like
@@ -28,5 +20,5 @@ const glyphFor = (name: IconName) => {
 })
 export class Icon {
 	public readonly name = input.required<IconName>();
-	protected readonly _glyph = computed(() => glyphFor(this.name()));
+	protected readonly _glyph = computed(() => lucideGlyph(this.name()));
 }
