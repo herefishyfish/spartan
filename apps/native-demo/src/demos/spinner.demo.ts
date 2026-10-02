@@ -1,63 +1,43 @@
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { buttonVariants } from '@spartan-ng/helm/button';
-import { Icon } from '../ui/icon';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmItem, HlmItemContent, HlmItemMedia, HlmItemTitle } from '@spartan-ng/helm/item';
+import { HlmSpinner } from '@spartan-ng/helm/spinner';
 
 @Component({
 	selector: 'spinner-demo',
-	imports: [Icon],
+	imports: [HlmSpinner, HlmButton, HlmItem, HlmItemMedia, HlmItemContent, HlmItemTitle],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Sizes</h3>
 			<div class="flex flex-row items-center gap-6">
-				@for (size of _sizes; track size) {
-					<ui-icon
-						data-slot="spinner"
-						role="status"
-						aria-label="Loading"
-						name="lucideLoaderCircle"
-						[class]="_spinner + ' ' + size"
-					/>
-				}
+				<hlm-spinner class="text-xs" />
+				<hlm-spinner class="text-base" />
+				<hlm-spinner class="text-2xl" />
+				<hlm-spinner class="text-4xl" />
 			</div>
 		</section>
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Colors</h3>
 			<div class="flex flex-row items-center gap-6">
-				@for (color of _colors; track color) {
-					<ui-icon
-						data-slot="spinner"
-						role="status"
-						aria-label="Loading"
-						name="lucideLoaderCircle"
-						[class]="_spinner + ' text-2xl ' + color"
-					/>
-				}
+				<hlm-spinner class="text-2xl text-red-500" />
+				<hlm-spinner class="text-2xl text-green-500" />
+				<hlm-spinner class="text-2xl text-blue-500" />
+				<hlm-spinner class="text-2xl text-yellow-500" />
+				<hlm-spinner class="text-2xl text-purple-500" />
 			</div>
 		</section>
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">In an item</h3>
-			<div data-slot="item" data-variant="muted" data-size="default" [class]="_item">
-				<div
-					data-slot="item-media"
-					data-variant="default"
-					class="spartan-item-media spartan-item-media-variant-default flex shrink-0 items-center justify-center"
-				>
-					<ui-icon
-						data-slot="spinner"
-						role="status"
-						aria-label="Loading"
-						name="lucideLoaderCircle"
-						[class]="_spinner + ' text-base'"
-					/>
+			<div hlmItem variant="muted">
+				<div hlmItemMedia>
+					<hlm-spinner class="text-base" />
 				</div>
-				<div data-slot="item-content" class="spartan-item-content flex flex-1 flex-col">
-					<span data-slot="item-title" class="spartan-item-title line-clamp-1 flex w-fit flex-row items-center">
-						Processing payment...
-					</span>
+				<div hlmItemContent>
+					<div hlmItemTitle>Processing payment...</div>
 				</div>
-				<div data-slot="item-content" class="spartan-item-content flex flex-none flex-col">
+				<div hlmItemContent>
 					<span class="text-sm tabular-nums">$100.00</span>
 				</div>
 			</div>
@@ -65,15 +45,9 @@ import { Icon } from '../ui/icon';
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">In a button</h3>
 			<div class="flex flex-row flex-wrap items-center gap-2">
-				<button [class]="_btn" [attr.data-disabled]="_saving() ? '' : null" (click)="save()">
+				<button hlmBtn variant="outline" [disabled]="_saving()" (click)="save()">
 					@if (_saving()) {
-						<ui-icon
-							data-slot="spinner"
-							role="status"
-							aria-label="Loading"
-							name="lucideLoaderCircle"
-							[class]="_spinner + ' text-base'"
-						/>
+						<hlm-spinner class="text-base" />
 					}
 					<span>{{ _saving() ? 'Saving' : 'Save' }}</span>
 				</button>
@@ -82,18 +56,6 @@ import { Icon } from '../ui/icon';
 	`,
 })
 export default class SpinnerDemo {
-	protected readonly _sizes = ['text-xs', 'text-base', 'text-2xl', 'text-4xl'];
-	protected readonly _colors = [
-		'text-red-500',
-		'text-green-500',
-		'text-blue-500',
-		'text-yellow-500',
-		'text-purple-500',
-	];
-	protected readonly _spinner = 'inline-flex motion-safe:animate-spin animate-spin';
-	protected readonly _item =
-		'spartan-item group/item flex w-full flex-row flex-wrap items-center transition-colors duration-100 outline-none spartan-item-variant-muted spartan-item-size-default';
-	protected readonly _btn = buttonVariants({ variant: 'outline' });
 	protected readonly _saving = signal(false);
 
 	protected save() {

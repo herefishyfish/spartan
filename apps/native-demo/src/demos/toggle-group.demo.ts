@@ -1,107 +1,75 @@
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { Haptics } from '@nativescript/haptics';
-import { type ToggleVariants, toggleVariants } from '@spartan-ng/helm/toggle';
-import { type IconName, Icon } from '../ui/icon';
-
-type Group = {
-	id: string;
-	title: string;
-	type: 'single' | 'multiple';
-	variant: ToggleVariants['variant'];
-	items: { value: string; icon: IconName }[];
-};
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+	lucideBold,
+	lucideItalic,
+	lucideTextAlignCenter,
+	lucideTextAlignEnd,
+	lucideTextAlignStart,
+	lucideUnderline,
+} from '@ng-icons/lucide';
+import { HlmToggleGroup, HlmToggleGroupItem } from '@spartan-ng/helm/toggle-group';
 
 @Component({
 	selector: 'toggle-group-demo',
-	imports: [Icon],
+	imports: [HlmToggleGroup, HlmToggleGroupItem, NgIcon],
+	providers: [
+		provideIcons({
+			lucideBold,
+			lucideItalic,
+			lucideUnderline,
+			lucideTextAlignStart,
+			lucideTextAlignCenter,
+			lucideTextAlignEnd,
+		}),
+	],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
-		@for (group of _groups; track group.id) {
-			<section class="flex flex-col gap-3">
-				<h3 class="text-sm font-medium">{{ group.title }}</h3>
-				<div
-					role="group"
-					data-slot="toggle-group"
-					data-size="default"
-					data-spacing="0"
-					data-orientation="horizontal"
-					class="spartan-toggle-group group/toggle-group flex w-fit flex-row items-center"
-					[attr.data-variant]="group.variant"
-				>
-					@for (item of group.items; track item.value; let first = $first, last = $last) {
-						<button
-							data-slot="toggle-group-item"
-							data-size="default"
-							data-spacing="0"
-							[class]="_itemClass(group)"
-							[attr.data-variant]="group.variant"
-							[attr.data-edge]="first ? 'first' : last ? 'last' : null"
-							[attr.aria-label]="'Toggle ' + item.value"
-							[attr.data-state]="isOn(group, item.value) ? 'on' : 'off'"
-							(click)="press(group, item.value)"
-						>
-							<ui-icon [name]="item.icon" />
-						</button>
-					}
-				</div>
-				<p class="text-muted-foreground text-sm">{{ summary(group) }}</p>
-			</section>
-		}
+		<section class="flex flex-col gap-3">
+			<h3 class="text-sm font-medium">Multiple, outline</h3>
+			<div hlmToggleGroup type="multiple" variant="outline" [value]="_format()" (valueChange)="changeFormat($event)">
+				<button hlmToggleGroupItem value="bold" aria-label="Toggle bold">
+					<ng-icon name="lucideBold" />
+				</button>
+				<button hlmToggleGroupItem value="italic" aria-label="Toggle italic">
+					<ng-icon name="lucideItalic" />
+				</button>
+				<button hlmToggleGroupItem value="underline" aria-label="Toggle underline">
+					<ng-icon name="lucideUnderline" />
+				</button>
+			</div>
+			<p class="text-muted-foreground text-sm">Selected: {{ _format().join(', ') || 'none' }}</p>
+		</section>
+		<section class="flex flex-col gap-3">
+			<h3 class="text-sm font-medium">Single, default</h3>
+			<div hlmToggleGroup type="single" [value]="_align()" (valueChange)="changeAlign($event)">
+				<button hlmToggleGroupItem value="left" aria-label="Align left">
+					<ng-icon name="lucideTextAlignStart" />
+				</button>
+				<button hlmToggleGroupItem value="center" aria-label="Align center">
+					<ng-icon name="lucideTextAlignCenter" />
+				</button>
+				<button hlmToggleGroupItem value="right" aria-label="Align right">
+					<ng-icon name="lucideTextAlignEnd" />
+				</button>
+			</div>
+			<p class="text-muted-foreground text-sm">Selected: {{ _align() ?? 'none' }}</p>
+		</section>
 	`,
 })
 export default class ToggleGroupDemo {
-	protected readonly _groups: Group[] = [
-		{
-			id: 'format',
-			title: 'Multiple, outline',
-			type: 'multiple',
-			variant: 'outline',
-			items: [
-				{ value: 'lucideBold', icon: 'lucideBold' },
-				{ value: 'lucideItalic', icon: 'lucideItalic' },
-				{ value: 'lucideUnderline', icon: 'lucideUnderline' },
-			],
-		},
-		{
-			id: 'align',
-			title: 'Single, default',
-			type: 'single',
-			variant: 'default',
-			items: [
-				{ value: 'left', icon: 'lucideTextAlignStart' },
-				{ value: 'center', icon: 'lucideTextAlignCenter' },
-				{ value: 'right', icon: 'lucideTextAlignEnd' },
-			],
-		},
-	];
-	protected readonly _selected = signal<Record<string, readonly string[]>>({ format: ['bold'], align: ['left'] });
+	protected readonly _format = signal<string[]>(['bold']);
+	protected readonly _align = signal<string | null>('left');
 
-	protected readonly _itemClass = ({ variant }: Group) =>
-		'spartan-toggle-group-item shrink-0 focus:z-10 focus-visible:z-10 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t ' +
-		toggleVariants({ variant, size: 'default' });
-
-	protected isOn(group: Group, value: string) {
-		return this._selected()[group.id].includes(value);
-	}
-
-	protected summary(group: Group) {
-		return `Selected: ${this._selected()[group.id].join(', ') || 'none'}`;
-	}
-
-	protected press(group: Group, value: string) {
+	protected changeFormat(value: unknown) {
 		Haptics.selection();
-		this._selected.update((selected) => {
-			const current = selected[group.id];
-			const next =
-				group.type === 'single'
-					? current.includes(value)
-						? []
-						: [value]
-					: current.includes(value)
-						? current.filter((v) => v !== value)
-						: [...current, value];
-			return { ...selected, [group.id]: next };
-		});
+		this._format.set(value as string[]);
+	}
+
+	protected changeAlign(value: unknown) {
+		Haptics.selection();
+		this._align.set(value as string | null);
 	}
 }

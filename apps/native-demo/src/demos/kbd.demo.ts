@@ -1,34 +1,36 @@
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { buttonVariants } from '@spartan-ng/helm/button';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmKbdImports } from '@spartan-ng/helm/kbd';
 
 @Component({
 	selector: 'kbd-demo',
+	imports: [HlmButton, HlmKbdImports],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col items-start gap-3">
 			<h3 class="text-sm font-medium">Modifiers</h3>
-			<kbd data-slot="kbd-group" [class]="_group">
+			<kbd hlmKbdGroup>
 				@for (key of _modifiers; track key) {
-					<kbd data-slot="kbd" [class]="_kbd">{{ key }}</kbd>
+					<kbd hlmKbd>{{ key }}</kbd>
 				}
 			</kbd>
 		</section>
 		<section class="flex flex-col items-start gap-3">
 			<h3 class="text-sm font-medium">Combination</h3>
-			<kbd data-slot="kbd-group" [class]="_group">
-				<kbd data-slot="kbd" [class]="_kbd">Ctrl</kbd>
+			<kbd hlmKbdGroup>
+				<kbd hlmKbd>Ctrl</kbd>
 				<span>+</span>
-				<kbd data-slot="kbd" [class]="_kbd">B</kbd>
+				<kbd hlmKbd>B</kbd>
 			</kbd>
 		</section>
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Inline</h3>
 			<p class="text-muted-foreground text-sm">
 				Use
-				<kbd data-slot="kbd-group" [class]="_group">
-					<kbd data-slot="kbd" [class]="_kbd">Ctrl + B</kbd>
-					<kbd data-slot="kbd" [class]="_kbd">Ctrl + K</kbd>
+				<kbd hlmKbdGroup>
+					<kbd hlmKbd>Ctrl + B</kbd>
+					<kbd hlmKbd>Ctrl + K</kbd>
 				</kbd>
 				to open the command palette
 			</p>
@@ -36,13 +38,13 @@ import { buttonVariants } from '@spartan-ng/helm/button';
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">In a button</h3>
 			<div class="flex flex-row flex-wrap items-center gap-2">
-				<button [class]="_outline" (click)="_accepted.set(!_accepted())">
+				<button hlmBtn variant="outline" size="sm" class="pr-2" (click)="_accepted.set(!_accepted())">
 					<span>{{ _accepted() ? 'Accepted' : 'Accept' }}</span>
-					<kbd data-slot="kbd" [class]="_kbd">⏎</kbd>
+					<kbd hlmKbd>⏎</kbd>
 				</button>
-				<button [class]="_outline">
+				<button hlmBtn variant="outline" size="sm" class="pr-2">
 					<span>Cancel</span>
-					<kbd data-slot="kbd" [class]="_kbd">Esc</kbd>
+					<kbd hlmKbd>Esc</kbd>
 				</button>
 			</div>
 		</section>
@@ -51,8 +53,4 @@ import { buttonVariants } from '@spartan-ng/helm/button';
 export default class KbdDemo {
 	protected readonly _modifiers = ['⌘', '⇧', '⌥', '⌃'];
 	protected readonly _accepted = signal(false);
-	protected readonly _group = 'spartan-kbd-group inline-flex flex-row items-center';
-	protected readonly _kbd =
-		'spartan-kbd pointer-events-none inline-flex flex-row items-center justify-center select-none';
-	protected readonly _outline = buttonVariants({ variant: 'outline' });
 }

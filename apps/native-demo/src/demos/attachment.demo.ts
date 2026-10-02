@@ -1,10 +1,18 @@
 import { Component, DestroyRef, NO_ERRORS_SCHEMA, inject, signal } from '@angular/core';
-import { buttonVariants } from '@spartan-ng/helm/button';
-import type { IconName } from '../ui/icon';
-import { Icon } from '../ui/icon';
-
-type AttachmentState = 'idle' | 'uploading' | 'processing' | 'error' | 'done';
-type AttachmentSize = 'default' | 'sm' | 'xs';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+	lucideCheck,
+	lucideClock,
+	lucideFileText,
+	lucideFileWarning,
+	lucidePaperclip,
+	lucideRefreshCw,
+	lucideUpload,
+	lucideX,
+} from '@ng-icons/lucide';
+import { type AttachmentState, HlmAttachmentImports } from '@spartan-ng/helm/attachment';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmSpinner } from '@spartan-ng/helm/spinner';
 
 interface Upload {
 	readonly id: number;
@@ -15,33 +23,8 @@ interface Upload {
 	readonly fails?: boolean;
 }
 
-const sizeClass: Record<AttachmentSize, string> = {
-	default:
-		'spartan-attachment-size-default gap-2 text-sm has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2',
-	sm: 'spartan-attachment-size-sm gap-2.5 text-xs has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
-	xs: 'spartan-attachment-size-xs gap-1.5 text-xs has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
-};
-
-const attachmentClass = (size: AttachmentSize, orientation: 'horizontal' | 'vertical') =>
-	[
-		'spartan-attachment group/attachment focus-within:ring-ring/50 has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 relative flex w-fit max-w-full min-w-0 shrink-0 flex-wrap transition-colors focus-within:ring-1 data-[state=idle]:border-dashed',
-		sizeClass[size],
-		orientation === 'horizontal'
-			? 'spartan-attachment-orientation-horizontal min-w-40 flex-row items-center'
-			: 'spartan-attachment-orientation-vertical w-24 flex-col has-data-[slot=attachment-content]:w-30',
-	].join(' ');
-
-const mediaClass = (variant: 'icon' | 'image') =>
-	[
-		"spartan-attachment-media group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive relative flex aspect-square shrink-0 items-center justify-center overflow-hidden group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 [&_ng-icon]:pointer-events-none [&_ng-icon:not([class*='text-'])]:text-[length:--spacing(4)] group-data-[orientation=vertical]/attachment:[&_ng-icon:not([class*='text-'])]:text-[length:--spacing(6)] group-data-[size=xs]/attachment:[&_ng-icon:not([class*='text-'])]:text-[length:--spacing(3.5)]",
-		variant === 'icon'
-			? 'spartan-attachment-media-variant-icon'
-			: 'spartan-attachment-media-variant-image *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover',
-	].join(' ');
-
-const stateIcon: Record<AttachmentState, IconName> = {
+const stateIcon: Record<Exclude<AttachmentState, 'uploading'>, string> = {
 	idle: 'lucideClock',
-	uploading: 'lucideLoaderCircle',
 	processing: 'lucideFileText',
 	error: 'lucideFileWarning',
 	done: 'lucideCheck',
@@ -49,33 +32,33 @@ const stateIcon: Record<AttachmentState, IconName> = {
 
 @Component({
 	selector: 'attachment-demo',
-	imports: [Icon],
+	imports: [HlmAttachmentImports, HlmButton, HlmSpinner, NgIcon],
+	providers: [
+		provideIcons({
+			lucideCheck,
+			lucideClock,
+			lucideFileText,
+			lucideFileWarning,
+			lucidePaperclip,
+			lucideRefreshCw,
+			lucideUpload,
+			lucideX,
+		}),
+	],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Images</h3>
-			<div
-				data-slot="attachment-group"
-				class="spartan-attachment-group scroll-fade-x no-scrollbar flex min-w-0 snap-x snap-mandatory scroll-px-1 flex-row gap-3 overflow-x-auto overscroll-x-contain py-1 *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start"
-			>
+			<div hlmAttachmentGroup>
 				@for (image of _images; track image.name) {
-					<div
-						data-slot="attachment"
-						data-state="done"
-						data-size="default"
-						data-orientation="vertical"
-						[class]="_attachment('default', 'vertical')"
-					>
-						<div data-slot="attachment-media" data-variant="image" [class]="_media('image')">
+					<div hlmAttachment orientation="vertical">
+						<div hlmAttachmentMedia variant="image">
 							<img [src]="image.src" />
 						</div>
-						<div
-							data-slot="attachment-content"
-							class="spartan-attachment-content max-w-full group-data-[orientation=vertical]/attachment:px-1"
-						>
-							<span data-slot="attachment-title" [class]="_title">{{ image.name }}</span>
-							<span data-slot="attachment-description" [class]="_description">{{ image.meta }}</span>
+						<div hlmAttachmentContent>
+							<span hlmAttachmentTitle>{{ image.name }}</span>
+							<span hlmAttachmentDescription>{{ image.meta }}</span>
 						</div>
 					</div>
 				}
@@ -85,40 +68,32 @@ const stateIcon: Record<AttachmentState, IconName> = {
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Uploads</h3>
 			@for (upload of _uploads(); track upload.id) {
-				<div
-					data-slot="attachment"
-					data-size="default"
-					data-orientation="horizontal"
-					[attr.data-state]="upload.state"
-					[class]="_attachment('default', 'horizontal') + ' w-full'"
-				>
-					<div data-slot="attachment-media" data-variant="icon" [class]="_media('icon')">
-						<ui-icon [name]="_icon[upload.state]" [class]="upload.state === 'uploading' ? 'animate-spin' : ''" />
+				<div hlmAttachment [state]="upload.state" class="w-full">
+					<div hlmAttachmentMedia>
+						@if (upload.state === 'uploading') {
+							<hlm-spinner />
+						} @else {
+							<ng-icon [name]="_icon[upload.state]" />
+						}
 					</div>
-					<div
-						data-slot="attachment-content"
-						class="spartan-attachment-content max-w-full group-data-[orientation=vertical]/attachment:px-1"
-					>
-						<span data-slot="attachment-title" [class]="_title">{{ upload.name }}</span>
-						<span data-slot="attachment-description" [class]="_description">{{ describe(upload) }}</span>
+					<div hlmAttachmentContent>
+						<span hlmAttachmentTitle>{{ upload.name }}</span>
+						<span hlmAttachmentDescription>{{ describe(upload) }}</span>
 					</div>
-					<div
-						data-slot="attachment-actions"
-						class="spartan-attachment-actions relative z-20 flex flex-row group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:gap-1"
-					>
+					<div hlmAttachmentActions>
 						@if (upload.state === 'error' || upload.state === 'idle') {
-							<button data-slot="attachment-action" [class]="_action" (click)="start(upload.id)">
-								<ui-icon [name]="upload.state === 'error' ? 'lucideRefreshCw' : 'lucideUpload'" />
+							<button hlmAttachmentAction (click)="start(upload.id)">
+								<ng-icon [name]="upload.state === 'error' ? 'lucideRefreshCw' : 'lucideUpload'" />
 							</button>
 						}
-						<button data-slot="attachment-action" [class]="_action" (click)="remove(upload.id)">
-							<ui-icon name="lucideX" />
+						<button hlmAttachmentAction (click)="remove(upload.id)">
+							<ng-icon name="lucideX" />
 						</button>
 					</div>
 				</div>
 			}
-			<button [class]="_addButton" (click)="add()">
-				<ui-icon name="lucidePaperclip" />
+			<button hlmBtn variant="outline" (click)="add()">
+				<ng-icon name="lucidePaperclip" />
 				<span>Add file</span>
 			</button>
 		</section>
@@ -126,23 +101,14 @@ const stateIcon: Record<AttachmentState, IconName> = {
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Sizes</h3>
 			@for (size of _sizes; track size) {
-				<div
-					data-slot="attachment"
-					data-state="done"
-					data-orientation="horizontal"
-					[attr.data-size]="size"
-					[class]="_attachment(size, 'horizontal') + ' w-full'"
-				>
-					<div data-slot="attachment-media" data-variant="icon" [class]="_media('icon')">
-						<ui-icon name="lucideFileText" />
+				<div hlmAttachment [size]="size" class="w-full">
+					<div hlmAttachmentMedia>
+						<ng-icon name="lucideFileText" />
 					</div>
-					<div
-						data-slot="attachment-content"
-						class="spartan-attachment-content max-w-full group-data-[orientation=vertical]/attachment:px-1"
-					>
-						<span data-slot="attachment-title" [class]="_title">{{ size }} attachment</span>
+					<div hlmAttachmentContent>
+						<span hlmAttachmentTitle>{{ size }} attachment</span>
 						@if (size !== 'xs') {
-							<span data-slot="attachment-description" [class]="_description">PDF · 2.4 MB</span>
+							<span hlmAttachmentDescription>PDF · 2.4 MB</span>
 						}
 					</div>
 				</div>
@@ -176,16 +142,8 @@ export default class AttachmentDemo {
 		{ id: 2, name: 'financial-model.xlsx', size: '2.1 MB', state: 'error', progress: 0 },
 		{ id: 3, name: 'uploaded-report.pdf', size: '1.8 MB', state: 'done', progress: 100 },
 	]);
-	protected readonly _sizes: readonly AttachmentSize[] = ['default', 'sm', 'xs'];
+	protected readonly _sizes = ['default', 'sm', 'xs'] as const;
 	protected readonly _icon = stateIcon;
-	protected readonly _attachment = attachmentClass;
-	protected readonly _media = mediaClass;
-	protected readonly _title =
-		'spartan-attachment-title group-data-[state=processing]/attachment:shimmer group-data-[state=uploading]/attachment:shimmer block max-w-full min-w-0';
-	protected readonly _description =
-		'spartan-attachment-description group-data-[state=error]/attachment:text-destructive/80 block max-w-full min-w-0';
-	protected readonly _action = buttonVariants({ variant: 'ghost', size: 'icon-xs' });
-	protected readonly _addButton = buttonVariants({ variant: 'outline' });
 
 	constructor() {
 		inject(DestroyRef).onDestroy(() => this._timers.forEach((timer) => clearInterval(timer)));

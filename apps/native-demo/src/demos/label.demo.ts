@@ -1,36 +1,29 @@
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { Icon } from '../ui/icon';
+import { HlmCheckbox } from '@spartan-ng/helm/checkbox';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmLabel } from '@spartan-ng/helm/label';
 
 @Component({
 	selector: 'label-demo',
-	imports: [Icon],
+	imports: [HlmCheckbox, HlmInput, HlmLabel],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">With a checkbox</h3>
-			<div class="flex flex-row items-center gap-2" (click)="_terms.set(!_terms())">
-				<div
-					data-slot="checkbox"
-					class="spartan-checkbox peer shrink-0 cursor-default outline-none disabled:cursor-not-allowed disabled:opacity-50"
-					[attr.data-state]="_terms() ? 'checked' : 'unchecked'"
-				>
-					@if (_terms()) {
-						<div class="spartan-checkbox-indicator flex items-center justify-center text-current transition-none">
-							<ui-icon name="lucideCheck" class="text-sm" />
-						</div>
-					}
-				</div>
-				<label data-slot="label" [class]="_label">Accept terms and conditions</label>
+			<div class="flex flex-row items-center gap-2">
+				<hlm-checkbox inputId="terms" [checked]="_terms()" (checkedChange)="_terms.set($event)" />
+				<!-- A native label does not forward taps to its control the way <label for> does. -->
+				<label hlmLabel for="terms" (click)="_terms.set(!_terms())">Accept terms and conditions</label>
 			</div>
 		</section>
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">With an input</h3>
 			<div class="flex flex-col gap-2">
-				<label data-slot="label" [class]="_label">Username</label>
+				<label hlmLabel for="username">Username</label>
 				<input
-					data-slot="input"
-					[class]="_input"
+					hlmInput
+					id="username"
 					placeholder="spartan"
 					[value]="_username()"
 					(input)="_username.set($any($event).target.value)"
@@ -40,8 +33,8 @@ import { Icon } from '../ui/icon';
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Disabled</h3>
 			<div class="group flex flex-col gap-2" data-disabled="true">
-				<label data-slot="label" [class]="_label">Email (locked)</label>
-				<input data-slot="input" [class]="_input + ' opacity-50'" value="team@spartan.ng" [isEnabled]="false" />
+				<label hlmLabel for="email">Email (locked)</label>
+				<input hlmInput id="email" class="opacity-50" value="team@spartan.ng" [isEnabled]="false" />
 			</div>
 		</section>
 	`,
@@ -49,8 +42,4 @@ import { Icon } from '../ui/icon';
 export default class LabelDemo {
 	protected readonly _terms = signal(false);
 	protected readonly _username = signal('');
-	protected readonly _label =
-		'spartan-label flex items-center select-none group-data-[disabled=true]:pointer-events-none peer-disabled:cursor-not-allowed';
-	protected readonly _input =
-		'spartan-input file:text-foreground placeholder:text-muted-foreground w-full min-w-0 outline-none file:inline-flex file:border-0 file:bg-transparent disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50';
 }

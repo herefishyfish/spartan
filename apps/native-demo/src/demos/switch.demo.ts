@@ -1,28 +1,29 @@
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { Haptics } from '@nativescript/haptics';
+import { HlmLabel } from '@spartan-ng/helm/label';
+import { HlmSwitch } from '@spartan-ng/helm/switch';
 
 @Component({
 	selector: 'switch-demo',
+	imports: [HlmSwitch, HlmLabel],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		@for (option of _options; track option.id) {
-			<div class="flex flex-row items-center gap-2" (click)="toggle(option.id)">
-				<div
-					data-slot="switch"
-					data-size="default"
-					class="spartan-switch group/switch inline-flex shrink-0 flex-row items-center"
-					[attr.data-state]="_checked()[option.id] ? 'checked' : 'unchecked'"
-				>
-					<div
-						data-slot="switch-thumb"
-						class="spartan-switch-thumb block"
-						[attr.data-state]="_checked()[option.id] ? 'checked' : 'unchecked'"
-					></div>
-				</div>
-				<span class="text-sm font-medium">{{ option.label }}</span>
+			<div class="flex flex-row items-center gap-2">
+				<hlm-switch
+					[inputId]="option.id"
+					[checked]="!!_checked()[option.id]"
+					(checkedChange)="toggled(option.id, $event)"
+				/>
+				<label hlmLabel [attr.for]="option.id">{{ option.label }}</label>
 			</div>
 		}
+		<div class="flex flex-row items-center gap-2">
+			<hlm-switch inputId="disabled" disabled />
+			<label hlmLabel for="disabled">Disabled</label>
+		</div>
+		<p class="text-muted-foreground text-sm">Wi-Fi is {{ _checked()['wifi'] ? 'on' : 'off' }}</p>
 	`,
 })
 export default class SwitchDemo {
@@ -32,8 +33,8 @@ export default class SwitchDemo {
 	];
 	protected readonly _checked = signal<Record<string, boolean>>({ wifi: true });
 
-	protected toggle(id: string) {
+	protected toggled(id: string, checked: boolean) {
 		Haptics.selection();
-		this._checked.update((checked) => ({ ...checked, [id]: !checked[id] }));
+		this._checked.update((state) => ({ ...state, [id]: checked }));
 	}
 }

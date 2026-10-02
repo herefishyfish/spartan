@@ -1,5 +1,6 @@
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { buttonVariants } from '@spartan-ng/helm/button';
+import { HlmBubbleImports } from '@spartan-ng/helm/bubble';
+import { HlmButton } from '@spartan-ng/helm/button';
 
 export type BubbleVariant = 'default' | 'secondary' | 'muted' | 'tinted' | 'outline' | 'ghost' | 'destructive';
 
@@ -18,8 +19,10 @@ export const bubbleReactionsClass = (side: 'top' | 'bottom' = 'bottom', align: '
 		align === 'start' ? 'start-3' : 'end-3',
 	].join(' ');
 
+// The class helpers above serve the message demos; this demo uses the helm directives.
 @Component({
 	selector: 'bubble-demo',
+	imports: [HlmBubbleImports, HlmButton],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
@@ -27,19 +30,24 @@ export const bubbleReactionsClass = (side: 'top' | 'bottom' = 'bottom', align: '
 			<h3 class="text-sm font-medium">Variants</h3>
 			<div class="flex flex-row flex-wrap gap-2">
 				@for (option of _variants; track option) {
-					<button [class]="_btn(option === _variant() ? 'default' : 'outline')" (click)="_variant.set(option)">
+					<button
+						hlmBtn
+						size="sm"
+						[variant]="option === _variant() ? 'default' : 'outline'"
+						(click)="_variant.set(option)"
+					>
 						{{ option }}
 					</button>
 				}
 			</div>
 			<div class="flex flex-col gap-4">
-				<div data-slot="bubble" data-align="end" [attr.data-variant]="_variant()" [class]="_bubble(_variant())">
-					<div data-slot="bubble-content" [class]="_content">
+				<div hlmBubble align="end" [variant]="_variant()">
+					<div hlmBubbleContent>
 						<span>This is the {{ _variant() }} variant.</span>
 					</div>
 				</div>
-				<div data-slot="bubble" data-align="start" [attr.data-variant]="_variant()" [class]="_bubble(_variant())">
-					<div data-slot="bubble-content" [class]="_content">
+				<div hlmBubble [variant]="_variant()">
+					<div hlmBubbleContent>
 						<span>Tap a variant above to restyle both bubbles.</span>
 					</div>
 				</div>
@@ -49,46 +57,40 @@ export const bubbleReactionsClass = (side: 'top' | 'bottom' = 'bottom', align: '
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Group and reactions</h3>
 			<div class="flex flex-col gap-4">
-				<div data-slot="bubble" data-align="end" data-variant="default" [class]="_bubble('default')">
-					<div data-slot="bubble-content" [class]="_content"><span>Hey there! what's up?</span></div>
+				<div hlmBubble align="end">
+					<div hlmBubbleContent><span>Hey there! what's up?</span></div>
 				</div>
-				<div data-slot="bubble-group" [class]="_group">
-					<div data-slot="bubble" data-align="start" data-variant="muted" [class]="_bubble('muted')">
-						<div data-slot="bubble-content" [class]="_content"><span>Hey! Want to see chat bubbles?</span></div>
+				<div hlmBubbleGroup>
+					<div hlmBubble variant="muted">
+						<div hlmBubbleContent><span>Hey! Want to see chat bubbles?</span></div>
 					</div>
-					<div
-						data-slot="bubble"
-						data-align="start"
-						data-variant="muted"
-						[class]="_bubble('muted')"
-						(click)="_liked.set(!_liked())"
-					>
-						<div data-slot="bubble-content" [class]="_content">
+					<div hlmBubble variant="muted" (click)="_liked.set(!_liked())">
+						<div hlmBubbleContent>
 							<span>I can group messages, switch sides, and keep the whole thread easy to scan. Tap me.</span>
 						</div>
 						@if (_liked()) {
-							<div data-slot="bubble-reactions" data-side="bottom" data-align="end" [class]="_reactions()">
+							<div hlmBubbleReactions>
 								<span>👍</span>
 							</div>
 						}
 					</div>
 				</div>
-				<div data-slot="bubble" data-align="end" data-variant="default" [class]="_bubble('default')">
-					<div data-slot="bubble-content" [class]="_content">
+				<div hlmBubble align="end">
+					<div hlmBubbleContent>
 						<span>Tests passed on the first try. All 142 of them.</span>
 					</div>
-					<div data-slot="bubble-reactions" data-side="top" data-align="start" [class]="_reactions('top', 'start')">
+					<div hlmBubbleReactions side="top" align="start">
 						<span>🎉</span>
 						<span>👏</span>
 					</div>
 				</div>
-				<div data-slot="bubble" data-align="start" data-variant="destructive" [class]="_bubble('destructive')">
-					<div data-slot="bubble-content" [class]="_content">
+				<div hlmBubble variant="destructive">
+					<div hlmBubbleContent>
 						<span>{{ _ran() ? 'Command finished.' : 'Are you sure I can run this command?' }}</span>
 					</div>
 					@if (!_ran()) {
-						<div data-slot="bubble-reactions" data-side="bottom" data-align="end" [class]="_reactions()">
-							<button [class]="_btn('ghost', 'xs')" (click)="_ran.set(true)">Yes, run it</button>
+						<div hlmBubbleReactions>
+							<button hlmBtn variant="ghost" size="xs" (click)="_ran.set(true)">Yes, run it</button>
 						</div>
 					}
 				</div>
@@ -97,8 +99,8 @@ export const bubbleReactionsClass = (side: 'top' | 'bottom' = 'bottom', align: '
 
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Ghost</h3>
-			<div data-slot="bubble" data-align="start" data-variant="ghost" [class]="_bubble('ghost')">
-				<div data-slot="bubble-content" [class]="_content + ' flex flex-col gap-4'">
+			<div hlmBubble variant="ghost">
+				<div hlmBubbleContent class="flex flex-col gap-4">
 					<p>Ghost bubbles work for assistant text and other content that should not be framed.</p>
 					<p>They take the full width of the container.</p>
 				</div>
@@ -119,10 +121,4 @@ export default class BubbleDemo {
 	protected readonly _variant = signal<BubbleVariant>('muted');
 	protected readonly _liked = signal(true);
 	protected readonly _ran = signal(false);
-	protected readonly _bubble = bubbleClass;
-	protected readonly _content = bubbleContentClass;
-	protected readonly _group = bubbleGroupClass;
-	protected readonly _reactions = bubbleReactionsClass;
-	protected readonly _btn = (variant: 'default' | 'outline' | 'ghost', size: 'xs' | 'sm' = 'sm') =>
-		buttonVariants({ variant, size });
 }

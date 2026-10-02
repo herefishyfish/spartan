@@ -1,44 +1,30 @@
 import { Component, NO_ERRORS_SCHEMA, computed, signal } from '@angular/core';
-import { buttonVariants } from '@spartan-ng/helm/button';
-
-const INPUT =
-	'spartan-input placeholder:text-muted-foreground w-full min-w-0 outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50';
-const LABEL =
-	'spartan-label flex items-center select-none spartan-field-label group/field-label peer/field-label flex w-fit';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmFieldImports } from '@spartan-ng/helm/field';
+import { HlmInput } from '@spartan-ng/helm/input';
 
 @Component({
 	selector: 'input-demo',
+	imports: [HlmInput, HlmFieldImports, HlmButton],
 	schemas: [NO_ERRORS_SCHEMA],
 	host: { class: 'flex flex-col gap-6' },
 	template: `
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Basic</h3>
-			<input
-				data-slot="input"
-				placeholder="Type something"
-				[class]="_input"
-				[value]="_text()"
-				(input)="_text.set($any($event).target.value)"
-			/>
+			<input hlmInput placeholder="Type something" [value]="_text()" (input)="_text.set($any($event).target.value)" />
 			<p class="text-muted-foreground text-sm">{{ _text() ? 'You typed: ' + _text() : 'Nothing typed yet' }}</p>
 		</section>
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Field</h3>
-			<div
-				role="group"
-				data-slot="field"
-				data-orientation="vertical"
-				class="spartan-field group/field spartan-field-orientation-vertical flex w-full flex-col"
-			>
-				<label data-slot="field-label" [class]="_label">Username</label>
+			<div hlmField>
+				<label hlmFieldLabel>Username</label>
 				<input
-					data-slot="input"
+					hlmInput
 					placeholder="Enter your username"
-					[class]="_input"
 					[value]="_username()"
 					(input)="_username.set($any($event).target.value)"
 				/>
-				<p data-slot="field-description" class="spartan-field-description leading-normal font-normal">
+				<p hlmFieldDescription>
 					{{ _username() ? 'spartan.ng/@' + _username() : 'Choose a unique username for your account.' }}
 				</p>
 			</div>
@@ -46,48 +32,36 @@ const LABEL =
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Types</h3>
 			<input
-				data-slot="input"
+				hlmInput
 				type="email"
 				placeholder="Email"
-				[class]="_input"
 				[value]="_email()"
 				(input)="_email.set($any($event).target.value)"
 			/>
 			<input
-				data-slot="input"
+				hlmInput
 				type="password"
 				placeholder="Password"
-				[class]="_input"
 				[value]="_password()"
 				(input)="_password.set($any($event).target.value)"
 			/>
-			<input data-slot="input" type="number" placeholder="Quantity" [class]="_input" />
+			<input hlmInput type="number" placeholder="Quantity" />
 			<p class="text-muted-foreground text-sm">Password: {{ _password().length }} characters</p>
 		</section>
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Invalid</h3>
-			<div
-				role="group"
-				data-slot="field"
-				data-orientation="vertical"
-				class="spartan-field group/field spartan-field-orientation-vertical flex w-full flex-col"
-				[attr.data-matches-spartan-invalid]="_emailInvalid() ? 'true' : null"
-			>
-				<label data-slot="field-label" [class]="_label">Email</label>
+			<div hlmField [forceInvalid]="_emailInvalid()">
+				<label hlmFieldLabel>Email</label>
 				<input
-					data-slot="input"
+					hlmInput
 					type="email"
 					placeholder="you@example.com"
-					[class]="_input"
-					[attr.aria-invalid]="_emailInvalid() ? 'true' : null"
-					[attr.data-matches-spartan-invalid]="_emailInvalid() ? 'true' : null"
+					[forceInvalid]="_emailInvalid()"
 					[value]="_email()"
 					(input)="_email.set($any($event).target.value)"
 				/>
 				@if (_emailInvalid()) {
-					<p role="alert" data-slot="field-error" class="spartan-field-error font-normal">
-						Enter a valid email address.
-					</p>
+					<hlm-field-error forceShow>Enter a valid email address.</hlm-field-error>
 				}
 			</div>
 		</section>
@@ -95,18 +69,14 @@ const LABEL =
 			<h3 class="text-sm font-medium">With button</h3>
 			<div class="flex w-full flex-row items-center gap-2">
 				<input
-					data-slot="input"
+					hlmInput
 					type="email"
 					placeholder="Email"
-					[class]="_input + ' flex-1'"
+					class="flex-1"
 					[value]="_email()"
 					(input)="_email.set($any($event).target.value)"
 				/>
-				<button
-					[class]="_outline"
-					[attr.data-disabled]="_emailInvalid() || !_email() ? '' : null"
-					(click)="_subscribed.set(_email())"
-				>
+				<button hlmBtn variant="outline" [disabled]="_emailInvalid() || !_email()" (click)="_subscribed.set(_email())">
 					Subscribe
 				</button>
 			</div>
@@ -116,15 +86,11 @@ const LABEL =
 		</section>
 		<section class="flex flex-col gap-3">
 			<h3 class="text-sm font-medium">Disabled</h3>
-			<input data-slot="input" placeholder="Disabled" [class]="_input" [isEnabled]="false" />
+			<input hlmInput placeholder="Disabled" [isEnabled]="false" />
 		</section>
 	`,
 })
 export default class InputDemo {
-	protected readonly _input = INPUT;
-	protected readonly _label = LABEL;
-	protected readonly _outline = buttonVariants({ variant: 'outline' });
-
 	protected readonly _text = signal('');
 	protected readonly _username = signal('');
 	protected readonly _email = signal('');
