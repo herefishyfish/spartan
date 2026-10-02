@@ -45,8 +45,9 @@ them in step when the workspace upgrades. After changing a patch or a dependency
 
 `src/spartan-native.ts` and `src/native-globals.ts` are what spartan needs from a NativeScript app, beyond MasonKit:
 
-- `registerSpartanNativeElements()` backs `button`, `a` and `li` with MasonKit blocks (MasonKit makes them inline
-  text runs, which ignore the flex classes spartan gives buttons, links and list items) and registers `ng-icon` as
+- `registerSpartanNativeElements()` backs `button`, `a`, `li`, `kbd` and `label` with MasonKit blocks (MasonKit
+  makes them inline text runs, which ignore the flex classes spartan gives buttons, links, list items, key caps
+  and labels) and registers `ng-icon` as
   a text element.
 - `provideSpartanNativeScript()` gives `@angular/cdk` a non-browser `Platform` (NativeScript reports
   `PLATFORM_ID` `'browser'`, after which CDK reaches for `window` and `document` listeners), adds the
@@ -93,10 +94,10 @@ below until those layers have native implementations.
 
 ## MasonKit rules
 
-- Text elements (`span`, `p`, `h1`-`h6`, `label`, `kbd`) lay their children out as inline text runs and ignore
-  flex (`button`, `a` and `li` are remapped to blocks, see above). An element that spartan styles as a flex box (a badge, an item title, a select group label) must
-  be a `div`; it still takes the `flex`/`inline-flex` classes. A `span` with them measures its text at the
-  wrong width when it is stretched in a column.
+- Text elements (`span`, `p`, `h1`-`h6`) lay their children out as inline text runs and ignore flex (`button`,
+  `a`, `li`, `kbd` and `label` are remapped to blocks, see above). An element that spartan styles as a flex box
+  (a badge, an item title, a select group label) must be a `div`; it still takes the `flex`/`inline-flex`
+  classes. A `span` with them measures its text at the wrong width when it is stretched in a column.
 - Listen with `(click)`. For `<input>` and `<textarea>`, bind `[value]` and read `$any($event).target.value`
   in `(input)`.
 - In demos that mirror helm's markup, drive state with signals and the same attributes helm sets: `[attr.data-state]` (`open`/`closed`,
