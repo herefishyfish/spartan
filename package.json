@@ -58,7 +58,6 @@
 		"@nativescript-community/ui-pager": "14.1.42",
 		"@nativescript-community/ui-popover": "0.1.22",
 		"@nativescript/angular": "^21.0.0",
-		"@nativescript/canvas-svg": "3.0.0-alpha.22",
 		"@nativescript/core": "~9.1.2",
 		"@nativescript/datetimepicker": "3.0.4",
 		"@nativescript/haptics": "3.1.0",

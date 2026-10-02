@@ -4,11 +4,18 @@ import { Application } from '@nativescript/core';
 import { DEMOS, findDemo } from '../demos/registry';
 import { Icon } from '../ui/icon';
 
-/** `adb shell am start -n ng.spartan.nativedemo/com.tns.NativeScriptActivity -e demo <slug>` opens a demo directly. */
+/**
+ * Opens a demo directly:
+ * `adb shell am start -n ng.spartan.nativedemo/com.tns.NativeScriptActivity -e demo <slug>` or
+ * `xcrun simctl launch booted ng.spartan.nativedemo -demo <slug>`.
+ */
 function launchDemoSlug(): string | undefined {
-	return __ANDROID__
-		? (Application.android.startActivity?.getIntent()?.getStringExtra('demo') ?? undefined)
-		: undefined;
+	if (__ANDROID__) {
+		return Application.android.startActivity?.getIntent()?.getStringExtra('demo') ?? undefined;
+	}
+	const args = NSProcessInfo.processInfo.arguments;
+	const index = args.indexOfObject('-demo');
+	return index !== NSNotFound && index + 1 < args.count ? args.objectAtIndex(index + 1) : undefined;
 }
 
 @Component({

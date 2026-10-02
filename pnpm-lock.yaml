@@ -119,9 +119,6 @@ importers:
       '@nativescript/angular':
         specifier: ^21.0.0
         version: 21.0.0(patch_hash=fcde85882a520c0a54c3f97420ffb8df0f6102db55c7b0ed43d79918ce33f485)
-      '@nativescript/canvas-svg':
-        specifier: 3.0.0-alpha.22
-        version: 3.0.0-alpha.22
       '@nativescript/core':
         specifier: ~9.1.2
         version: 9.1.2(patch_hash=63b274fbf9b32488a1eadef7500a03ddcb9248e4bcfdd37b65a56235e0eeea02)
@@ -4294,9 +4291,6 @@ packages:
 
   '@nativescript/angular@21.0.0':
     resolution: {integrity: sha512-g7PlqDDjlemXyOd3DzvzYqWsgec2k/JqoPEVT7hLcONc66AI/ZCBcZpStcPVHYwHrwMaMRGD8La75StlZtWdMw==}
-
-  '@nativescript/canvas-svg@3.0.0-alpha.22':
-    resolution: {integrity: sha512-sRq3pg5/jUjYiaoC5f4BxkROuRgRR7b7C2zc4DJmb+k/noZ0OCai0XU/lqc6e43H4EvE5fBVyU9j20abvXYHEA==}
 
   '@nativescript/core@9.1.2':
     resolution: {integrity: sha512-zL/dgfuLmcVu9nR47UEFOaPHXoaRKuWMBnDwiaMAwXmf4WKd6yr1gIXcNHheKgBNGrls06LgbBpkB841fI+HcA==}
@@ -10356,10 +10350,6 @@ packages:
   is-potential-custom-element-name@1.0.1:
     resolution: {integrity: sha512-bCYeRA2rVibKZd+s2625gGnGF/t7DSqDs4dP7CrLA1m7jKWz6pps0LpYLJN8Q64HtmPKJ1hrN3nzPNKFEKOUiQ==}
 
-  is-primitive@3.0.1:
-    resolution: {integrity: sha512-GljRxhWvlCNRfZyORiH77FwdFwGcMO620o37EOYC0ORWdq+WYNVqW0w2Juzew4M+L81l6/QS3t5gkkihyRqv9w==}
-    engines: {node: '>=0.10.0'}
-
   is-promise@2.2.2:
     resolution: {integrity: sha512-+lP4/6lKUBfQjZ2pdxThZvLUAafmZb8OAxFb8XXtiQmS35INgr85hdOGoEs124ez1FCnZJt6jau/T+alh58QFQ==}
 
@@ -12861,9 +12851,6 @@ packages:
   quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==}
 
-  query-selector@2.0.0:
-    resolution: {integrity: sha512-dmygfvKNyaUl0PvU/3iEmoNr+lojOwLS95VlQj9jWDObiW4IpF7VWactsWaOLy3arqiQDj/aibhf6MHJWcAhuA==}
-
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -13448,10 +13435,6 @@ packages:
 
   set-cookie-parser@3.1.0:
     resolution: {integrity: sha512-kjnC1DXBHcxaOaOXBHBeRtltsDG2nUiUni+jP92M9gYdW12rsmx92UsfpH7o5tDRs7I1ZZPSQJQGv3UaRfCiuw==}
-
-  set-value@4.1.0:
-    resolution: {integrity: sha512-zTEg4HL0RwVrqcWs3ztF+x1vkxfm0lP+MQQFPiMJTKVceBwEV0A569Ou8l9IYQG8jOZdMVI1hGsc0tmeD2o/Lw==}
-    engines: {node: '>=11.0'}
 
   setprototypeof@1.1.0:
     resolution: {integrity: sha512-BvE/TwpZX4FXExxOxZyRGQQv651MSwmWKZGqvmPcRIjDqWub67kTKuIMx43cZZrS/cBBzwBcNDWoFxt2XEFIpQ==}
@@ -19089,11 +19072,6 @@ snapshots:
     dependencies:
       '@nativescript/zone-js': 4.0.0
       tslib: 2.8.1
-
-  '@nativescript/canvas-svg@3.0.0-alpha.22':
-    dependencies:
-      query-selector: 2.0.0
-      set-value: 4.1.0
 
   '@nativescript/core@9.1.2(patch_hash=63b274fbf9b32488a1eadef7500a03ddcb9248e4bcfdd37b65a56235e0eeea02)':
     dependencies:
@@ -26090,8 +26068,6 @@ snapshots:
 
   is-potential-custom-element-name@1.0.1: {}
 
-  is-primitive@3.0.1: {}
-
   is-promise@2.2.2: {}
 
   is-promise@4.0.0: {}
@@ -29091,8 +29067,6 @@ snapshots:
 
   quansync@0.2.11: {}
 
-  query-selector@2.0.0: {}
-
   queue-microtask@1.2.3: {}
 
   quick-format-unescaped@4.0.4: {}
@@ -29767,11 +29741,6 @@ snapshots:
       - supports-color
 
   set-cookie-parser@3.1.0: {}
-
-  set-value@4.1.0:
-    dependencies:
-      is-plain-object: 2.0.4
-      is-primitive: 3.0.1
 
   setprototypeof@1.1.0: {}
 
