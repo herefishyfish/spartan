@@ -1,0 +1,26 @@
+{
+	"name": "native-demo",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./src/main.ts",
+	"dependencies": {
+		"@nativescript-community/gesturehandler": "*",
+		"@nativescript-community/ui-chart": "*",
+		"@nativescript-community/ui-drawer": "*",
+		"@nativescript-community/ui-material-bottomsheet": "*",
+		"@nativescript-community/ui-material-core": "*",
+		"@nativescript-community/ui-pager": "*",
+		"@nativescript-community/ui-popover": "*",
+		"@nativescript/canvas-svg": "*",
+		"@nativescript/core": "*",
+		"@nativescript/datetimepicker": "*",
+		"@nativescript/haptics": "*",
+		"@nstudio/nativescript-menu": "*",
+		"@triniwiz/nativescript-masonkit": "*"
+	},
+	"devDependencies": {
+		"@nativescript/android": "~9.1.1",
+		"@nativescript/ios": "~9.1.0",
+		"@nativescript/tailwind": "*"
+	}
+}

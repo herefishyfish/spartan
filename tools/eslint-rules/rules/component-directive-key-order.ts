@@ -18,6 +18,7 @@ const ORDER = [
 	'selector',
 	'exportAs',
 	'imports',
+	'schemas',
 	'providers',
 	'viewProviders',
 	'encapsulation',
@@ -43,7 +44,7 @@ export const rule = ESLintUtils.RuleCreator(() => __filename)({
 		messages: {
 			templateLast: '`template` or `templateUrl` should be the last property in @Component/@Directive metadata.',
 			incorrectOrder:
-				'Property "{{name}}" is not in the correct order. Expected order: selector, exportAs, imports, providers, viewProviders, changeDetection, hostDirectives, host, styleUrl|styles, template|templateUrl.',
+				'Property "{{name}}" is not in the correct order. Expected order: selector, exportAs, imports, schemas, providers, viewProviders, changeDetection, hostDirectives, host, styleUrl|styles, template|templateUrl.',
 		},
 	},
 	defaultOptions: [],

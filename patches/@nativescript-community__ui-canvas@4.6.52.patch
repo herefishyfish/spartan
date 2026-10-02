@@ -1,0 +1,22 @@
+diff --git a/platforms/android/include.gradle b/platforms/android/include.gradle
+index 0e3770c186c15cf9eb5d23bbe87cc19db9807e33..db0d74ece6401c8c1fdab7c671da01e3f3044669 100644
+--- a/platforms/android/include.gradle
++++ b/platforms/android/include.gradle
+@@ -6,7 +6,7 @@ dependencies {
+         // we need to copy the code in both places as N main gradle system does not support top level code
+         // for now we support only @nativescript/core and @akylas/nativescript
+         // we should have a more generic way
+-		def widgetsDir = "$USER_PROJECT_ROOT/node_modules/@nativescript/core/platforms/android"
++		def widgetsDir = ({ -> def dir = file(USER_PROJECT_ROOT); while (dir != null && !new File(dir, "node_modules/@nativescript/core/platforms/android").exists()) { dir = dir.parentFile }; new File(dir ?: file(USER_PROJECT_ROOT), "node_modules/@nativescript/core/platforms/android").absolutePath }).call() /* walks up like Node resolution, so hoisted monorepo installs work */
+         def appPackageJsonFile = file("$USER_PROJECT_ROOT/package.json")
+         if (appPackageJsonFile.exists()) {
+             def appPackageJson = new JsonSlurper().parseText(appPackageJsonFile.text)
+@@ -29,7 +29,7 @@ repositories {
+         // we need to copy the code in both places as N main gradle system does not support top level code
+         // for now we support only @nativescript/core and @akylas/nativescript
+         // we should have a more generic way
+-        def widgetsDir = "$USER_PROJECT_ROOT/node_modules/@nativescript/core/platforms/android"
++        def widgetsDir = ({ -> def dir = file(USER_PROJECT_ROOT); while (dir != null && !new File(dir, "node_modules/@nativescript/core/platforms/android").exists()) { dir = dir.parentFile }; new File(dir ?: file(USER_PROJECT_ROOT), "node_modules/@nativescript/core/platforms/android").absolutePath }).call() /* walks up like Node resolution, so hoisted monorepo installs work */
+         def appPackageJsonFile = file("$USER_PROJECT_ROOT/package.json")
+         if (appPackageJsonFile.exists()) {
+             def appPackageJson = new JsonSlurper().parseText(appPackageJsonFile.text)

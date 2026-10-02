@@ -1,0 +1,47 @@
+{
+	"name": "native-demo",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/native-demo/src",
+	"projectType": "application",
+	"tags": ["scope:native"],
+	"targets": {
+		"build": {
+			"executor": "@nativescript/nx:build",
+			"options": {
+				"noHmr": true,
+				"production": true,
+				"uglify": true,
+				"release": true,
+				"forDevice": true
+			}
+		},
+		"debug": {
+			"executor": "@nativescript/nx:debug",
+			"options": {
+				"noHmr": true,
+				"uglify": false,
+				"release": false,
+				"forDevice": false,
+				"prepare": false
+			}
+		},
+		"prepare": {
+			"executor": "@nativescript/nx:prepare",
+			"options": {
+				"noHmr": true,
+				"production": true,
+				"uglify": true,
+				"release": true,
+				"forDevice": true,
+				"prepare": true
+			}
+		},
+		"clean": {
+			"executor": "@nativescript/nx:clean",
+			"options": {}
+		},
+		"lint": {
+			"command": "eslint apps/native-demo/src"
+		}
+	}
+}

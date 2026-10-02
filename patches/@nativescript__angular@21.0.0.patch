@@ -1,0 +1,41 @@
+diff --git a/fesm2022/nativescript-angular.mjs b/fesm2022/nativescript-angular.mjs
+index f65ad62a060fd626bfb578863681921e75fac58c..40fcb132197c9ef4eb483fa67cb0492d54b446c1 100644
+--- a/fesm2022/nativescript-angular.mjs
++++ b/fesm2022/nativescript-angular.mjs
+@@ -1315,7 +1315,12 @@ class ViewUtil {
+             return;
+         }
+         // Unknown attribute value -- just set it to our object as is.
++        const previous = view[attributeName];
+         view[attributeName] = value;
++        // CSS attribute selectors ([data-state=open]) re-match on `<name>Change`, which a plain property never emits.
++        if (previous !== value && typeof view.notify === 'function') {
++            view.notify({ eventName: `${attributeName}Change`, object: view, value, oldValue: previous });
++        }
+     }
+     removeParentReferencesFromItems(items) {
+         for (const item of items) {
+@@ -1637,6 +1642,14 @@ class NativeScriptRenderer {
+         this.viewUtil.removeChild(parent ?? oldChild.parentNode, oldChild);
+     }
+     selectRootElement(selectorOrNode, preserveContent) {
++        // Backport of @nativescript/angular 22: Angular 21.2 reads rootElement.tagName.toLowerCase().
++        const root = this._selectRootElement(selectorOrNode, preserveContent);
++        if (root && typeof root.tagName !== "string") {
++            root.tagName = root.nodeName || "view";
++        }
++        return root;
++    }
++    _selectRootElement(selectorOrNode, preserveContent) {
+         if (NativeScriptDebug.enabled) {
+             NativeScriptDebug.rendererLog(`NativeScriptRenderer.selectRootElement: ${selectorOrNode}`);
+         }
+@@ -1679,6 +1692,8 @@ class NativeScriptRenderer {
+         if (NativeScriptDebug.enabled) {
+             NativeScriptDebug.rendererLog(`NativeScriptRenderer.removeAttribute ${namespace ? namespace + ':' : ''}${el}.${name}`);
+         }
++        // `[attr.x]="null"` removes the attribute; clearing the property un-matches `[x]` selectors.
++        this.viewUtil.setProperty(el, name, undefined, namespace);
+     }
+     addClass(el, name) {
+         if (NativeScriptDebug.enabled) {

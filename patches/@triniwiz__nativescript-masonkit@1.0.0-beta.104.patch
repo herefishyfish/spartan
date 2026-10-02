@@ -1,0 +1,111 @@
+diff --git a/common.js b/common.js
+index 1770602f5d50fb886f53dda4c8701f673c9217ce..acf7a18bb7cc0a2ce05b13f19b90dbb9e91a4b6c 100644
+--- a/common.js
++++ b/common.js
+@@ -17,7 +17,7 @@ import { masonEngine } from './windows-panel-helpers';
+ import { TextNode } from './text-node';
+ import { compile } from './pseudo';
+ import { frameworkRegistry } from './framework-registry';
+-import { reconcileTextRuns } from './text-runs';
++import { displayText, reconcileTextRuns } from './text-runs';
+ function getViewStyle(view) {
+     const ret = (__ANDROID__ ? view.get() : view.deref());
+     return ret._styleHelper;
+@@ -1297,7 +1297,7 @@ export class ViewBase extends CustomLayoutView {
+     }
+     // -- Unified text node update (cross-platform) --
+     _updateTextNode(node, operation = null) {
+-        const text = String(node.text ?? node.data ?? '');
++        const text = displayText(node);
+         const textNode = this._createOrUpdateNativeTextNode(node, text);
+         if (!operation)
+             return;
+@@ -2909,3 +2909,21 @@ function wrapNativeEvent(type) {
+     }
+ }
+ //# sourceMappingURL=common.js.map
++// Keep :first-child, :last-child and :only-child current as children come and go. NativeScript matches
++// pseudo-classes against each view's cssPseudoClasses, and nothing else sets these structural ones.
++const structuralPseudoClasses = ['first-child', 'last-child', 'only-child'];
++function syncStructuralPseudoClasses(parent) {
++    const elements = (parent._children || []).filter((child) => child && typeof child.addSinglePseudoClass === 'function');
++    elements.forEach((child, index) => {
++        const states = [index === 0, index === elements.length - 1, elements.length === 1];
++        structuralPseudoClasses.forEach((name, i) => (states[i] ? child.addSinglePseudoClass(name) : child.deleteSinglePseudoClass(name)));
++    });
++}
++for (const method of ['addChild', 'insertChild', 'replaceChild', 'removeChild', 'removeChildren']) {
++    const original = ViewBase.prototype[method];
++    ViewBase.prototype[method] = function (...args) {
++        const result = original.apply(this, args);
++        syncStructuralPseudoClasses(this);
++        return result;
++    };
++}
+diff --git a/style.js b/style.js
+index f5de8b9f36e34f3071066e870050278bb73aea7b..9bc8addba2d2aa2c0a11af28c70959d6501678df 100644
+--- a/style.js
++++ b/style.js
+@@ -1849,6 +1849,12 @@ export class Style {
+         }
+         const normalized = normalizeColorValue(value);
+         if (normalized == null) {
++            // unset (e.g. its CSS class was removed): drop back to the inherited color
++            if (value == null) {
++                this.prepareMut();
++                setInt8(this.style_view, StyleKeys.FONT_COLOR_STATE, 0);
++                this.commitState(StateKeys.FONT_COLOR);
++            }
+             return;
+         }
+         this.prepareMut();
+@@ -1875,6 +1881,13 @@ export class Style {
+         }
+         const normalized = normalizeColorValue(value);
+         if (normalized == null) {
++            // unset (e.g. its CSS class was removed): clear to transparent
++            if (value == null) {
++                this.prepareMut();
++                setUint32(this.style_view, StyleKeys.BACKGROUND_COLOR, 0);
++                setInt8(this.style_view, StyleKeys.BACKGROUND_COLOR_STATE, 0);
++                this.commitState(StateKeys.BACKGROUND_COLOR);
++            }
+             return;
+         }
+         this.prepareMut();
+diff --git a/text-runs.js b/text-runs.js
+index 511b55409672443b92335718ae980dfb92d87977..576034160078f14b590c35feff806d86508ef08a 100644
+--- a/text-runs.js
++++ b/text-runs.js
+@@ -15,8 +15,30 @@ export function hasTextRun(children, node) {
+  * list. `classify` maps each framework node to its kind: `text` (a run),
+  * `break` (a `<br>` run), `element` (a slot with no run) or `none` (no slot).
+  */
++/**
++ * The text a run renders. As with CSS `white-space: normal`, whitespace that starts the container's first box or
++ * ends its last box collapses away, so `<p>\n  Some text\n</p>` does not render a leading space.
++ */
++export const collapsedText = new WeakMap();
++export function displayText(node) {
++    return collapsedText.get(node) ?? String(node.text ?? node.data ?? '');
++}
+ export function reconcileTextRuns(context, nodes, classify) {
+-    const textOf = (n) => String(n.text ?? n.data ?? '');
++    const rawTextOf = (n) => String(n.text ?? n.data ?? '');
++    const boxes = nodes.map((n) => {
++        const kind = classify(n);
++        return kind === 'element' || kind === 'break' || (kind === 'text' && rawTextOf(n).trim() !== '');
++    });
++    const firstBox = boxes.indexOf(true);
++    const lastBox = boxes.lastIndexOf(true);
++    nodes.forEach((n, i) => {
++        if (classify(n) !== 'text') return;
++        let text = rawTextOf(n);
++        if (i <= firstBox) text = text.replace(/^\s+/, '');
++        if (i >= lastBox) text = text.replace(/\s+$/, '');
++        collapsedText.set(n, text);
++    });
++    const textOf = displayText;
+     // A `<br>` that the host already inserted as a `Br` placeholder element
+     // (Vue/Angular metas do) is a slot of its own; only synthesise a break run
+     // for a framework node MasonKit has no child for.
